@@ -1,7 +1,8 @@
 {
   "name": "hid-handle",
+  "main": "./hidhandle.js",
   "version": "1.0.0",
-  "description": "hidhandle",
+  "description": "hid-handle - Write data to USB HID devices from Node.js",
   "scripts": {
     "build": "node-gyp build",
     "clean": "node-gyp clean",
@@ -13,7 +14,18 @@
     "hid",
     "hid-handle"
   ],
-  "author": "Yao Hengfeng",
+  "author": {
+    "name": "Yao hengfeng",
+    "email": "1921934563@qq.com",
+    "url": "https://github.com/yhf98"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yhf98/hid-handle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yhf98/hid-handle/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "bindings": "^1.5.0",

@@ -1,0 +1,22 @@
+{
+  "name": "hid-handle",
+  "version": "1.0.0",
+  "description": "hidhandle",
+  "scripts": {
+    "build": "node-gyp build",
+    "clean": "node-gyp clean",
+    "configure": "node-gyp configure",
+    "rebuild": "node-gyp rebuild",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hid",
+    "hid-handle"
+  ],
+  "author": "Yao Hengfeng",
+  "license": "MIT",
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^5.0.0"
+  }
+}

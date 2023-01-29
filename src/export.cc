@@ -6,9 +6,10 @@
 using namespace Napi;
 using namespace std;
 
-Value HidWriteFileHandleJs(const CallbackInfo &info){
+Value HidWriteFileHandleJs(const CallbackInfo &info)
+{
     auto env = info.Env();
-    
+
     string arg0 = info[0].As<String>();
     string arg1 = info[1].As<String>();
     int arg2 = info[2].As<Number>().Int32Value();
@@ -19,7 +20,8 @@ Value HidWriteFileHandleJs(const CallbackInfo &info){
     return result;
 }
 
-Value HidWriteBuffHandleJs(const CallbackInfo &info){
+Value HidWriteBuffHandleJs(const CallbackInfo &info)
+{
     auto env = info.Env();
 
     string arg0 = info[0].As<String>();
@@ -32,7 +34,8 @@ Value HidWriteBuffHandleJs(const CallbackInfo &info){
     return result;
 }
 
-Value hidIOControlHandleJs(const CallbackInfo &info){
+Value hidIOControlHandleJs(const CallbackInfo &info)
+{
     auto env = info.Env();
 
     unsigned int arg0 = info[0].As<Number>().Int32Value();

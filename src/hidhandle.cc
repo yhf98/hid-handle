@@ -57,14 +57,20 @@ unsigned char readbuff[2048] = {0x00, 0x00, 0, 0, 0};
 #define TRAN_ERR_NUKNOWN 0x03
 #define TRAN_ERR_TIMEOUT 0x04
 
-#define CMD_SHOW_PNG 0xA1
-#define CMD_SHOW_JPG 0xA2
-#define CMD_PLAY_VIDEO 0xA3
-#define CMD_PLAY_AUDIO 0xA4
-#define CMD_SHOW_LINE_CHART 0xA5
-#define CMD_SHOW_TXT 0xA6
-#define CMD_SOFT_UPDATE 0xA7
-#define CMD_WIFI_PASSWORD 0xA8
+#define CMD_OBJ_DEL (0xA0)
+#define CMD_SHOW_PNG (0xA1)
+#define CMD_SHOW_JPG (0xA2)
+#define CMD_PLAY_VIDEO (0xA3)
+#define CMD_PLAY_AUDIO (0xA4)
+#define CMD_SHOW_LINE_CHART (0xA5)
+#define CMD_SHOW_TXT (0xA6)
+#define CMD_SOFT_UPDATE (0xA7)
+#define CMD_SHOW_STRA_CHART (0xA8)
+#define CMD_SHOW_METTER_CRC (0xA9)
+#define CMD_SHOW_METTER_DASHBOARD (0xAA)
+#define CMD_STOP_VIDEO (0xAB)
+#define CMD_STOP_PHOTO (0xAC)
+#define CMD_STOP_AUDIO (0xAD)
 
 //**************************************************************************************************************
 // file trans
@@ -157,7 +163,7 @@ unsigned char crc8_calc(unsigned char *pdata, unsigned int len)
 	return crc8;
 }
 
-int hid_io_control(unsigned int cmd, const char *file_name, unsigned char *reserve, unsigned int rese_len)
+int hid_io_control(unsigned int cmd, const char *file_name, unsigned char *control_buff, unsigned int control_buff_len)
 {
 	int ret = -1;
 
@@ -169,18 +175,23 @@ int hid_io_control(unsigned int cmd, const char *file_name, unsigned char *reser
 	unsigned long long time_s;
 	unsigned long long time_e;
 
-	if (rese_len < 16)
+	printf("rese_len=%d.\n", control_buff_len);
+
+	if (control_buff_len < 16)
 	{
+		printf("para error.\n");
 		return SYS_PARA_ERROR;
 	}
 
-	if (rese_len > READ_DATA_LEN)
+	if (control_buff_len > READ_DATA_LEN)
 	{
+		printf("para error.\n");
 		return SYS_PARA_ERROR;
 	}
 
 	if (!hid_handle)
 	{
+		printf("hid device error.\n");
 		return SYS_DEVICE_ERROR;
 	}
 
@@ -188,6 +199,8 @@ int hid_io_control(unsigned int cmd, const char *file_name, unsigned char *reser
 	memset((unsigned char *)(&a_packet), 0, sizeof(ack_packet_t));
 
 	file_len = strlen(file_name);
+	printf("file_len=%d\n", file_len);
+	printf("file_name=%s\n", file_name);
 
 	time_s = GetTickCount64();
 
@@ -202,23 +215,25 @@ int hid_io_control(unsigned int cmd, const char *file_name, unsigned char *reser
 	m_packet.tran_data[0] = cmd;
 
 	// control para len and para.
-	m_packet.tran_data[1] = ((rese_len & 0xff000000) >> 24);
-	m_packet.tran_data[2] = ((rese_len & 0x00ff0000) >> 16);
-	m_packet.tran_data[3] = ((rese_len & 0x0000ff00) >> 8);
-	m_packet.tran_data[4] = ((rese_len & 0x000000ff) >> 0);
-	memcpy((unsigned char *)(&m_packet.tran_data[5]), reserve, rese_len);
+	m_packet.tran_data[1] = ((control_buff_len & 0xff000000) >> 24);
+	m_packet.tran_data[2] = ((control_buff_len & 0x00ff0000) >> 16);
+	m_packet.tran_data[3] = ((control_buff_len & 0x0000ff00) >> 8);
+	m_packet.tran_data[4] = ((control_buff_len & 0x000000ff) >> 0);
+	memcpy((unsigned char *)(&m_packet.tran_data[5]), control_buff, control_buff_len);
 	//****************************************************************************
 
 	// file name len and file name.
-	m_packet.tran_data[5 + rese_len] = ((file_len & 0xff000000) >> 24);
-	m_packet.tran_data[6 + rese_len] = ((file_len & 0x00ff0000) >> 16);
-	m_packet.tran_data[7 + rese_len] = ((file_len & 0x0000ff00) >> 8);
-	m_packet.tran_data[8 + rese_len] = ((file_len & 0x000000ff) >> 0);
-	memcpy((unsigned char *)(&m_packet.tran_data[9 + rese_len]), file_name, file_len);
+	m_packet.tran_data[5 + control_buff_len] = ((file_len & 0xff000000) >> 24);
+	m_packet.tran_data[6 + control_buff_len] = ((file_len & 0x00ff0000) >> 16);
+	m_packet.tran_data[7 + control_buff_len] = ((file_len & 0x0000ff00) >> 8);
+	m_packet.tran_data[8 + control_buff_len] = ((file_len & 0x000000ff) >> 0);
+	memcpy((unsigned char *)(&m_packet.tran_data[9 + control_buff_len]), file_name, file_len);
+	//****************************************************************************
+
 	//****************************************************************************
 	// crc calc
 
-	m_packet.tran_data_len = rese_len + file_len + 4 + 4 + 1;
+	m_packet.tran_data_len = control_buff_len + file_len + 4 + 4 + 1;
 	m_packet.crc8 = crc8_calc((unsigned char *)(&m_packet), CRC_CALC_LEN);
 	//****************************************************************************
 
@@ -228,6 +243,7 @@ int hid_io_control(unsigned int cmd, const char *file_name, unsigned char *reser
 		ret = hid_write(hid_handle, (unsigned char *)(&m_packet), HID_WRITE_BUFF_LEN);
 		if (ret == -1)
 		{
+			printf("device error.\n");
 			return SYS_DEVICE_ERROR;
 		}
 
@@ -261,9 +277,12 @@ int hid_io_control(unsigned int cmd, const char *file_name, unsigned char *reser
 		default:
 			break;
 		}
+		printf("tran_index=%d,data_len=%d,\n", m_packet.tran_index, m_packet.tran_data_len);
 	}
 
 	time_e = GetTickCount64();
+
+	printf("file trans succeed,time=%lld ms.\n", time_e - time_s);
 
 	return SYS_SUCCEED;
 }
@@ -284,6 +303,7 @@ int hid_write_buff(unsigned char *buff, const unsigned int buff_len, unsigned in
 
 	if (!hid_handle)
 	{
+		printf("hid device error.\n");
 		return SYS_DEVICE_ERROR;
 	}
 
@@ -331,6 +351,7 @@ int hid_write_buff(unsigned char *buff, const unsigned int buff_len, unsigned in
 				ret = hid_write(hid_handle, (unsigned char *)(&m_packet), HID_WRITE_BUFF_LEN);
 				if (ret == -1)
 				{
+					printf("device error.\n");
 					return SYS_DEVICE_ERROR;
 				}
 
@@ -364,6 +385,7 @@ int hid_write_buff(unsigned char *buff, const unsigned int buff_len, unsigned in
 				default:
 					break;
 				}
+				printf("tran_index=%d,data_len=%d,\n", m_packet.tran_index, m_packet.tran_data_len);
 			}
 		}
 		else
@@ -382,6 +404,7 @@ int hid_write_buff(unsigned char *buff, const unsigned int buff_len, unsigned in
 				ret = hid_write(hid_handle, (unsigned char *)(&m_packet), HID_WRITE_BUFF_LEN);
 				if (ret == -1)
 				{
+					printf("device error.\n");
 					return SYS_DEVICE_ERROR;
 				}
 				hid_read_timeout(hid_handle, (unsigned char *)(&a_packet), HID_READ_BUFF_LEN, 100);
@@ -416,6 +439,7 @@ int hid_write_buff(unsigned char *buff, const unsigned int buff_len, unsigned in
 				}
 
 				hid_error(hid_handle);
+				printf("tran_index=%d,data_len=%d,\n", m_packet.tran_index, m_packet.tran_data_len);
 			}
 
 			send_len = 0;
@@ -423,6 +447,8 @@ int hid_write_buff(unsigned char *buff, const unsigned int buff_len, unsigned in
 	}
 
 	time_e = GetTickCount64();
+
+	printf("file trans succeed,time=%lld ms.\n", time_e - time_s);
 
 	return SYS_SUCCEED;
 }
@@ -445,6 +471,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 
 	if (!hid_handle)
 	{
+		printf("hid device error.\n");
 		return SYS_DEVICE_ERROR;
 	}
 
@@ -454,6 +481,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 	fp_png = fopen(full_path, "rb");
 	if (fp_png == NULL)
 	{
+		printf("no file,%s\n", full_path);
 		return SYS_NO_FILE;
 	}
 
@@ -465,6 +493,8 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 
 	name_len = strlen(file_name);
 
+	printf("name_len=%d,filename=%s\n", name_len, file_name);
+
 	m_packet.hid_ep_id = HID_END_POINT;			 // hid-endpoint
 	m_packet.start_byte = TRAN_START_FRAME_HEDA; // start frame head byte
 	m_packet.tran_type = file_type;				 // trans data type
@@ -475,6 +505,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 	memcpy((unsigned char *)(&m_packet.tran_data), file_name, name_len);
 
 	m_packet.crc8 = crc8_calc((unsigned char *)(&m_packet), CRC_CALC_LEN);
+	printf("crc8=0x%x\n", m_packet.crc8);
 
 	m_packet.end_byte = TRAN_START_FRAME_TAIL;
 
@@ -484,6 +515,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 		ret = hid_write(hid_handle, (unsigned char *)(&m_packet), HID_WRITE_BUFF_LEN);
 		if (ret == -1)
 		{
+			printf("device error.\n");
 			fclose(fp_png);
 			fp_png = NULL;
 			return SYS_DEVICE_ERROR;
@@ -520,6 +552,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 		default:
 			break;
 		}
+		printf("tran_index=%d,data_len=%d,\n", m_packet.tran_index, m_packet.tran_data_len);
 	}
 
 	while (!feof(fp_png))
@@ -551,6 +584,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 				ret = hid_write(hid_handle, (unsigned char *)(&m_packet), HID_WRITE_BUFF_LEN);
 				if (ret == -1)
 				{
+					printf("device error.\n");
 					fclose(fp_png);
 					fp_png = NULL;
 					return SYS_DEVICE_ERROR;
@@ -587,6 +621,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 				default:
 					break;
 				}
+				printf("tran_index=%d,data_len=%d,\n", m_packet.tran_index, m_packet.tran_data_len);
 			}
 		}
 		else
@@ -603,6 +638,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 				ret = hid_write(hid_handle, (unsigned char *)(&m_packet), HID_WRITE_BUFF_LEN);
 				if (ret == -1)
 				{
+					printf("device error.\n");
 					fclose(fp_png);
 					fp_png = NULL;
 					return SYS_DEVICE_ERROR;
@@ -639,6 +675,7 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 				default:
 					break;
 				}
+				printf("tran_index=%d,data_len=%d,\n", m_packet.tran_index, m_packet.tran_data_len);
 			}
 		}
 	}
@@ -647,6 +684,8 @@ int hid_write_file(const char *full_path, const char *file_name, unsigned int fi
 	fp_png = NULL;
 
 	time_e = GetTickCount64();
+
+	printf("file trans succeed,time=%lld ms.\n", time_e - time_s);
 
 	return SYS_SUCCEED;
 }
@@ -773,7 +812,10 @@ int hid_write_file_handle(const char *full_path, const char *file_name, unsigned
 	hid_get_indexed_string(hid_handle, string_index, indexed, sizeof(indexed));
 	printf("indexed      = %ls\n", indexed);
 
-	return hid_write_file(full_path, file_name, file_type);
+	int result = hid_write_file(full_path, file_name, file_type);
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	return result;
 }
 
 /**
@@ -812,7 +854,11 @@ int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsi
 	hid_get_indexed_string(hid_handle, string_index, indexed, sizeof(indexed));
 	printf("indexed      = %ls\n", indexed);
 
-	return hid_write_buff(buff, buff_len, file_type);
+	int result = hid_write_buff(buff, buff_len, file_type);
+	hid_close(hid_handle);
+	hid_handle = NULL;
+
+	return result;
 }
 
 /**
@@ -856,12 +902,9 @@ int hid_io_control_handle(unsigned int cmd, const char *file_name, unsigned char
 	hid_get_indexed_string(hid_handle, string_index, indexed, sizeof(indexed));
 	printf("indexed      = %ls\n", indexed);
 
-	control_buff[0] = 25;
-	control_buff[1] = 26;
-
 	while (1)
 	{
-		ret = hid_io_control(CMD_SHOW_PNG, file_name, control_buff, rese_len);
+		ret = hid_io_control(cmd, file_name, reserve, rese_len);
 		switch (ret)
 		{
 		case SYS_NO_FILE:
@@ -892,5 +935,8 @@ int hid_io_control_handle(unsigned int cmd, const char *file_name, unsigned char
 		Sleep(100);
 	}
 
-	return 0;
+	hid_close(hid_handle);
+	hid_handle = NULL;
+
+	return ret;
 }

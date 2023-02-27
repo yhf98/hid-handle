@@ -9,18 +9,16 @@ function setDriverType(type) {
 // lazy load the C++ binding
 var binding = null;
 function loadBinding() {
-    if( !binding ) {
-        if( os.platform() === 'linux' ) {
-            // Linux defaults to hidraw
-            if( !driverType || driverType === 'hidraw' ) {
-                return binding = require('bindings')('hidhandle_raw.node');
-            } else {
-                return binding = require('bindings')('hidhandle.node');
-            }
-        }
-        else {
+    if (os.platform() === 'linux') {
+        // Linux defaults to hidraw
+        if (!driverType || driverType === 'hidraw') {
+            return binding = require('bindings')('hidhandle_raw.node');
+        } else {
             return binding = require('bindings')('hidhandle.node');
         }
+    }
+    else {
+        return binding = require('bindings')('hidhandle.node');
     }
 }
 

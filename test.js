@@ -6,7 +6,10 @@
 
 // console.info(res)
 
-const hid = require('./hidhandle')
-let hidHandle = hid.HidHandle()
+const hid = require('H:\\hid-handle\\build\\Release\\hidhandle.node')
+// let hidHandle = hid.HidHandle()
 
-console.info(hidHandle.hid_write_file_handle("C:/Users/idmin/Pictures/cat.png", "aa",1))
+// console.info(hid)
+
+console.info(hid.hid_write_file_handle("C:\\Users\\idmin\\.gitconfig", ".gitconfig", 0))
+

@@ -43,8 +43,14 @@ Value hidIOControlHandleJs(const CallbackInfo &info)
     string arg2 = info[2].As<String>();
     unsigned int arg3 = info[3].As<Number>().Int32Value();
 
-    const auto res = hid_io_control_handle(arg0, arg1.c_str(), (unsigned char *)arg2.c_str(), arg3);
+    char* cstr = new char[arg2.size() + 1];
+    std::copy(arg2.begin(), arg2.end(), cstr);
+    cstr[arg2.size()] = '\0';
+
+    const auto res = hid_io_control_handle(arg0, arg1.c_str(), cstr, arg3);
     Number result = Number::New(env, res);
+
+    delete[] cstr;
 
     return result;
 }

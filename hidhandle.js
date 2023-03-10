@@ -24,6 +24,7 @@ function loadBinding() {
 
 //This class is a wrapper for `binding.HidHandle` class
 function HidHandle() {
+    
     return loadBinding();
 }
 

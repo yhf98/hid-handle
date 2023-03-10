@@ -654,6 +654,16 @@ void  hid_cmd_elem_update_buff(void);
 int hmi_delete_obj(unsigned int id);
 
 /**
+ * @desc 默认创建默认UI模板 
+ * 
+ * @return int 
+ */
+int hmi_create_label_handle(){
+	int ret = hmi_create_label();
+	return ret;
+}
+
+/**
  * 写入文件
  * @full_path 文件路径
  * @file_name 文件名

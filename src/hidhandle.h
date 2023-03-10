@@ -15,4 +15,6 @@ int hid_io_control_handle(unsigned int cmd, const char *file_name, char *reserve
 
 int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsigned int file_type);
 
+int hmi_create_label_handle(void);
+
 #endif

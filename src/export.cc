@@ -1,3 +1,11 @@
+/*
+ * @Author: yaohengfeng 1921934563@qq.com
+ * @Date: 2023-01-13 10:58:19
+ * @LastEditors: yaohengfeng 1921934563@qq.com
+ * @LastEditTime: 2023-03-10 15:34:59
+ * @FilePath: \hid-handle\src\export.cc
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #include <napi.h>
 #include <tuple>
 #include <string.h>
@@ -55,11 +63,22 @@ Value hidIOControlHandleJs(const CallbackInfo &info)
     return result;
 }
 
+Value hmiCreateLabelHandleJs(const CallbackInfo &info)
+{
+    auto env = info.Env();
+
+    const auto res = hmi_create_label_handle();
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
     exports.Set("hid_write_buff_handle", Function::New(env, HidWriteBuffHandleJs));
     exports.Set("hid_io_control_handle", Function::New(env, hidIOControlHandleJs));
+    exports.Set("hmi_create_label_handle", Function::New(env, hmiCreateLabelHandleJs));
 
     return exports;
 }

@@ -659,7 +659,40 @@ int hmi_delete_obj(unsigned int id);
  * @return int 
  */
 int hmi_create_label_handle(){
-	int ret = hmi_create_label();
+	int ret = -1;
+	int string_index = 1;
+
+	printf(" ... hid init ...\n");
+
+	hid_init();
+
+	hid_handle = hid_open(0x264a, 0x232a, NULL);
+	if (hid_handle == NULL)
+	{
+		printf(" open hid error!\n");
+		return 0;
+	}
+	else
+	{
+		printf(" open hid succeed!\n");
+	}
+
+	hid_set_nonblocking(hid_handle, 0);
+
+	hid_get_manufacturer_string(hid_handle, manufact, sizeof(manufact));
+	printf("manufact     = %ls\n", manufact);
+	hid_get_product_string(hid_handle, product, sizeof(product));
+	printf("product      = %ls\n", product);
+	hid_get_serial_number_string(hid_handle, serial_num, sizeof(serial_num));
+	printf("serial_num   = %ls\n", serial_num);
+	hid_get_indexed_string(hid_handle, string_index, indexed, sizeof(indexed));
+	printf("indexed      = %ls\n", indexed);
+
+	ret = hmi_create_label();
+	
+	hid_close(hid_handle);
+	hid_handle = NULL;
+
 	return ret;
 }
 

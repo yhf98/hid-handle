@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-17 14:55:00
+ * @LastEditTime: 2023-03-17 16:34:52
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -271,9 +271,12 @@ int hmi_add_obj_handle(obj_attr_t para){
 	{
 		printf(" open hid succeed!\n");
 	}
-	
+
 	hmi_init();
-	ret = hmi_add_obj(hmi_page_get_default(0), para);
+	hmi_page_t *page = hmi_page_get_default(0);
+	ret = hmi_add_obj(page, para);
+
+	hmi_packet_file(page, "./UI/index.hbin");
 
 	return ret;
 }

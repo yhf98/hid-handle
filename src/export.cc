@@ -192,7 +192,8 @@ Object Init(Env env, Object exports)
     exports.Set("hid_io_control_handle", Function::New(env, hidIOControlHandleJs));
     exports.Set("hmi_send_wifi_info_handle", Function::New(env, hmiSendWifiInfoHandleJs));
     exports.Set("hmi_add_obj_handle", Function::New(env, hmiAddObjJs));
-    
+    exports.Set("hmi_add_obj_handle", Function::New(env, hmiAddObjJs));
+
     return exports;
 }
 NODE_API_MODULE(NODE_GYP_MODULE_NAME, Init)

@@ -573,7 +573,7 @@ int  hmi_init(void)
 }
 //**********************************************************************
 
-int hmi_add_obj(hmi_page_t *page,obj_attr_t para)
+int hmi_add_obj(hmi_page_t *page, obj_attr_t para)
 {
 	int ret = -1;
 	

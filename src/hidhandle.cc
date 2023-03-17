@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-17 09:47:29
+ * @LastEditTime: 2023-03-17 14:55:00
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -246,4 +246,34 @@ int hmi_send_wifi_info_handle(const char* wifiname, const char* wifipasswd){
 
 	return ret;
 	
+}
+
+/**
+ * @brief 生层UI元素
+ * 
+ * @param para 
+ * @return int 
+ */
+int hmi_add_obj_handle(obj_attr_t para){
+	printf("\n======hmi_add_obj_handle==========\n");
+
+	int ret = -1;
+	int string_index = 1;
+	hid_init();
+
+	hid_handle = hid_open(0x264a, 0x232a, NULL);
+	if (hid_handle == NULL)
+	{
+		printf(" open hid error!\n");
+		return 0;
+	}
+	else
+	{
+		printf(" open hid succeed!\n");
+	}
+	
+	hmi_init();
+	ret = hmi_add_obj(hmi_page_get_default(0), para);
+
+	return ret;
 }

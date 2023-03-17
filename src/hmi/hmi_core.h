@@ -42,7 +42,7 @@ typedef struct obj_attr
 {
 	unsigned int   obj_id;
 	unsigned int   obj_type;
-		    char   obj_name[MAX_OBJ_NAME_LEN]; //4+4+10
+	char   obj_name[MAX_OBJ_NAME_LEN]; //4+4+10
 
 	unsigned int   obj_x;
 	unsigned int   obj_y;

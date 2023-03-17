@@ -11,7 +11,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "${default}"
         }
     ],
     "version": 4

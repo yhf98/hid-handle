@@ -836,7 +836,7 @@ int hmi_update_firmware(void)
 {
 	int i = 0;
 	unsigned int len = 0;
-	obj_attr_t para ;
+	obj_attr_t para;
 	
 	char control_buff[1024] = {0};
 

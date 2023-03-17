@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-17 16:34:52
+ * @LastEditTime: 2023-03-17 16:55:50
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -275,8 +275,11 @@ int hmi_add_obj_handle(obj_attr_t para){
 	hmi_init();
 	hmi_page_t *page = hmi_page_get_default(0);
 	ret = hmi_add_obj(page, para);
+	hmi_create_obj_test();
 
-	hmi_packet_file(page, "./UI/index.hbin");
+	hmi_packet_file(page, "./ui/index1.hbin");
+
+	hmi_unpacket_file("./ui/index1.hbin");
 
 	return ret;
 }

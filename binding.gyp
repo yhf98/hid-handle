@@ -44,7 +44,7 @@
                   'libraries': ['-lusb']
                 }], # OS==freebsd
                 [ 'OS=="win"', {
-                    "sources": [ "src/hidhandle.cc","src/hmi_core.cc" ],
+                    "sources": [ "src/hidhandle.cc","src/hmi/hmi_core.cc", "src/hmi/hmi_hid.cc", "src/hmi/hmi_packet.cc", "src/hmi/list.c" ],
                     'msvs_settings': {
                         'VCCLCompilerTool': {
                             'ExceptionHandling': '2', # /EHsc

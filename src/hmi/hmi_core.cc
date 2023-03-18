@@ -575,6 +575,7 @@ int  hmi_init(void)
 
 int hmi_add_obj(hmi_page_t *page, obj_attr_t para)
 {
+	printf("\n===hmi_add_obj.obj_data= %s ==\n", para.obj_data);
 	int ret = -1;
 	
 	ret = hmi_page_add_elem(page,para);

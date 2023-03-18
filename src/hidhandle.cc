@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-18 11:03:38
+ * @LastEditTime: 2023-03-18 14:07:08
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -22,6 +22,8 @@
 #include "hmi/hmi_hid.h"
 #include "hmi/hmi_core.h"
 #include "hmi/hmi_packet.h"
+
+using namespace std;
 
 //**************************************************************************************************************
 
@@ -255,42 +257,36 @@ int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
  * @param para
  * @return int
  */
-int hmi_add_obj_handle(std::vector<obj_attr_t> paras)
+int hmi_add_obj_handle(vector<obj_attr_t> &paras)
 {
 	int ret = -1;
 	printf("\n======hmi_add_obj_handle==========\n");
 
-	for (const auto &obj : paras)
+	hid_init();
+
+	hid_handle = hid_open(0x264a, 0x232a, NULL);
+	if (hid_handle == NULL)
 	{
-		printf("obj_id: %d, obj_id: %d\n", obj.obj_id, obj.obj_id);
+		printf(" open hid error!\n");
+		return 0;
+	}
+	else
+	{
+		printf(" open hid succeed!\n");
 	}
 
-	// int ret = -1;
-	// int string_index = 1;
-	// hid_init();
+	hmi_init();
+	hmi_page_t *page = hmi_page_get_default(0);
+	for (const auto &obj : paras)
+	{
+		ret = hmi_add_obj(page, obj);
+		printf("obj_id: %d, obj_id: %d, obj_data: %s, obj_reserve: %s\n", obj.obj_id, obj.obj_id, obj.obj_data, obj.obj_reserve);
+	}
 
-	// hid_handle = hid_open(0x264a, 0x232a, NULL);
-	// if (hid_handle == NULL)
-	// {
-	// 	printf(" open hid error!\n");
-	// 	return 0;
-	// }
-	// else
-	// {
-	// 	printf(" open hid succeed!\n");
-	// }
+	// hmi_create_obj_test();
+	ret = hmi_packet_file(page, "./ui/hmi_res.hbin");
 
-	// hmi_init();
-	// hmi_page_t *page = hmi_page_get_default(0);
-	// ret = hmi_add_obj(page, para);
-
-	// if (ret == -1) return ret;
-
-	// // hmi_create_obj_test();
-
-	// ret = hmi_packet_file(page, "./ui/hmi_res.hbin");
-
-	// hmi_unpacket_file("./ui/index1.hbin");
+	hmi_unpacket_file("./ui/index1.hbin");
 
 	return ret;
 }

@@ -38,7 +38,7 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 
 	unsigned int file_start_code 	= FILE_START_CODE;
 	unsigned int file_end_code		= FILE_END_CODE;	
-			 char filename[1024]    = {0};
+	char filename[1024]    = {0};
 	unsigned int  file_size         = 0;
 	unsigned int  file_name_len     = 0;
  	unsigned int  obj_attr_size 	= 0;
@@ -131,8 +131,8 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_IMG)
 			{
 				memset(filename,0,sizeof(filename));
-
-				sprintf(filename, "./res/%s", elem->elem_attr.obj_data);
+				printf("img:filename: %s\n",filename);
+				sprintf(filename, elem->elem_attr.obj_data);
 
 				fp_png = fopen(filename,"rb");
 				if(!fp_png){
@@ -194,8 +194,8 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 			{
 				memset(filename,0,sizeof(filename));
 
-				sprintf(filename, "./res/%s", elem->elem_attr.obj_data);
-
+				sprintf(filename, elem->elem_attr.obj_data);
+				printf("filename: %s\n",filename);
 				fp_jpg = fopen(filename,"rb");
 				if(!fp_jpg){
 					printf("file open error %s.\n",filename);

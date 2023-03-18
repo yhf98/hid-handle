@@ -79,9 +79,9 @@ typedef struct obj_attr
 
 	unsigned int   obj_event;
 	unsigned int   obj_action;  //8
-			char   obj_data[MAX_OBJ_DATA_LEN]; //100
-
-			char   obj_reserve[MAX_RESERVE_LEN];//10
+	
+	char   obj_data[MAX_OBJ_DATA_LEN]; //100
+	char   obj_reserve[MAX_RESERVE_LEN];//10
 
 }obj_attr_t;
 

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-18 14:07:08
+ * @LastEditTime: 2023-03-18 14:18:12
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -280,13 +280,13 @@ int hmi_add_obj_handle(vector<obj_attr_t> &paras)
 	for (const auto &obj : paras)
 	{
 		ret = hmi_add_obj(page, obj);
-		printf("obj_id: %d, obj_id: %d, obj_data: %s, obj_reserve: %s\n", obj.obj_id, obj.obj_id, obj.obj_data, obj.obj_reserve);
+		printf("\nobj_id: %d\n", obj.obj_id);
 	}
 
 	// hmi_create_obj_test();
 	ret = hmi_packet_file(page, "./ui/hmi_res.hbin");
 
-	hmi_unpacket_file("./ui/index1.hbin");
+	// hmi_unpacket_file("./ui/index1.hbin");
 
 	return ret;
 }

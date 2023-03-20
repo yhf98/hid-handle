@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:53:22
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-18 13:51:02
+ * @LastEditTime: 2023-03-20 10:13:54
  * @FilePath: \hid-handle\test.js
  * @Description: test.js
  */
@@ -59,7 +59,7 @@ let element = [
   {
     obj_id: 1,
     obj_type: 2,
-    obj_name: "label2",
+    obj_name: "img1",
     obj_x: 192,
     obj_y: 0,
     obj_w: 320,
@@ -87,8 +87,8 @@ let element = [
     obj_var: [50, 60, 70],
     obj_event: 0,
     obj_action: 0,
-    obj_data: "C:/Users/idmin/Pictures/miao.jpg",
-    obj_reserve: "ab",
+    obj_data: "miao.jpg",
+    obj_reserve: "/miao.jpg",
   },
 ];
 

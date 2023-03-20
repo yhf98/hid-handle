@@ -131,8 +131,9 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_IMG)
 			{
 				memset(filename,0,sizeof(filename));
-				printf("\nimg:filename: %s\n",filename);
-				sprintf(filename, elem->elem_attr.obj_data);
+				
+				sprintf(filename, "./res/%s", elem->elem_attr.obj_data);
+				printf("\nimg2:filename: %s\n",filename);
 
 				fp_png = fopen(filename,"rb");
 				if(!fp_png){
@@ -194,7 +195,7 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 			{
 				memset(filename,0,sizeof(filename));
 
-				sprintf(filename, elem->elem_attr.obj_data);
+				sprintf(filename,"./res/%s", elem->elem_attr.obj_data);
 				printf("filename: %s\n",filename);
 				fp_jpg = fopen(filename,"rb");
 				if(!fp_jpg){

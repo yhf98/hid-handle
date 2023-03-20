@@ -286,10 +286,7 @@ hmi_page_t* hmi_page_get_default(unsigned int id)
 hmi_page_t* hmi_page_get_by_id(unsigned int id)
 {
 	hmi_page_t* temp = NULL;
-
-
-
-
+	
 	return temp;
 }
 

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-20 15:30:50
+ * @LastEditTime: 2023-03-21 10:31:37
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -190,6 +190,66 @@ Value hmiAddObjJs(const CallbackInfo &info)
     return result;
 }
 
+Value hmiPageUpdateElemVarHandleJs(const CallbackInfo &info){
+    auto env = info.Env();
+
+    unsigned int id = 0;
+    obj_attr_t para;
+    memset(&para, 0, sizeof(obj_attr_t));
+    para.obj_id = 4;
+    strcpy_s(para.obj_name, "label15");
+    // para.obj_name = "label15";
+    para.obj_type = 6;
+
+    para.obj_x = 0;
+    para.obj_y = 270;
+    para.obj_w = 192;
+    para.obj_h = 20;
+
+    para.obj_opa = 255;
+    para.obj_r = 255;
+    para.obj_g = 0;
+    para.obj_b = 0;
+
+    para.obj_opa_2 = 255;
+    para.obj_r_2 = 0;
+    para.obj_g_2 = 0;
+    para.obj_b_2 = 255;
+
+    para.obj_font_size = 0;
+    para.obj_font_r = 0;
+    para.obj_font_g = 255;
+    para.obj_font_b = 0;
+
+    para.obj_range_min = 0;
+    para.obj_range_max = 100;
+    para.obj_angle_range = 360;
+    para.obj_rotation = 90;
+    para.obj_width = 20;
+
+    para.obj_point_x_num = 0;
+    para.obj_point_y_num = 0;
+
+    para.obj_time = 1000;
+
+    para.obj_var[0] = 10;
+
+    para.obj_event = 0;
+    para.obj_action = 0;
+    strcpy_s(para.obj_data, "磁盘");
+    // para.obj_data = "磁盘";
+    // para.obj_reserve = "";
+    strcpy_s(para.obj_reserve, "");
+
+    const auto res = hmi_page_update_elem_var_handle(id, para);
+
+    Number result = Number::New(env, res);
+    
+    return result;
+
+
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
@@ -197,6 +257,7 @@ Object Init(Env env, Object exports)
     exports.Set("hid_io_control_handle", Function::New(env, hidIOControlHandleJs));
     exports.Set("hmi_send_wifi_info_handle", Function::New(env, hmiSendWifiInfoHandleJs));
     exports.Set("hmi_add_obj_handle", Function::New(env, hmiAddObjJs));
+    exports.Set("hmi_page_update_elem_var_handle", Function::New(env, hmiPageUpdateElemVarHandleJs));
 
     return exports;
 }

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-18 14:18:12
+ * @LastEditTime: 2023-03-21 15:15:07
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -287,6 +287,189 @@ int hmi_add_obj_handle(vector<obj_attr_t> &paras)
 	ret = hmi_packet_file(page, "./ui/hmi_res.hbin");
 
 	// hmi_unpacket_file("./ui/index1.hbin");
+
+	return ret;
+}
+
+int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
+{
+	int ret = -1;
+	printf("\n======hmi_page_update_elem_var_handle==========\n");
+
+	hid_init();
+
+	hid_handle = hid_open(0x264a, 0x232a, NULL);
+	if (hid_handle == NULL)
+	{
+		printf(" open hid error!\n");
+		return 0;
+	}
+	else
+	{
+		printf(" open hid succeed!\n");
+	}
+
+	int i = 0;
+	unsigned int page_id = 0;
+	unsigned int elem_id = 0;
+	unsigned int data_type = 0;
+	unsigned int elem_data_len = 0;
+
+	unsigned int var0 = 0;
+	unsigned int var1 = 0;
+	unsigned int var2 = 0;
+	unsigned int var3 = 0;
+
+	char control_buff[24];
+
+	memset(control_buff, 0, sizeof(control_buff));
+
+	srand(time(0));
+	var0 = rand() % 100;
+	var1 = rand() % 100;
+	var2 = rand() % 100;
+	var3 = rand() % 100;
+
+	printf("var0=%d\n", var0);
+	printf("var1=%d\n", var1);
+	printf("var2=%d\n", var2);
+	printf("var3=%d\n", var3);
+
+	for (i = 0; i < 4; i++)
+	{
+
+		page_id = 0;
+		elem_id = 0x07 + i;
+		printf("\n\n========elem_id=========%d\n\n", elem_id);
+
+		data_type = HMI_OBJ_DATA_BUFF;
+
+		elem_data_len = 3;
+
+		control_buff[0] = ((page_id >> 0) & 0xff);
+		control_buff[1] = ((page_id >> 8) & 0xff);
+
+		control_buff[2] = ((elem_id >> 0) & 0xff);
+		control_buff[3] = ((elem_id >> 8) & 0xff);
+
+		control_buff[4] = ((data_type >> 0) & 0xff);
+		control_buff[5] = ((data_type >> 8) & 0xff);
+
+		control_buff[6] = ((elem_data_len >> 0) & 0xff);
+		control_buff[7] = ((elem_data_len >> 8) & 0xff);
+
+		switch (i)
+		{
+		case 0:
+		{
+			sprintf(control_buff + 8, "memory:%d%", var0);
+			break;
+		}
+		case 1:
+		{
+			sprintf(control_buff + 8, "cpu:%d%", var1);
+			break;
+		}
+		case 2:
+		{
+			sprintf(control_buff + 8, "net:%d%", var2);
+			break;
+		}
+		case 3:
+		{
+			sprintf(control_buff + 8, "disk:%d%", var3);
+			break;
+		}
+		default:
+			break;
+		}
+
+		ret =  hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	}
+
+	// for (i = 0; i < 4; i++)
+	// {
+
+	// 	page_id = 0;
+	// 	elem_id = 0x07 + i;
+	// 	// data_type = HMI_OBJ_DATA_DEFAULT;
+	// 	data_type = HMI_OBJ_DATA_BUFF;
+		
+	// 	elem_data_len = 3;
+
+	// 	control_buff[0] = ((page_id >> 0) & 0xff);
+	// 	control_buff[1] = ((page_id >> 8) & 0xff);
+
+	// 	control_buff[2] = ((elem_id >> 0) & 0xff);
+	// 	control_buff[3] = ((elem_id >> 8) & 0xff);
+
+	// 	control_buff[4] = ((data_type >> 0) & 0xff);
+	// 	control_buff[5] = ((data_type >> 8) & 0xff);
+
+	// 	control_buff[6] = ((elem_data_len >> 0) & 0xff);
+	// 	control_buff[7] = ((elem_data_len >> 8) & 0xff);
+
+	// 	switch (i)
+	// 	{
+	// 	case 0:
+	// 	{
+	// 		control_buff[8] = ((var0 >> 0) & 0xff);
+	// 		control_buff[9] = ((var0 >> 8) & 0xff);
+
+	// 		control_buff[10] = ((var0 >> 0) & 0xff);
+	// 		control_buff[11] = ((var0 >> 8) & 0xff);
+
+	// 		control_buff[12] = ((var0 >> 0) & 0xff);
+	// 		control_buff[13] = ((var0 >> 8) & 0xff);
+	// 		break;
+	// 	}
+	// 	case 1:
+	// 	{
+	// 		control_buff[8] = ((var1 >> 0) & 0xff);
+	// 		control_buff[9] = ((var1 >> 8) & 0xff);
+
+	// 		control_buff[10] = ((var1 >> 0) & 0xff);
+	// 		control_buff[11] = ((var1 >> 8) & 0xff);
+
+	// 		control_buff[12] = ((var1 >> 0) & 0xff);
+	// 		control_buff[13] = ((var1 >> 8) & 0xff);
+	// 		break;
+	// 	}
+	// 	case 2:
+	// 	{
+	// 		control_buff[8] = ((var2 >> 0) & 0xff);
+	// 		control_buff[9] = ((var2 >> 8) & 0xff);
+
+	// 		control_buff[10] = ((var2 >> 0) & 0xff);
+	// 		control_buff[11] = ((var2 >> 8) & 0xff);
+
+	// 		control_buff[12] = ((var2 >> 0) & 0xff);
+	// 		control_buff[13] = ((var2 >> 8) & 0xff);
+	// 		break;
+	// 	}
+	// 	case 3:
+	// 	{
+	// 		control_buff[8] = ((var3 >> 0) & 0xff);
+	// 		control_buff[9] = ((var3 >> 8) & 0xff);
+
+	// 		control_buff[10] = ((var3 >> 0) & 0xff);
+	// 		control_buff[11] = ((var3 >> 8) & 0xff);
+
+	// 		control_buff[12] = ((var3 >> 0) & 0xff);
+	// 		control_buff[13] = ((var3 >> 8) & 0xff);
+	// 		break;
+	// 	}
+	// 	default:
+	// 		break;
+	// 	}
+
+	// 	hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	// }
+
+	// hmi_init();
+	// hmi_page_t *page = hmi_page_get_default(0);
+
+	// ret = hmi_page_update_elem_var(page, id, para);
 
 	return ret;
 }

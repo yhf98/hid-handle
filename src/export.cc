@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-21 10:31:37
+ * @LastEditTime: 2023-03-22 15:30:44
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -79,7 +79,7 @@ Value hmiSendWifiInfoHandleJs(const CallbackInfo &info)
     return result;
 }
 
-Value hmiAddObjJs(const CallbackInfo &info)
+Value generateUIHandleJs(const CallbackInfo &info)
 {
     auto env = info.Env();
 
@@ -90,6 +90,8 @@ Value hmiAddObjJs(const CallbackInfo &info)
     }
 
     Array objAttrTs = info[0].As<Array>();
+
+    string pkgPath = info[1].As<String>();
 
     vector<obj_attr_t> vec_obj_attr_t;
 
@@ -184,7 +186,7 @@ Value hmiAddObjJs(const CallbackInfo &info)
         vec_obj_attr_t.push_back(para);
     }
 
-    const auto res = hmi_add_obj_handle(vec_obj_attr_t);
+    const auto res = generate_ui_handle(vec_obj_attr_t, pkgPath.c_str());
     Number result = Number::New(env, res);
 
     return result;
@@ -250,14 +252,28 @@ Value hmiPageUpdateElemVarHandleJs(const CallbackInfo &info){
 
 }
 
+Value hmiUnpacketFileHandleJs(const CallbackInfo &info){
+    auto env = info.Env();
+
+    string filepath = info[0].As<String>();
+    string out_path = info[1].As<String>();
+
+    const auto res = hmi_unpacket_file_handle(filepath.c_str(), out_path.c_str());
+    
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
     exports.Set("hid_write_buff_handle", Function::New(env, HidWriteBuffHandleJs));
     exports.Set("hid_io_control_handle", Function::New(env, hidIOControlHandleJs));
     exports.Set("hmi_send_wifi_info_handle", Function::New(env, hmiSendWifiInfoHandleJs));
-    exports.Set("hmi_add_obj_handle", Function::New(env, hmiAddObjJs));
+    exports.Set("generate_ui_handle", Function::New(env, generateUIHandleJs));
     exports.Set("hmi_page_update_elem_var_handle", Function::New(env, hmiPageUpdateElemVarHandleJs));
+    exports.Set("hmi_unpacket_file_handle", Function::New(env, hmiUnpacketFileHandleJs));
 
     return exports;
 }

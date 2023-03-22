@@ -20,8 +20,7 @@
 #define  FILE_START_CODE       (0x0003A0A1)
 #define  FILE_END_CODE         (0x0004A2A3)
 
-
-int hmi_packet_file(hmi_page_t *page, const char * filepath)
+int hmi_packet_file(hmi_page_t *page, const char * rootpath)
 {
 	int i = 0;
 	slist_t* node;
@@ -61,8 +60,10 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 		printf("list empty.\n");
 		return -1;
 	}
-
-	fp_packet = fopen(filepath,"wb");
+	char hbin_path[100];
+	sprintf(hbin_path, "%s/hbin/hmi_res.hbin", rootpath);
+	
+	fp_packet = fopen(hbin_path,"wb");
 	if(!fp_packet){
 		printf("file open error.\n");
 		return -1;
@@ -132,7 +133,7 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 			{
 				memset(filename,0,sizeof(filename));
 				
-				sprintf(filename, "./res/%s", elem->elem_attr.obj_data);
+				sprintf(filename, "%s/img/%s",rootpath, elem->elem_attr.obj_data);
 				printf("\nimg2:filename: %s\n",filename);
 
 				fp_png = fopen(filename,"rb");
@@ -195,9 +196,9 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 			{
 				memset(filename,0,sizeof(filename));
 
-				sprintf(filename,"./res/%s", elem->elem_attr.obj_data);
-				printf("filename: %s\n",filename);
-				fp_jpg = fopen(filename,"rb");
+				sprintf(filename,"%s/img/%s", rootpath, elem->elem_attr.obj_data);
+				printf("filename: %s\n", filename);
+				fp_jpg = fopen(filename, "rb");
 				if(!fp_jpg){
 					printf("file open error %s.\n",filename);
 					break;;
@@ -285,10 +286,7 @@ int hmi_packet_file(hmi_page_t *page, const char * filepath)
 	return 0;
 }
 
-
-
-
-int hmi_unpacket_file(const char * filepath)
+int hmi_unpacket_file(const char * filepath, const char * out_path)
 {
 	int i = 0;
 	obj_attr_t	   elem_attr;
@@ -318,6 +316,10 @@ int hmi_unpacket_file(const char * filepath)
 	memset(&elem_attr,0,sizeof(obj_attr_t));
 	memset(obj_reserve,0,sizeof(obj_reserve));
 	
+
+	// char hbin_path[100];
+	// sprintf(hbin_path, "%s/hbin/hmi_res.hbin", rootpath);
+
 	fp_unpacket = fopen(filepath,"rb");
 	if(!fp_unpacket){
 		printf("file open error.\n");
@@ -424,7 +426,7 @@ int hmi_unpacket_file(const char * filepath)
 		}
 
 		memset(file_name,0,sizeof(file_name));
-		sprintf(file_name,"./output/%s",file_temp);
+		sprintf(file_name,"%s/%s",out_path, file_temp);
 		printf("file_name=%s\n",file_name);
 		fp_file  = fopen(file_name,"wb");
 		if(!fp_file){

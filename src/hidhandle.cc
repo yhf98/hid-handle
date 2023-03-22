@@ -2,7 +2,15 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-21 15:15:07
+ * @LastEditTime: 2023-03-22 15:08:06
+ * @FilePath: \hid-handle\src\hidhandle.cc
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+/*
+ * @Author: yaohengfeng 1921934563@qq.com
+ * @Date: 2023-01-13 10:45:03
+ * @LastEditors: yaohengfeng 1921934563@qq.com
+ * @LastEditTime: 2023-03-22 14:20:25
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -257,7 +265,7 @@ int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
  * @param para
  * @return int
  */
-int hmi_add_obj_handle(vector<obj_attr_t> &paras)
+int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 {
 	int ret = -1;
 	printf("\n======hmi_add_obj_handle==========\n");
@@ -282,9 +290,14 @@ int hmi_add_obj_handle(vector<obj_attr_t> &paras)
 		ret = hmi_add_obj(page, obj);
 		printf("\nobj_id: %d\n", obj.obj_id);
 	}
-
+	
 	// hmi_create_obj_test();
-	ret = hmi_packet_file(page, "./ui/hmi_res.hbin");
+	
+	
+
+	printf("打包地址：%s", pkg_path);
+
+	ret = hmi_packet_file(page, pkg_path);
 
 	// hmi_unpacket_file("./ui/index1.hbin");
 
@@ -470,6 +483,50 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
 	// hmi_page_t *page = hmi_page_get_default(0);
 
 	// ret = hmi_page_update_elem_var(page, id, para);
+
+	return ret;
+}
+
+/**
+ * @brief 解压hbin文件
+ * 
+ * @param filepath 文件路径
+ * @param out_path 解压路径
+ * @return int 
+ */
+int hmi_unpacket_file_handle(const char * filepath, const char * out_path){
+	int ret = -1;
+	int string_index = 1;
+
+	unsigned char control_buff[24];
+
+	printf(" ... hmi_unpacket_file_handle ...\n");
+
+	hid_init();
+
+	hid_handle = hid_open(0x264a, 0x232a, NULL);
+	if (hid_handle == NULL)
+	{
+		printf(" open hid error!\n");
+		return 0;
+	}
+	else
+	{
+		printf(" open hid succeed!\n");
+	}
+
+	hid_set_nonblocking(hid_handle, 0);
+
+	hid_get_manufacturer_string(hid_handle, manufact, sizeof(manufact));
+	printf("manufact     = %ls\n", manufact);
+	hid_get_product_string(hid_handle, product, sizeof(product));
+	printf("product      = %ls\n", product);
+	hid_get_serial_number_string(hid_handle, serial_num, sizeof(serial_num));
+	printf("serial_num   = %ls\n", serial_num);
+	hid_get_indexed_string(hid_handle, string_index, indexed, sizeof(indexed));
+	printf("indexed      = %ls\n", indexed);
+
+	ret =  hmi_unpacket_file(filepath, out_path);
 
 	return ret;
 }

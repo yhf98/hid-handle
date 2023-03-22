@@ -8,8 +8,8 @@
 
 
 
-int hmi_packet_file(hmi_page_t *page,const char * filepath);
-int hmi_unpacket_file(const char * filepath);
+int hmi_packet_file(hmi_page_t *page, const char * rootpath);
+int hmi_unpacket_file(const char * filepath, const char * out_path);
 
 
 #endif

@@ -22,9 +22,9 @@ jobs:
         node-version: [14.17.5]
     steps:
       # 拉取 github 仓库代码
-      - uses: yhf98/hid-handle@1.13.0
+      - uses: yhf98/hid-handle@1.13.1
       # 设定 node 环境
-      - uses: yhf98/hid-handle@1.13.0
+      - uses: yhf98/hid-handle@1.13.1
         with:
           node-version: ${{ matrix.node-version }}
           # 设置发包 npm 地址仓库

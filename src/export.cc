@@ -2,9 +2,17 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-22 15:30:44
+ * @LastEditTime: 2023-03-23 10:57:24
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+/*
+ * @Author: yaohengfeng 1921934563@qq.com
+ * @Date: 2023-01-13 10:58:19
+ * @LastEditors: yaohengfeng 1921934563@qq.com
+ * @LastEditTime: 2023-03-22 18:30:14
+ * @FilePath: \hid-handle\src\export.cc
+ * @Description: 对外导出接口
  */
 #include <napi.h>
 #include <node_api.h>
@@ -73,7 +81,7 @@ Value hmiSendWifiInfoHandleJs(const CallbackInfo &info)
     string wifiName = info[0].As<String>();
     string wifiPassword = info[1].As<String>();
 
-    const auto res = hmi_send_wifi_info_handle(wifiPassword.c_str(), wifiPassword.c_str());
+    const auto res = hmi_send_wifi_info_handle(wifiName.c_str(), wifiPassword.c_str());
     Number result = Number::New(env, res);
 
     return result;

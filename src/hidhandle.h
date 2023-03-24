@@ -28,4 +28,6 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para);
 
 int hmi_unpacket_file_handle(const char * filepath, const char * out_path);
 
+int hmi_update_obj_var_handle();
+
 #endif

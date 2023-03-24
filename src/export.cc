@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-23 10:57:24
+ * @LastEditTime: 2023-03-24 10:59:20
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -118,7 +118,7 @@ Value generateUIHandleJs(const CallbackInfo &info)
         memset(&para, 0, sizeof(obj_attr_t));
 
         // 对象id,要唯一
-        para.obj_id = objAttrT.Get("obj_type").As<Number>().Int32Value();
+        para.obj_id = objAttrT.Get("obj_id").As<Number>().Int32Value();
         // UI类型
         para.obj_type = objAttrT.Get("obj_type").As<Number>().Int32Value();
         // 对象名字,唯一
@@ -273,6 +273,19 @@ Value hmiUnpacketFileHandleJs(const CallbackInfo &info){
     return result;
 }
 
+Value hmiUpdateObjVarHandleJs(const CallbackInfo &info){
+    auto env = info.Env();
+
+    const auto res = hmi_update_obj_var_handle();
+
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
+
+
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
@@ -282,6 +295,7 @@ Object Init(Env env, Object exports)
     exports.Set("generate_ui_handle", Function::New(env, generateUIHandleJs));
     exports.Set("hmi_page_update_elem_var_handle", Function::New(env, hmiPageUpdateElemVarHandleJs));
     exports.Set("hmi_unpacket_file_handle", Function::New(env, hmiUnpacketFileHandleJs));
+    exports.Set("hmi_update_obj_var_handle", Function::New(env, hmiUpdateObjVarHandleJs));
 
     return exports;
 }

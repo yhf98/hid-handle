@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:46:10
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-22 15:07:04
+ * @LastEditTime: 2023-03-27 13:40:43
  * @FilePath: \hid-handle\src\hidhandle.h
  * @Description: hidhandle.h
  */
@@ -29,5 +29,9 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para);
 int hmi_unpacket_file_handle(const char * filepath, const char * out_path);
 
 int hmi_update_obj_var_handle();
+
+int hmi_update_screen_data(unsigned int elem_id, const char *data);
+
+int hmi_batch_update_screen_data(vector<obj_attr_t> &paras);
 
 #endif

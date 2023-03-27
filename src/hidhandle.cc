@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-24 18:41:53
+ * @LastEditTime: 2023-03-27 14:29:11
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -569,7 +569,7 @@ int hmi_update_obj_var_handle()
 	unsigned int var2 = 0;
 	unsigned int var3 = 0;
 
-	char control_buff[24];
+	char control_buff[64];
 
 	memset(control_buff, 0, sizeof(control_buff));
 
@@ -615,4 +615,164 @@ int hmi_update_obj_var_handle()
 	hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 
 	return 0;
+}
+
+/**
+ * @brief 更新屏幕元素的数据
+ *
+ * @param paras
+ * @return int int
+ */
+int hmi_update_screen_data(unsigned int elem_id, const char *data)
+{
+	int ret = -1;
+	printf("\n======hmi_update_screen_data==========\n");
+
+	hid_init();
+
+	hid_handle = hid_open(0x264a, 0x232a, NULL);
+	if (hid_handle == NULL)
+	{
+		printf(" open hid error!\n");
+		return 0;
+	}
+	else
+	{
+		printf(" open hid succeed!\n");
+	}
+
+	int i = 0;
+	unsigned int page_id = 0;
+	// unsigned int elem_id = 0;
+	unsigned int data_type = 0;
+	unsigned int elem_data_len = 0;
+
+	char control_buff[64];
+
+	memset(control_buff, 0, sizeof(control_buff));
+
+	page_id = 0;
+	elem_id = 0;
+
+	data_type = HMI_OBJ_DATA_BUFF;
+
+	elem_data_len = 3;
+
+	control_buff[0] = ((page_id >> 0) & 0xff);
+	control_buff[1] = ((page_id >> 8) & 0xff);
+
+	control_buff[2] = ((elem_id >> 0) & 0xff);
+	control_buff[3] = ((elem_id >> 8) & 0xff);
+
+	control_buff[4] = ((data_type >> 0) & 0xff);
+	control_buff[5] = ((data_type >> 8) & 0xff);
+
+	control_buff[6] = ((elem_data_len >> 0) & 0xff);
+	control_buff[7] = ((elem_data_len >> 8) & 0xff);
+
+	sprintf(control_buff + 8, "%s", data);
+
+	ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	delete[] control_buff;
+
+	return ret;
+}
+
+/**
+ * @brief 批量获取更新屏幕数据
+ *
+ * @param paras
+ * @return int
+ */
+int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
+{
+	int ret = -1;
+	printf("\n======hmi_update_screen_data==========\n");
+
+	hid_init();
+
+	hid_handle = hid_open(0x264a, 0x232a, NULL);
+	if (hid_handle == NULL)
+	{
+		printf(" open hid error!\n");
+		return 0;
+	}
+	else
+	{
+		printf(" open hid succeed!\n");
+	}
+
+	unsigned int page_id = 0;
+	unsigned int elem_id = 0;
+	unsigned int data_type = 0;
+	unsigned int elem_data_len = 0;
+
+	char control_buff[64];
+	memset(control_buff, 0, sizeof(control_buff));
+	// 更新obj_data
+	for (const auto &obj : paras)
+	{
+
+		page_id = 0;
+		elem_id = obj.obj_id;
+
+		data_type = HMI_OBJ_DATA_BUFF;
+
+		elem_data_len = 3;
+
+		control_buff[0] = ((page_id >> 0) & 0xff);
+		control_buff[1] = ((page_id >> 8) & 0xff);
+
+		control_buff[2] = ((elem_id >> 0) & 0xff);
+		control_buff[3] = ((elem_id >> 8) & 0xff);
+
+		control_buff[4] = ((data_type >> 0) & 0xff);
+		control_buff[5] = ((data_type >> 8) & 0xff);
+
+		control_buff[6] = ((elem_data_len >> 0) & 0xff);
+		control_buff[7] = ((elem_data_len >> 8) & 0xff);
+
+		sprintf(control_buff + 8, "%s", obj.obj_data);
+
+		ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	}
+
+	// 更新obj_var
+	for (const auto &obj : paras)
+	{
+
+		page_id = 0;
+		elem_id = obj.obj_id;
+
+		data_type = HMI_OBJ_DATA_DEFAULT;
+
+		elem_data_len = 3;
+
+		control_buff[0] = ((page_id >> 0) & 0xff);
+		control_buff[1] = ((page_id >> 8) & 0xff);
+
+		control_buff[2] = ((elem_id >> 0) & 0xff);
+		control_buff[3] = ((elem_id >> 8) & 0xff);
+
+		control_buff[4] = ((data_type >> 0) & 0xff);
+		control_buff[5] = ((data_type >> 8) & 0xff);
+
+		control_buff[6] = ((elem_data_len >> 0) & 0xff);
+		control_buff[7] = ((elem_data_len >> 8) & 0xff);
+
+		control_buff[8] = ((obj.obj_var[0] >> 0) & 0xff);
+		control_buff[9] = ((obj.obj_var[0] >> 7) & 0xff);
+		
+		ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	}
+
+
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	delete[] control_buff;
+
+	return ret;
 }

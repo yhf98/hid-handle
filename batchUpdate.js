@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:53:22
  * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-28 09:43:43
+ * @LastEditTime: 2023-03-28 18:19:41
  * @FilePath: \hid-handle\test.js
  * @Description: test.js
  */
@@ -88,10 +88,7 @@ console.info("============================================================");
 //   },
 // ];
 
-
 cpuInfo().then((res) => {
-  console.info("CPU使用率：", res, memoryInfo, deskInfo());
-
   let element = [
     {
       obj_id: 2,
@@ -201,3 +198,41 @@ cpuInfo().then((res) => {
 
 });
 
+// let element = [
+//   {
+//     obj_id: 0,
+//     obj_type: 1,
+//     obj_name: "cpu",
+//     obj_x: 0,
+//     obj_y: 0,
+//     obj_w: 240,
+//     obj_h: 20,
+//     obj_opa: 255,
+//     obj_r: 1,
+//     obj_g: 249,
+//     obj_b: 129,
+//     obj_opa_2: 255,
+//     obj_r_2: 0,
+//     obj_g_2: 0,
+//     obj_b_2: 0,
+//     obj_font_size: 18,
+//     obj_font_r: 238,
+//     obj_font_g: 55,
+//     obj_font_b: 23,
+//     obj_range_min: 0,
+//     obj_range_max: 100,
+//     obj_angle_range: 0,
+//     obj_rotation: 0,
+//     obj_width: 240,
+//     obj_point_x_num: 5,
+//     obj_point_y_num: 5,
+//     obj_time: 1000,
+//     obj_var: [90],
+//     obj_event: 0,
+//     obj_action: 0,
+//     obj_data: "CPU 90%",
+//     obj_reserve: "",
+//   }
+// ]
+
+// console.info(hidHandle.hmi_batch_update_screen_data(element));

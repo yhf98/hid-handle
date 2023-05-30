@@ -1127,158 +1127,158 @@ int hmi_create_obj_test(void)
 #endif
 
 
-#if 1 //  png obj
-	memset(&para,0,sizeof(obj_attr_t));
+// #if 1 //  png obj
+// 	memset(&para,0,sizeof(obj_attr_t));
 
-	para.obj_id = 0x08+0;
-	para.obj_type = HMI_OBJ_TYPE_IMG;
+// 	para.obj_id = 0x08+0;
+// 	para.obj_type = HMI_OBJ_TYPE_IMG;
 
-	para.obj_x	= 192;
-	para.obj_y	= 0;
-	para.obj_w	= 320;
-	para.obj_h	= 320;
+// 	para.obj_x	= 192;
+// 	para.obj_y	= 0;
+// 	para.obj_w	= 320;
+// 	para.obj_h	= 320;
 
-	para.obj_opa	= 0;
-	para.obj_r		= 255;
-	para.obj_g		= 0;
-	para.obj_b		= 0;
+// 	para.obj_opa	= 0;
+// 	para.obj_r		= 255;
+// 	para.obj_g		= 0;
+// 	para.obj_b		= 0;
 
-	para.obj_opa_2	= 0;
-	para.obj_r_2	= 0;
-	para.obj_g_2	= 0;
-	para.obj_b_2	= 255;	
+// 	para.obj_opa_2	= 0;
+// 	para.obj_r_2	= 0;
+// 	para.obj_g_2	= 0;
+// 	para.obj_b_2	= 255;	
 
-	para.obj_font_size	= 0;
-	para.obj_font_r = 0;
-	para.obj_font_g = 255;
-	para.obj_font_b = 0;		
+// 	para.obj_font_size	= 0;
+// 	para.obj_font_r = 0;
+// 	para.obj_font_g = 255;
+// 	para.obj_font_b = 0;		
 
-	para.obj_var[0] = 50;
-	para.obj_var[1] = 60;
-	para.obj_var[2] = 70;
+// 	para.obj_var[0] = 50;
+// 	para.obj_var[1] = 60;
+// 	para.obj_var[2] = 70;
 
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
+// 	para.obj_range_min	= 0;
+// 	para.obj_range_max	= 100;
 
-	para.obj_angle_range = 360;
-	para.obj_rotation  = 90;
-	para.obj_width	= 20;
+// 	para.obj_angle_range = 360;
+// 	para.obj_rotation  = 90;
+// 	para.obj_width	= 20;
 
-	para.obj_point_x_num = 0;
-	para.obj_point_y_num = 0;
+// 	para.obj_point_x_num = 0;
+// 	para.obj_point_y_num = 0;
 
-	para.obj_time = 1000;
+// 	para.obj_time = 1000;
 
-	para.obj_event		= 0;
-	para.obj_action 	= 0;
+// 	para.obj_event		= 0;
+// 	para.obj_action 	= 0;
 
-	sprintf((para.obj_data), "%s","menu_4.png");
+// 	sprintf((para.obj_data), "%s","menu_4.png");
 
-	hmi_add_obj(hmi_page_get_default(0),para);
+// 	hmi_add_obj(hmi_page_get_default(0),para);
 
-#endif
+// #endif
 
-#if 1 //  png obj
-	memset(&para,0,sizeof(obj_attr_t));
+// #if 1 //  png obj
+// 	memset(&para,0,sizeof(obj_attr_t));
 
-	para.obj_id = 0x08+1;
-	para.obj_type = HMI_OBJ_TYPE_IMG;
+// 	para.obj_id = 0x08+1;
+// 	para.obj_type = HMI_OBJ_TYPE_IMG;
 
-	para.obj_x	= 192+320;
-	para.obj_y	= 0;
-	para.obj_w	= 334;
-	para.obj_h	= 68;
+// 	para.obj_x	= 192+320;
+// 	para.obj_y	= 0;
+// 	para.obj_w	= 334;
+// 	para.obj_h	= 68;
 
-	para.obj_opa	= 0;
-	para.obj_r		= 255;
-	para.obj_g		= 0;
-	para.obj_b		= 0;
+// 	para.obj_opa	= 0;
+// 	para.obj_r		= 255;
+// 	para.obj_g		= 0;
+// 	para.obj_b		= 0;
 
-	para.obj_opa_2	= 0;
-	para.obj_r_2	= 0;
-	para.obj_g_2	= 0;
-	para.obj_b_2	= 255;	
+// 	para.obj_opa_2	= 0;
+// 	para.obj_r_2	= 0;
+// 	para.obj_g_2	= 0;
+// 	para.obj_b_2	= 255;	
 
-	para.obj_font_size	= 0;
-	para.obj_font_r = 0;
-	para.obj_font_g = 255;
-	para.obj_font_b = 0;		
+// 	para.obj_font_size	= 0;
+// 	para.obj_font_r = 0;
+// 	para.obj_font_g = 255;
+// 	para.obj_font_b = 0;		
 
-	para.obj_var[0] = 50;
-	para.obj_var[1] = 60;
-	para.obj_var[2] = 70;
+// 	para.obj_var[0] = 50;
+// 	para.obj_var[1] = 60;
+// 	para.obj_var[2] = 70;
 
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
+// 	para.obj_range_min	= 0;
+// 	para.obj_range_max	= 100;
 
-	para.obj_angle_range = 360;
-	para.obj_rotation  = 90;
-	para.obj_width	= 20;
+// 	para.obj_angle_range = 360;
+// 	para.obj_rotation  = 90;
+// 	para.obj_width	= 20;
 
-	para.obj_point_x_num = 0;
-	para.obj_point_y_num = 0;
+// 	para.obj_point_x_num = 0;
+// 	para.obj_point_y_num = 0;
 
-	para.obj_time = 1000;
+// 	para.obj_time = 1000;
 
-	para.obj_event		= 0;
-	para.obj_action 	= 0;
+// 	para.obj_event		= 0;
+// 	para.obj_action 	= 0;
 
-	sprintf((para.obj_data), "%s","audio_spect_4.png");
+// 	sprintf((para.obj_data), "%s","audio_spect_4.png");
 
-	hmi_add_obj(hmi_page_get_default(0),para);
+// 	hmi_add_obj(hmi_page_get_default(0),para);
 	
-#endif
+// #endif
 
-#if 1 //  jpg obj
-	memset(&para,0,sizeof(obj_attr_t));
+// #if 1 //  jpg obj
+// 	memset(&para,0,sizeof(obj_attr_t));
 
-	para.obj_id = 0x08+2;
-	para.obj_type = HMI_OBJ_TYPE_BG_IMAGE;
+// 	para.obj_id = 0x08+2;
+// 	para.obj_type = HMI_OBJ_TYPE_BG_IMAGE;
 
-	para.obj_x	= 0;
-	para.obj_y	= 0;
-	para.obj_w	= 960;
-	para.obj_h	= 320;
+// 	para.obj_x	= 0;
+// 	para.obj_y	= 0;
+// 	para.obj_w	= 960;
+// 	para.obj_h	= 320;
 
-	para.obj_opa	= 0;
-	para.obj_r		= 255;
-	para.obj_g		= 0;
-	para.obj_b		= 0;
+// 	para.obj_opa	= 0;
+// 	para.obj_r		= 255;
+// 	para.obj_g		= 0;
+// 	para.obj_b		= 0;
 
-	para.obj_opa_2	= 0;
-	para.obj_r_2	= 0;
-	para.obj_g_2	= 0;
-	para.obj_b_2	= 255;	
+// 	para.obj_opa_2	= 0;
+// 	para.obj_r_2	= 0;
+// 	para.obj_g_2	= 0;
+// 	para.obj_b_2	= 255;	
 
-	para.obj_font_size	= 0;
-	para.obj_font_r = 0;
-	para.obj_font_g = 255;
-	para.obj_font_b = 0;		
+// 	para.obj_font_size	= 0;
+// 	para.obj_font_r = 0;
+// 	para.obj_font_g = 255;
+// 	para.obj_font_b = 0;		
 
-	para.obj_var[0] = 50;
-	para.obj_var[1] = 60;
-	para.obj_var[2] = 70;
+// 	para.obj_var[0] = 50;
+// 	para.obj_var[1] = 60;
+// 	para.obj_var[2] = 70;
 
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
+// 	para.obj_range_min	= 0;
+// 	para.obj_range_max	= 100;
 
-	para.obj_angle_range = 360;
-	para.obj_rotation  = 90;
-	para.obj_width	= 20;
+// 	para.obj_angle_range = 360;
+// 	para.obj_rotation  = 90;
+// 	para.obj_width	= 20;
 
-	para.obj_point_x_num = 0;
-	para.obj_point_y_num = 0;
+// 	para.obj_point_x_num = 0;
+// 	para.obj_point_y_num = 0;
 
-	para.obj_time = 1000;
+// 	para.obj_time = 1000;
 
-	para.obj_event		= 0;
-	para.obj_action 	= 0;
+// 	para.obj_event		= 0;
+// 	para.obj_action 	= 0;
 
-	sprintf((para.obj_data), "%s","1631551139.jpg");
+// 	sprintf((para.obj_data), "%s","1631551139.jpg");
 
-	hmi_add_obj(hmi_page_get_default(0),para);
+// 	hmi_add_obj(hmi_page_get_default(0),para);
 		
-#endif
+// #endif
 
 
 

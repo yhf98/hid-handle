@@ -191,7 +191,7 @@ cpuInfo().then((res) => {
       obj_action: 0,
       obj_data: "CPU" + res + "%",
       obj_reserve: "",
-    },
+    }
   ];
 
   console.info(hidHandle.hmi_batch_update_screen_data(element));
@@ -236,3 +236,5 @@ cpuInfo().then((res) => {
 // ]
 
 // console.info(hidHandle.hmi_batch_update_screen_data(element));
+
+

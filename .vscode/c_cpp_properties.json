@@ -4,15 +4,22 @@
             "name": "Win32",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/hidapi/hidapi"
+                "${workspaceFolder}/hidapi/hidapi",
+                "${vcpkgRoot}/x64-windows/include",
+                "K:/mingw/include/**",
+                "K:/mingw/lib/gcc/mingw32/9.2.0/include/c++"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "intelliSenseMode": "${default}"
+            "compilerPath": "K:/mingw/bin/gcc.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "windows-gcc-x64"
         }
     ],
     "version": 4
 }
+

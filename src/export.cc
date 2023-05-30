@@ -1,16 +1,8 @@
 /*
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
- * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-27 13:43:01
- * @FilePath: \hid-handle\src\export.cc
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-/*
- * @Author: yaohengfeng 1921934563@qq.com
- * @Date: 2023-01-13 10:58:19
- * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-22 18:30:14
+ * @LastEditors: 姚恒锋 1921934563@qq.com
+ * @LastEditTime: 2023-05-24 18:04:58
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -408,6 +400,16 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info){
     return result;
 }
 
+Value hmiCreateObjTestJs(const CallbackInfo &info){
+    auto env = info.Env();
+    
+    const auto res = hmi_create_obj_test_handle();
+
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
@@ -420,6 +422,7 @@ Object Init(Env env, Object exports)
     exports.Set("hmi_update_obj_var_handle", Function::New(env, hmiUpdateObjVarHandleJs));
     exports.Set("hmi_update_screen_data", Function::New(env, hmiUpdateScreenDataJs));
     exports.Set("hmi_batch_update_screen_data", Function::New(env, hmiBatchUpdateScreenDataJs));
+    exports.Set("hmi_create_obj_test_handle", Function::New(env, hmiCreateObjTestJs));
 
     return exports;
 }

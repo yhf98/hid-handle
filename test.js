@@ -1,8 +1,8 @@
 /*
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:53:22
- * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-21 15:12:06
+ * @LastEditors: 姚恒锋 1921934563@qq.com
+ * @LastEditTime: 2023-05-24 16:53:13
  * @FilePath: \hid-handle\test.js
  * @Description: test.js
  */
@@ -12,7 +12,7 @@ let hidHandle = hid.HidHandle();
 
 console.info("handle: ", hidHandle);
 
-let element = [
+let data = [
   {
     obj_id: 0,
     obj_type: 1,
@@ -431,8 +431,8 @@ console.info("============================================================");
 // console.info("设置WIFI：")
 // console.info(hidHandle.hmi_send_wifi_info_handle("jieshen", "Jieshen168"))
 
-// // 生成UI
-// console.info(hidHandle.hmi_add_obj_handle(element))
+// 生成UI
+console.info(hidHandle.hmi_add_obj_handle(data))
 
 // // 写入文件更新UI
 // console.info(
@@ -440,5 +440,5 @@ console.info("============================================================");
 // )
 
 // 更新数据
-console.info("更新数据：");
-console.info(hidHandle.hmi_page_update_elem_var_handle());
+// console.info("更新数据：");
+// console.info(hidHandle.hmi_page_update_elem_var_handle());

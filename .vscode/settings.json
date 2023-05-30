@@ -45,6 +45,12 @@
         "xstddef": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
-    }
+        "xutility": "cpp",
+        "list.h": "c",
+        "stdio.h": "c"
+    },
+    "C_Cpp.default.includePath": [
+        "K:\\mingw\\include"
+    ],
+    "C_Cpp.errorSquiggles": "disabled"
 }

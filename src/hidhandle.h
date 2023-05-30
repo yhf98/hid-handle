@@ -1,8 +1,8 @@
 /*
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:46:10
- * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-27 13:40:43
+ * @LastEditors: 姚恒锋 1921934563@qq.com
+ * @LastEditTime: 2023-05-29 14:33:12
  * @FilePath: \hid-handle\src\hidhandle.h
  * @Description: hidhandle.h
  */
@@ -34,4 +34,5 @@ int hmi_update_screen_data(unsigned int elem_id, const char *data);
 
 int hmi_batch_update_screen_data(vector<obj_attr_t> &paras);
 
+int hmi_create_obj_test_handle(void);
 #endif

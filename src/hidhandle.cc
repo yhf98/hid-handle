@@ -1,16 +1,8 @@
 /*
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
- * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-28 15:45:50
- * @FilePath: \hid-handle\src\hidhandle.cc
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-/*
- * @Author: yaohengfeng 1921934563@qq.com
- * @Date: 2023-01-13 10:45:03
- * @LastEditors: yaohengfeng 1921934563@qq.com
- * @LastEditTime: 2023-03-22 14:20:25
+ * @LastEditors: 姚恒锋 1921934563@qq.com
+ * @LastEditTime: 2023-05-29 15:23:30
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -33,7 +25,7 @@
 
 using namespace std;
 
-//**************************************************************************************************************
+// **************************************************************************************************************
 
 hid_device *hid_handle = NULL;
 
@@ -116,7 +108,7 @@ int hid_io_control_handle(unsigned int cmd, const char *file_name, char *reserve
 int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
 {
 	hid_handle_init();
-	return  hmi_send_wifi_info(hid_handle, wifiname, wifipasswd);
+	return hmi_send_wifi_info(hid_handle, wifiname, wifipasswd);
 }
 
 /**
@@ -134,7 +126,7 @@ int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 	for (const auto &obj : paras)
 	{
 		hmi_add_obj(page, obj);
-		printf("\nobj_id: %d\n", obj.obj_id);
+		printf("\n#######Generate: #########: %d\n", obj.obj_id);
 	}
 
 	return hmi_packet_file(page, pkg_path);
@@ -314,7 +306,6 @@ int hmi_unpacket_file_handle(const char *filepath, const char *out_path)
 {
 	hid_handle_init();
 	return hmi_unpacket_file(filepath, out_path);
-
 }
 
 int hmi_update_obj_var_handle()
@@ -505,4 +496,45 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 	// }
 
 	return 0;
+}
+
+int hmi_create_obj_test_handle(void)
+{
+	hid_handle_init();
+	hmi_init();
+	int i = 0;
+	unsigned int len = 0;
+	obj_attr_t para ;
+	
+	char control_buff[1024] = {0};
+
+	memset(&para,0,sizeof(obj_attr_t));
+	memset(control_buff,0,sizeof(control_buff));
+	
+	para.obj_id   = 0x01;
+	para.obj_type = HMI_OBJ_TYPE_LABEL;
+	
+	para.obj_x	  = 0;
+	para.obj_y	  = 25;
+	para.obj_w	  = 192;
+	para.obj_h	  = 20;
+	
+	para.obj_opa	= 0;
+	para.obj_r		= 0;
+	para.obj_g		= 0;
+	para.obj_b		= 255;
+
+	para.obj_font_size  = 0;
+	para.obj_font_r		= 255;
+	para.obj_font_g		= 0;
+	para.obj_font_b		= 0;	
+	
+	para.obj_time       = 200;
+
+	para.obj_range_min	= 0;
+	para.obj_range_max	= 100;
+	
+	para.obj_event		= HMI_OBJ_EVENT_NETTIME_DAY;
+	para.obj_action 	= 0;
+	return hmi_add_obj(hmi_page_get_default(0),para);
 }

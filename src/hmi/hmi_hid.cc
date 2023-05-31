@@ -131,9 +131,12 @@ int hid_io_control(hid_device* hid_handle ,unsigned int cmd,const char *file_nam
 
 	a_packet.err_code  = TRAN_ERR_NUKNOWN;
 	while(a_packet.err_code){
+		if(hid_handle == NULL){
+			printf("Error: HID_CALC_Errors------");
+		}
 		ret = hid_write(hid_handle, (unsigned char*)(&m_packet), HID_WRITE_BUFF_LEN);
 		if(ret == -1){
-			printf("device error.\n");
+			printf("========device error======.\n");
 			return SYS_DEVICE_ERROR;
 		}
 	

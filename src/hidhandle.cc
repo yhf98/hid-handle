@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-05-29 15:23:30
+ * @LastEditTime: 2023-05-31 10:09:45
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -42,7 +42,11 @@ int hid_handle_init()
 	{
 		hid_init();
 		hid_handle = hid_open(0x264a, 0x232a, NULL);
-
+		if (hid_handle == NULL)
+		{
+			printf(" open hid error!\n");
+			return 0;
+		}
 		hid_set_nonblocking(hid_handle, 0);
 
 		hid_get_manufacturer_string(hid_handle, manufact, sizeof(manufact));
@@ -69,8 +73,16 @@ int hid_handle_init()
  */
 int hid_write_file_handle(const char *full_path, const char *file_name, unsigned int file_type)
 {
+	unsigned int ret = 0;
 	hid_handle_init();
-	return hid_write_file(hid_handle, full_path, file_name, file_type);
+
+	ret = hid_write_file(hid_handle, full_path, file_name, file_type);
+
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return ret;
 }
 
 /**
@@ -81,8 +93,15 @@ int hid_write_file_handle(const char *full_path, const char *file_name, unsigned
  */
 int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsigned int file_type)
 {
+	unsigned int ret = 0;
 	hid_handle_init();
-	return hid_write_buff(hid_handle, buff, buff_len, file_type);
+	ret = hid_write_buff(hid_handle, buff, buff_len, file_type);
+
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return ret;
 }
 
 /**
@@ -94,8 +113,15 @@ int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsi
  */
 int hid_io_control_handle(unsigned int cmd, const char *file_name, char *reserve, unsigned int rese_len)
 {
+	unsigned int ret = 0;
 	hid_handle_init();
-	return hid_io_control(hid_handle, cmd, file_name, reserve, rese_len);
+
+	ret = hid_io_control(hid_handle, cmd, file_name, reserve, rese_len);
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return ret;
 }
 
 /**
@@ -107,8 +133,15 @@ int hid_io_control_handle(unsigned int cmd, const char *file_name, char *reserve
  */
 int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
 {
+	unsigned int ret = 0;
 	hid_handle_init();
-	return hmi_send_wifi_info(hid_handle, wifiname, wifipasswd);
+	ret = hmi_send_wifi_info(hid_handle, wifiname, wifipasswd);
+
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return ret;
 }
 
 /**
@@ -119,6 +152,7 @@ int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
  */
 int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 {
+	unsigned int ret = 0;
 	hid_handle_init();
 	hmi_init();
 
@@ -128,8 +162,13 @@ int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 		hmi_add_obj(page, obj);
 		printf("\n#######Generate: #########: %d\n", obj.obj_id);
 	}
+	ret = hmi_packet_file(page, pkg_path);
+	
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
 
-	return hmi_packet_file(page, pkg_path);
+	return ret;
 }
 
 int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
@@ -146,6 +185,7 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
 	unsigned int var1 = 0;
 	unsigned int var2 = 0;
 	unsigned int var3 = 0;
+	unsigned int ret = 0;
 
 	char control_buff[24];
 
@@ -211,7 +251,7 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
 			break;
 		}
 
-		hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+		ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 	}
 
 	// for (i = 0; i < 4; i++)
@@ -292,7 +332,11 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
 
 	// 	hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 	// }
-	return 0;
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return ret;
 }
 
 /**
@@ -304,13 +348,22 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
  */
 int hmi_unpacket_file_handle(const char *filepath, const char *out_path)
 {
+	unsigned int ret = 0;
 	hid_handle_init();
-	return hmi_unpacket_file(filepath, out_path);
+
+	ret = hmi_unpacket_file(filepath, out_path);
+	
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return ret;
 }
 
 int hmi_update_obj_var_handle()
 {
 	hid_handle_init();
+
 
 	int i = 0;
 	unsigned int page_id = 0;
@@ -322,6 +375,7 @@ int hmi_update_obj_var_handle()
 	unsigned int var1 = 0;
 	unsigned int var2 = 0;
 	unsigned int var3 = 0;
+	unsigned int ret = 0;
 
 	char control_buff[64];
 
@@ -366,9 +420,13 @@ int hmi_update_obj_var_handle()
 	control_buff[12] = ((var2 >> 0) & 0xff);
 	control_buff[13] = ((var2 >> 7) & 0xff);
 
-	hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 
-	return 0;
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return ret;
 }
 
 /**
@@ -386,6 +444,7 @@ int hmi_update_screen_data(unsigned int elem_id, const char *data)
 	// unsigned int elem_id = 0;
 	unsigned int data_type = 0;
 	unsigned int elem_data_len = 0;
+	unsigned int ret = 0;
 
 	char control_buff[64];
 
@@ -412,13 +471,14 @@ int hmi_update_screen_data(unsigned int elem_id, const char *data)
 
 	sprintf(control_buff + 8, "%s", data);
 
-	hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 
 	hid_close(hid_handle);
 	hid_handle = NULL;
+	printf("\n---close Devices---\n");
 	delete[] control_buff;
 
-	return 0;
+	return ret;
 }
 
 /**
@@ -430,7 +490,7 @@ int hmi_update_screen_data(unsigned int elem_id, const char *data)
 int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 {
 	hid_handle_init();
-
+	unsigned int ret = 0;
 	unsigned int page_id = 0;
 	unsigned int elem_id = 0;
 	unsigned int data_type = 0;
@@ -463,7 +523,7 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 
 		sprintf(control_buff + 8, "%s", obj.obj_data);
 
-		hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+		ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 	}
 
 	// 更新obj_var
@@ -494,8 +554,11 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 
 	// 	hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 	// }
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
 
-	return 0;
+	return ret;
 }
 
 int hmi_create_obj_test_handle(void)
@@ -504,37 +567,45 @@ int hmi_create_obj_test_handle(void)
 	hmi_init();
 	int i = 0;
 	unsigned int len = 0;
-	obj_attr_t para ;
-	
+	unsigned int ret = 0;
+	obj_attr_t para;
+
 	char control_buff[1024] = {0};
 
-	memset(&para,0,sizeof(obj_attr_t));
-	memset(control_buff,0,sizeof(control_buff));
-	
-	para.obj_id   = 0x01;
+	memset(&para, 0, sizeof(obj_attr_t));
+	memset(control_buff, 0, sizeof(control_buff));
+
+	para.obj_id = 0x01;
 	para.obj_type = HMI_OBJ_TYPE_LABEL;
-	
-	para.obj_x	  = 0;
-	para.obj_y	  = 25;
-	para.obj_w	  = 192;
-	para.obj_h	  = 20;
-	
-	para.obj_opa	= 0;
-	para.obj_r		= 0;
-	para.obj_g		= 0;
-	para.obj_b		= 255;
 
-	para.obj_font_size  = 0;
-	para.obj_font_r		= 255;
-	para.obj_font_g		= 0;
-	para.obj_font_b		= 0;	
-	
-	para.obj_time       = 200;
+	para.obj_x = 0;
+	para.obj_y = 25;
+	para.obj_w = 192;
+	para.obj_h = 20;
 
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
-	
-	para.obj_event		= HMI_OBJ_EVENT_NETTIME_DAY;
-	para.obj_action 	= 0;
-	return hmi_add_obj(hmi_page_get_default(0),para);
+	para.obj_opa = 0;
+	para.obj_r = 0;
+	para.obj_g = 0;
+	para.obj_b = 255;
+
+	para.obj_font_size = 0;
+	para.obj_font_r = 255;
+	para.obj_font_g = 0;
+	para.obj_font_b = 0;
+
+	para.obj_time = 200;
+
+	para.obj_range_min = 0;
+	para.obj_range_max = 100;
+
+	para.obj_event = HMI_OBJ_EVENT_NETTIME_DAY;
+	para.obj_action = 0;
+
+	ret = hmi_add_obj(hmi_page_get_default(0), para);
+
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return ret;
 }

@@ -410,6 +410,16 @@ Value hmiCreateObjTestJs(const CallbackInfo &info){
     return result;
 }
 
+Value hmiUnpacketHandleJs(const CallbackInfo &info){
+    auto env = info.Env();
+
+    const auto res = hmi_update_obj_var_handle();
+
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));

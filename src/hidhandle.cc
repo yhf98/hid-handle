@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-05-31 10:09:45
+ * @LastEditTime: 2023-05-31 17:06:52
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -45,7 +45,7 @@ int hid_handle_init()
 		if (hid_handle == NULL)
 		{
 			printf(" open hid error!\n");
-			return 0;
+			return -1;
 		}
 		hid_set_nonblocking(hid_handle, 0);
 
@@ -73,8 +73,8 @@ int hid_handle_init()
  */
 int hid_write_file_handle(const char *full_path, const char *file_name, unsigned int file_type)
 {
-	unsigned int ret = 0;
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
 
 	ret = hid_write_file(hid_handle, full_path, file_name, file_type);
 
@@ -93,8 +93,9 @@ int hid_write_file_handle(const char *full_path, const char *file_name, unsigned
  */
 int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsigned int file_type)
 {
-	unsigned int ret = 0;
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
+
 	ret = hid_write_buff(hid_handle, buff, buff_len, file_type);
 
 	hid_close(hid_handle);
@@ -113,8 +114,8 @@ int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsi
  */
 int hid_io_control_handle(unsigned int cmd, const char *file_name, char *reserve, unsigned int rese_len)
 {
-	unsigned int ret = 0;
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
 
 	ret = hid_io_control(hid_handle, cmd, file_name, reserve, rese_len);
 	hid_close(hid_handle);
@@ -133,8 +134,9 @@ int hid_io_control_handle(unsigned int cmd, const char *file_name, char *reserve
  */
 int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
 {
-	unsigned int ret = 0;
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
+
 	ret = hmi_send_wifi_info(hid_handle, wifiname, wifipasswd);
 
 	hid_close(hid_handle);
@@ -152,8 +154,9 @@ int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
  */
 int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 {
-	unsigned int ret = 0;
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
+
 	hmi_init();
 
 	hmi_page_t *page = hmi_page_get_default(0);
@@ -173,7 +176,8 @@ int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 
 int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
 {
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
 
 	int i = 0;
 	unsigned int page_id = 0;
@@ -185,7 +189,6 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
 	unsigned int var1 = 0;
 	unsigned int var2 = 0;
 	unsigned int var3 = 0;
-	unsigned int ret = 0;
 
 	char control_buff[24];
 
@@ -348,8 +351,8 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
  */
 int hmi_unpacket_file_handle(const char *filepath, const char *out_path)
 {
-	unsigned int ret = 0;
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
 
 	ret = hmi_unpacket_file(filepath, out_path);
 	
@@ -362,7 +365,8 @@ int hmi_unpacket_file_handle(const char *filepath, const char *out_path)
 
 int hmi_update_obj_var_handle()
 {
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
 
 
 	int i = 0;
@@ -375,7 +379,6 @@ int hmi_update_obj_var_handle()
 	unsigned int var1 = 0;
 	unsigned int var2 = 0;
 	unsigned int var3 = 0;
-	unsigned int ret = 0;
 
 	char control_buff[64];
 
@@ -437,14 +440,14 @@ int hmi_update_obj_var_handle()
  */
 int hmi_update_screen_data(unsigned int elem_id, const char *data)
 {
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
 
 	int i = 0;
 	unsigned int page_id = 0;
 	// unsigned int elem_id = 0;
 	unsigned int data_type = 0;
 	unsigned int elem_data_len = 0;
-	unsigned int ret = 0;
 
 	char control_buff[64];
 
@@ -489,8 +492,9 @@ int hmi_update_screen_data(unsigned int elem_id, const char *data)
  */
 int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 {
-	hid_handle_init();
-	unsigned int ret = 0;
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
+
 	unsigned int page_id = 0;
 	unsigned int elem_id = 0;
 	unsigned int data_type = 0;
@@ -527,33 +531,33 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 	}
 
 	// 更新obj_var
-	// for (const auto &obj : paras)
-	// {
+	for (const auto &obj : paras)
+	{
 
-	// 	page_id = 0;
-	// 	elem_id = obj.obj_id;
+		page_id = 0;
+		elem_id = obj.obj_id;
 
-	// 	data_type = HMI_OBJ_DATA_DEFAULT;
+		data_type = HMI_OBJ_DATA_DEFAULT;
 
-	// 	elem_data_len = 3;
+		elem_data_len = 3;
 
-	// 	control_buff[0] = ((page_id >> 0) & 0xff);
-	// 	control_buff[1] = ((page_id >> 8) & 0xff);
+		control_buff[0] = ((page_id >> 0) & 0xff);
+		control_buff[1] = ((page_id >> 8) & 0xff);
 
-	// 	control_buff[2] = ((elem_id >> 0) & 0xff);
-	// 	control_buff[3] = ((elem_id >> 8) & 0xff);
+		control_buff[2] = ((elem_id >> 0) & 0xff);
+		control_buff[3] = ((elem_id >> 8) & 0xff);
 
-	// 	control_buff[4] = ((data_type >> 0) & 0xff);
-	// 	control_buff[5] = ((data_type >> 8) & 0xff);
+		control_buff[4] = ((data_type >> 0) & 0xff);
+		control_buff[5] = ((data_type >> 8) & 0xff);
 
-	// 	control_buff[6] = ((elem_data_len >> 0) & 0xff);
-	// 	control_buff[7] = ((elem_data_len >> 8) & 0xff);
+		control_buff[6] = ((elem_data_len >> 0) & 0xff);
+		control_buff[7] = ((elem_data_len >> 8) & 0xff);
 
-	// 	control_buff[8] = ((obj.obj_var[0] >> 0) & 0xff);
-	// 	control_buff[9] = ((obj.obj_var[0] >> 7) & 0xff);
+		control_buff[8] = ((obj.obj_var[0] >> 0) & 0xff);
+		control_buff[9] = ((obj.obj_var[0] >> 7) & 0xff);
 
-	// 	hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
-	// }
+		ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	}
 	hid_close(hid_handle);
 	hid_handle = NULL;
 	printf("\n---close Devices---\n");
@@ -563,11 +567,13 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 
 int hmi_create_obj_test_handle(void)
 {
-	hid_handle_init();
+	unsigned int ret = hid_handle_init();
+	if (ret != 0) return ret;
+
 	hmi_init();
 	int i = 0;
 	unsigned int len = 0;
-	unsigned int ret = 0;
+
 	obj_attr_t para;
 
 	char control_buff[1024] = {0};

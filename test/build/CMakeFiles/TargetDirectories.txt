@@ -1,0 +1,3 @@
+H:/hid-handle/test/build/CMakeFiles/cpu.dir
+H:/hid-handle/test/build/CMakeFiles/ALL_BUILD.dir
+H:/hid-handle/test/build/CMakeFiles/ZERO_CHECK.dir

@@ -116,7 +116,7 @@ typedef struct ack_packet {
 
 
 int hid_io_control(hid_device* hid_handle ,unsigned int cmd,const char *file_name,  char *control_buff,unsigned int control_buff_len);
-int hid_write_buff(  hid_device* hid_handle ,unsigned char *buff,const unsigned int buff_len ,unsigned int file_type);
+int hid_write_buff(hid_device* hid_handle ,unsigned char *buff,const unsigned int buff_len ,unsigned int file_type);
 int hid_write_file(hid_device* hid_handle ,const char *full_path,const char *file_name,unsigned int file_type);
 int hmi_send_wifi_info(hid_device* hid_handle, const char* wifiname, const char* wifipasswd);
 

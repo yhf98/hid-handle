@@ -48,7 +48,8 @@
         "xutility": "cpp",
         "list.h": "c",
         "stdio.h": "c",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "deque": "cpp"
     },
     "C_Cpp.default.includePath": [
         "K:\\mingw\\include"

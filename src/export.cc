@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-05-24 18:04:58
+ * @LastEditTime: 2023-06-30 10:32:06
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -182,6 +182,18 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
         strcpy_s(para.obj_reserve, obj_reserve.c_str());
+
+        // obj_url[MAX_OBJ_URL_LEN] 获取数据API地址
+        string obj_url = objAttrT.Get("obj_url").As<String>();
+        strcpy_s(para.obj_url, obj_url.c_str());
+
+        // obj_field[MAX_OBJ_FIELD_LEN] 数据字段
+        string obj_field = objAttrT.Get("obj_field").As<String>();
+        strcpy_s(para.obj_field, obj_field.c_str());
+
+        // obj_align_reserve[8] 保留字段
+        string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
+        strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
 
         vec_obj_attr_t.push_back(para);
     }
@@ -389,6 +401,18 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info){
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
         strcpy_s(para.obj_reserve, obj_reserve.c_str());
+
+        // obj_url[MAX_OBJ_URL_LEN] 获取数据API地址
+        string obj_url = objAttrT.Get("obj_url").As<String>();
+        strcpy_s(para.obj_url, obj_url.c_str());
+
+        // obj_field[MAX_OBJ_FIELD_LEN] 数据字段
+        string obj_field = objAttrT.Get("obj_field").As<String>();
+        strcpy_s(para.obj_field, obj_field.c_str());
+
+        // obj_align_reserve[8] 保留字段
+        string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
+        strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
 
         vec_obj_attr_t.push_back(para);
     }

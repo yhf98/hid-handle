@@ -1,0 +1,219 @@
+L832(App_hid/app_hid.c):file_name  :/mnt/sda1/hmi_res.hbin
+L850(App_hid/app_hid.c):last packet  :2
+L851(App_hid/app_hid.c):last data len:720
+[Err]  chk_state(mode:0x1,state:0xe6) timeout, test count:50000
+[Err]  Write:wait xfer complete error. dest(0xf80),src buf(0x01701000),blk_num(3)
+[Warn] reset sd host ...
+[Debug] try to set clock for init -- CLK DIV : 63
+[Info] init clock div : 63
+[Debug] Reset SD/TF card successful!
+[Debug] card_ver 2.0
+[Debug] card type : SDHC/SDXC(>2GB or >32GB)
+[Debug] OCR valid!
+[Debug]          --> Get OCR cost : 6 ms
+[Debug]          --> Get CID cost : 18 ms
+[Debug] RCA(relative card address): 0x00000001
+[Debug]          --> Get RCA cost : 7 ms
+[Debug] CSD bit[127:126] : CSD structure -- 1
+[Debug] CSD version : 2.0
+[Debug] CSD[105:96]: the time value is 0x32
+[Debug] CSD[102:99]: tran_speed_time index is 6
+[Debug] CSD[98:96]: tran_rate_uint is 10000
+[Debug] Card tran speed is 25000 Khz
+[Debug] Card capacity is 7798784 kB
+[Debug] Get CSD(card specific data) Successfully!
+[Debug]          --> Get CSD cost : 34 ms
+[Debug] Select Card Successfully!
+[Debug]          --> Get RCA cost : 3 ms
+[Debug] Set block size (512) success!
+[Debug]          --> Set size cost : 4 ms
+[Info] Set bus width : 1-bit
+[Debug]          --> Set width cost : 3 ms
+[Debug]  trans clk div : 3, tran_clk_hz : 24750, target : 25000
+[Info] xfer clock div : 3
+[Debug] Config Card Successfully!
+[Debug] SD is not protected now by using protect_gpio
+[Info] SD init cost : 134 ms
+[Err]  chk_state(mode:0x1,state:0xe6) timeout, test count:50000
+[Err]  Write:wait xfer complete error. dest(0xf80),src buf(0x01701000),blk_num(3)
+[Warn] reset sd host ...
+[Debug] try to set clock for init -- CLK DIV : 63
+[Info] init clock div : 63
+[Debug] Reset SD/TF card successful!
+[Debug] card_ver 2.0
+[Debug] card type : SDHC/SDXC(>2GB or >32GB)
+[Debug] OCR valid!
+[Debug]          --> Get OCR cost : 6 ms
+[Debug]          --> Get CID cost : 9 ms
+[Debug] RCA(relative card address): 0x00000001
+[Debug]          --> Get RCA cost : 7 ms
+[Debug] CSD bit[127:126] : CSD structure -- 1
+[Debug] CSD version : 2.0
+[Debug] CSD[105:96]: the time value is 0x32
+[Debug] CSD[102:99]: tran_speed_time index is 6
+[Debug] CSD[98:96]: tran_rate_uint is 10000
+[Debug] Card tran speed is 25000 Khz
+[Debug] Card capacity is 7798784 kB
+[Debug] Get CSD(card specific data) Successfully!
+[Debug]          --> Get CSD cost : 34 ms
+[Debug] Select Card Successfully!
+[Debug]          --> Get RCA cost : 3 ms
+[Debug] Set block size (512) success!
+[Debug]          --> Set size cost : 3 ms
+[Info] Set bus width : 1-bit
+[Debug]          --> Set width cost : 3 ms
+[Debug]  trans clk div : 3, tran_clk_hz : 24750, target : 25000
+[Info] xfer clock div : 3
+[Debug] Config Card Successfully!
+[Debug] SD is not protected now by using protect_gpio
+[Info] SD init cost : 126 ms
+[Err]  chk_state(mode:0x1,state:0xe6) timeout, test count:50000
+[Err]  Write:wait xfer complete error. dest(0xf80),src buf(0x01701000),blk_num(3)
+[Warn] reset sd host ...
+[Debug] try to set clock for init -- CLK DIV : 63
+[Info] init clock div : 63
+[Debug] Reset SD/TF card successful!
+[Debug] card_ver 2.0
+[Debug] card type : SDHC/SDXC(>2GB or >32GB)
+[Debug] OCR valid!
+[Debug]          --> Get OCR cost : 7 ms
+[Debug]          --> Get CID cost : 9 ms
+[Debug] RCA(relative card address): 0x00000001
+[Debug]          --> Get RCA cost : 6 ms
+[Debug] CSD bit[127:126] : CSD structure -- 1
+[Debug] CSD version : 2.0
+[Debug] CSD[105:96]: the time value is 0x32
+[Debug] CSD[102:99]: tran_speed_time index is 6
+[Debug] CSD[98:96]: tran_rate_uint is 10000
+[Debug] Card tran speed is 25000 Khz
+[Debug] Card capacity is 7798784 kB
+[Debug] Get CSD(card specific data) Successfully!
+[Debug]          --> Get CSD cost : 34 ms
+[Debug] Select Card Successfully!
+[Debug]          --> Get RCA cost : 4 ms
+[Debug] Set block size (512) success!
+[Debug]          --> Set size cost : 3 ms
+[Info] Set bus width : 1-bit
+[Debug]          --> Set width cost : 3 ms
+[Debug]  trans clk div : 3, tran_clk_hz : 24750, target : 25000
+[Info] xfer clock div : 3
+[Debug] Config Card Successfully!
+[Debug] SD is not protected now by using protect_gpio
+[Info] SD init cost : 127 ms
+[Err]  chk_state(mode:0x1,state:0xe6) timeout, test count:50000
+[Err]  Write:wait xfer complete error. dest(0xf80),src buf(0x01701000),blk_num(3)
+[Warn] reset sd host ...
+[Debug] try to set clock for init -- CLK DIV : 63
+[Info] init clock div : 63
+[Debug] Reset SD/TF card successful!
+[Debug] card_ver 2.0
+[Debug] card type : SDHC/SDXC(>2GB or >32GB)
+[Debug] OCR valid!
+[Debug]          --> Get OCR cost : 6 ms
+[Debug]          --> Get CID cost : 17 ms
+[Debug] RCA(relative card address): 0x00000001
+[Debug]          --> Get RCA cost : 6 ms
+[Debug] CSD bit[127:126] : CSD structure -- 1
+[Debug] CSD version : 2.0
+[Debug] CSD[105:96]: the time value is 0x32
+[Debug] CSD[102:99]: tran_speed_time index is 6
+[Debug] CSD[98:96]: tran_rate_uint is 10000
+[Debug] Card tran speed is 25000 Khz
+[Debug] Card capacity is 7798784 kB
+[Debug] Get CSD(card specific data) Successfully!
+[Debug]          --> Get CSD cost : 32 ms
+[Debug] Select Card Successfully!
+[Debug]          --> Get RCA cost : 3 ms
+[Debug] Set block size (512) success!
+[Debug]          --> Set size cost : 4 ms
+[Info] Set bus width : 1-bit
+[Debug]          --> Set width cost : 3 ms
+[Debug]  trans clk div : 3, tran_clk_hz : 24750, target : 25000
+[Info] xfer clock div : 3
+[Debug] Config Card Successfully!
+[Debug] SD is not protected now by using protect_gpio
+[Info] SD init cost : 134 ms
+[Err]  chk_state(mode:0x1,state:0xe6) timeout, test count:50000
+[Err]  Write:wait xfer complete error. dest(0xf80),src buf(0x01701000),blk_num(3)
+[Warn] reset sd host ...
+[Debug] try to set clock for init -- CLK DIV : 63
+[Info] init clock div : 63
+[Debug] Reset SD/TF card successful!
+[Debug] card_ver 2.0
+[Debug] card type : SDHC/SDXC(>2GB or >32GB)
+[Debug] OCR valid!
+[Debug]          --> Get OCR cost : 6 ms
+[Debug]          --> Get CID cost : 9 ms
+[Debug] RCA(relative card address): 0x00000001
+[Debug]          --> Get RCA cost : 7 ms
+[Debug] CSD bit[127:126] : CSD structure -- 1
+[Debug] CSD version : 2.0
+[Debug] CSD[105:96]: the time value is 0x32
+[Debug] CSD[102:99]: tran_speed_time index is 6
+[Debug] CSD[98:96]: tran_rate_uint is 10000
+[Debug] Card tran speed is 25000 Khz
+[Debug] Card capacity is 7798784 kB
+[Debug] Get CSD(card specific data) Successfully!
+[Debug]          --> Get CSD cost : 34 ms
+[Debug] Select Card Successfully!
+[Debug]          --> Get RCA cost : 3 ms
+[Debug] Set block size (512) success!
+[Debug]          --> Set size cost : 4 ms
+[Info] Set bus width : 1-bit
+[Debug]          --> Set width cost : 3 ms
+[Debug]  trans clk div : 3, tran_clk_hz : 24750, target : 25000
+[Info] xfer clock div : 3
+[Debug] Config Card Successfully!
+[Debug] SD is not protected now by using protect_gpio
+[Info] SD init cost : 125 ms
+[Err]  write repeat timeout !!!
+[Err]  set error flag
+[Err]  card xfer error before
+[Err]  SD/TF xfer error
+[Info] dev_notify unmount !!!
+[Err]  card xfer error before
+L1761(disk_manager.c):... card plugout ...
+[Info] sd_m33_uninit --> finish
+[Debug] try to set clock for init -- CLK DIV : 63
+[Info] init clock div : 63
+[Debug] Reset SD/TF card successful!
+[Debug] card_ver 2.0
+[Debug] card type : SDHC/SDXC(>2GB or >32GB)
+[Debug] OCR valid!
+[Debug]          --> Get OCR cost : 6 ms
+[Debug]          --> Get CID cost : 9 ms
+[Debug] RCA(relative card address): 0x00000001
+[Debug]          --> Get RCA cost : 6 ms
+[Debug] CSD bit[127:126] : CSD structure -- 1
+[Debug] CSD version : 2.0
+[Debug] CSD[105:96]: the time value is 0x32
+[Debug] CSD[102:99]: tran_stf card plg
+                                      peed_time index is 6
+[Debug] CSD[98:96]: tran_rate_uint is 10000
+[Debug] Card tran speed is 25000 Khz
+[Debug] Card capacity is 7798784 kB
+[Debug] Get CSD(card specific data) Successfully!
+[Debug]          --> Get CSD cost : 35 ms
+[Debug] Select Card Successfully!
+[Debug]          --> Get RCA cost : 4 ms
+[Debug] Set block size (512) success!
+[Debug]          --> Set size cost : 3 ms
+[Info] Set bus width : 1-bit
+[Debug]          --> Set width cost : 3 ms
+[Debug]  trans clk div : 3, tran_clk_hz : 24750, target : 25000
+[Info] xfer clock div : 3
+[Debug] Config Card Successfully!
+[Debug] SD is not protected now by using protect_gpio
+[Info] SD init cost : 126 ms
+tf card plugin
+L187(App_root/app_root.c):udisk no file to upgrade
+L195(App_root/app_root.c):tfcard no file to upgrade
+L865(App_mixplay/app_mixplay.c):filenum=0
+L711(App_root/app_root.c):get ttf buff
+L67(App_Interface/app_font_ttf.c):db_addr:0x690070,db_len:0x94d32c
+L92(App_Interface/app_font_ttf.c):tft_buff=820ca000
+L93(App_Interface/app_font_ttf.c):tft_size=9753388
+L94(App_Interface/app_font_ttf.c):get tft buff succeed.
+L106(App_Interface/app_font_ttf.c):ttf manage init succeed.
+L716(App_root/app_root.c):ui resource unpacket.
+L310(App_hmi/hmi_packet.c):file open error.

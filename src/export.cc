@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-06-30 10:32:06
+ * @LastEditTime: 2023-07-07 17:15:03
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -444,6 +444,16 @@ Value hmiUnpacketHandleJs(const CallbackInfo &info){
     return result;
 }
 
+Value testHandleJs(const CallbackInfo &info){
+    auto env = info.Env();
+
+    const auto res = test_handle();
+
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
@@ -457,6 +467,7 @@ Object Init(Env env, Object exports)
     exports.Set("hmi_update_screen_data", Function::New(env, hmiUpdateScreenDataJs));
     exports.Set("hmi_batch_update_screen_data", Function::New(env, hmiBatchUpdateScreenDataJs));
     exports.Set("hmi_create_obj_test_handle", Function::New(env, hmiCreateObjTestJs));
+    exports.Set("test_handle", Function::New(env, testHandleJs));
 
     return exports;
 }

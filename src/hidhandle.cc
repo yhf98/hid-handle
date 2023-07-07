@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-05-31 17:06:52
+ * @LastEditTime: 2023-07-07 17:12:45
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -565,6 +565,7 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 	return ret;
 }
 
+
 int hmi_create_obj_test_handle(void)
 {
 	unsigned int ret = hid_handle_init();
@@ -614,4 +615,8 @@ int hmi_create_obj_test_handle(void)
 	printf("\n---close Devices---\n");
 
 	return ret;
+}
+
+int test_handle(void){
+	return 0;
 }

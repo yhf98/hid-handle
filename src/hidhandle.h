@@ -37,4 +37,7 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras);
 int hmi_create_obj_test_handle(void);
 
 int test_handle(void);
+
+int async_test_handle(void);
+
 #endif

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-07-13 13:54:39
+ * @LastEditTime: 2023-07-13 11:37:46
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -459,71 +459,211 @@ Value testHandleJs(const CallbackInfo &info)
     return result;
 }
 
-Promise TestAsync(const CallbackInfo &info)
-{
-    Env env = info.Env();
+// napi_value MyMethod(napi_env env, napi_callback_info  info) {
+//   // 创建 Promise 对象
+//   napi_deferred deferred;
 
-    // 创建 Promise 的执行器函数
-    auto executor = [&](Promise::Deferred deferred)
-    {
-        // 异步操作完成后，根据结果决定是解决还是拒绝 Promise
-        bool success = async_test_handle();
-        if (success == 0)
-        {
-            printf("\nSuccess\n");
-            deferred.Resolve(String::New(env, "Async operation completed"));
-        }
-        else
-        {
-            Error::New(env, "Async operation failed").ThrowAsJavaScriptException();
-            deferred.Reject(env.Null()); // 使用 Null 作为拒绝的原因
-        }
-    };
+//   napi_value promise;
+//   napi_create_promise(env, &deferred, &promise);
 
-    // 创建 Promise 对象并返回
-    Promise::Deferred deferred = Promise::Deferred::New(env);
-    Promise promise = deferred.Promise();
+//   // 此处省略异步操作的具体实现
 
-    // 调用执行器函数，开始异步操作
-    executor(deferred);
+//   // 异步操作完成后根据结果解决或拒绝 Promise
+//   bool success = true; // 假设异步操作成功
+//   if (success) {
+//     napi_resolve_deferred(env, deferred, promise);
+//   } else {
+//     napi_reject_deferred(env, deferred, promise);
+//   }
 
-    // 返回 Promise 对象给 JavaScript
-    return promise;
-}
+//   return promise;
+// }
 
-Promise HidWriteFileHandleAsync(const CallbackInfo &info)
-{
-    Env env = info.Env();
+// void TestHandleAsync(const Napi::CallbackInfo& info)
+// {
+//     // 创建 Promise，并获取解决和拒绝函数
+//     Napi::Env env = info.Env();
+//     Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+//     Napi::Promise promise = deferred.Promise();
 
-    // 创建 Promise 的执行器函数
-    auto executor = [&](Promise::Deferred deferred)
-    {
-        string arg0 = info[0].As<String>();
-        string arg1 = info[1].As<String>();
-        int arg2 = info[2].As<Number>().Int32Value();
-        // 异步操作完成后，根据结果决定是解决还是拒绝 Promise
-        int success = hid_write_file_handle(arg0.c_str(), arg1.c_str(), arg2);
-        if (success == 0)
-        {
-            deferred.Resolve(Number::New(env, success));
-        }
-        else
-        {
-            Error::New(env, "Write file error!").ThrowAsJavaScriptException();
-            deferred.Reject(env.Null()); // 使用 Null 作为拒绝的原因
-        }
-    };
+//     // 异步操作的逻辑
+//     // 假设你执行了某个异步操作，例如定时器
+//     // 在异步操作完成后，使用 deferred.Resolve 或 deferred.Reject 来解决或拒绝 Promise
 
-    // 创建 Promise 对象并返回
-    Promise::Deferred deferred = Promise::Deferred::New(env);
-    Promise promise = deferred.Promise();
+//     // 示例：模拟一个异步操作（1秒后解决 Promise）
+//     std::thread([deferred](){
+//         std::this_thread::sleep_for(std::chrono::seconds(1));
+//         deferred.Resolve(Napi::String::New(deferred.Env(), "Async operation completed"));
+//     }).detach();
 
-    // 调用执行器函数，开始异步操作
-    executor(deferred);
+//     // 返回 Promise 对象
+//     info[0].As<Napi::Promise>().Resolve(promise);
+// }
 
-    // 返回 Promise 对象给 JavaScript
-    return promise;
-}
+// void TestHandleAsync(const Napi::CallbackInfo& info)
+// {
+//     // 创建 Promise，并获取解决和拒绝函数
+//     Napi::Env env = info.Env();
+//     Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+
+//     // 异步操作的逻辑
+//     // 假设你执行了某个异步操作，例如定时器
+//     // 在异步操作完成后，使用 deferred.Resolve 或 deferred.Reject 来解决或拒绝 Promise
+
+//     // 示例：模拟一个异步操作（1秒后解决 Promise）
+//     std::thread([deferred](){
+//         std::this_thread::sleep_for(std::chrono::seconds(1));
+//         deferred.Resolve(Napi::String::New(deferred.Env(), "Async operation completed"));
+//     }).detach();
+
+//     // 返回 Promise 对象
+//     info[0].GetReturnValue().Set(deferred.Promise());
+// }
+
+// void TestHandleAsync(const Napi::CallbackInfo& info)
+// {
+//     // 创建 Promise，并获取解决和拒绝函数
+//     Napi::Env env = info.Env();
+//     Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+//     Napi::Promise promise = deferred.Promise();
+
+//     // 异步操作的逻辑
+//     // 假设你执行了某个异步操作，例如定时器
+//     // 在异步操作完成后，使用 deferred.Resolve 或 deferred.Reject 来解决或拒绝 Promise
+
+//     // 示例：模拟一个异步操作（1秒后解决 Promise）
+//     std::thread([deferred](){
+//         std::this_thread::sleep_for(std::chrono::seconds(3));
+//         deferred.Resolve(Napi::String::New(deferred.Env(), "Async operation completed"));
+//     }).detach();
+
+//     // 返回 Promise 对象
+//     info.Env().Global().As<Napi::Object>().Set("promise", promise);
+// }
+
+// oid TestHandleAsync(const Napi::CallbackInfo& info)
+// {
+//     Napi::Env env = info.Env();
+
+//     // 创建一个 Promise 的执行器函数
+//     auto executor = [](const Napi::Env& env, Napi::Promise::Deferred deferred) {
+//         std::thread([env, deferred]() {
+//             std::this_thread::sleep_for(std::chrono::seconds(1));
+//             deferred.Resolve(Napi::String::New(env, "Async operation completed"));
+//         }).detach();
+//     };
+
+//     // 创建 Promise，并传入执行器函数
+//     Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+//     Napi::Promise promise = deferred.Promise();
+//     executor(env, deferred);
+
+//     // 返回 Promise 对象
+//     info.GetReturnValue().Set(promise);
+// }
+// void TestHandleAsync(const Napi::CallbackInfo& info)
+// {
+//     Napi::Env env = info.Env();
+
+//     // 创建一个 Promise 的执行器函数
+//     auto executor = [](const Napi::Env& env, Napi::Promise::Deferred deferred) {
+//         std::thread([env, deferred]() {
+//             std::this_thread::sleep_for(std::chrono::seconds(1));
+//             deferred.Resolve(Napi::String::New(env, "Async operation completed"));
+//         }).detach();
+//     };
+
+//     // 创建 Promise，并传入执行器函数
+//     Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+//     Napi::Promise promise = deferred.Promise();
+//     executor(env, deferred);
+
+//     // 返回 Promise 对象
+//     info.Env().Global().Set("promise", promise);
+// }
+
+// void TestHandleAsync(const Napi::CallbackInfo& info)
+// {
+//     Napi::Env env = info.Env();
+//     Napi::Function callback = info[0].As<Napi::Function>();
+
+//     // 创建一个 Promise 的执行器函数
+//     auto executor = [&](Napi::Promise::Deferred deferred) {
+//         std::thread([=]() {
+//             std::this_thread::sleep_for(std::chrono::seconds(1));
+//             deferred.Resolve(Napi::String::New(env, "Async operation completed"));
+
+//             // 在异步操作完成后，执行回调函数
+//             callback.Call({});
+//         }).detach();
+//     };
+
+//     // 创建 Promise，并传入执行器函数
+//     Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+//     Napi::Promise promise = deferred.Promise();
+//     executor(deferred);
+
+//     // 返回 Promise 对象
+//     info.Env().Global().Set("promise", promise);
+// }
+
+// 定义一个异步函数，模拟耗时操作
+// Napi::Value asyncFunction(const Napi::CallbackInfo &info)
+// {
+//     Napi::Env env = info.Env();
+
+//     // 创建一个Promise对象
+//     Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+
+//     // 模拟一个异步操作，例如延迟1秒钟
+//     std::thread asyncOperation([deferred]() {
+//         std::this_thread::sleep_for(std::chrono::seconds(1));
+//         // 假设我们在此处获得了结果
+//         bool success = true;
+
+//         if (success) {
+//             // 将Promise解析为一个值
+//             deferred.Resolve(Napi::String::New(deferred.Env(), "操作成功！"));
+//         } else {
+//             // 将Promise拒绝
+//             deferred.Reject(Napi::String::New(deferred.Env(), "操作失败！"));
+//         } 
+//     });
+
+//     asyncOperation.detach();
+
+//     // 返回Promise对象
+//     return deferred.Promise();
+// }
+
+// 定义一个异步函数，模拟耗时操作
+// Napi::Value asyncFunction(const Napi::CallbackInfo& info) {
+//   Napi::Env env = info.Env();
+
+//   // 创建一个Promise对象
+//   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+
+//   // 模拟一个异步操作，例如延迟1秒钟
+//   std::thread asyncOperation([deferred]() {
+//     std::this_thread::sleep_for(std::chrono::seconds(1));
+
+//     // 假设我们在此处获得了结果
+//     bool success = true;
+
+//     if (success) {
+//       // 将Promise解析为一个值
+//       deferred.Resolve(Napi::String::New(deferred.Env(), "操作成功！"));
+//     } else {
+//       // 将Promise拒绝
+//       deferred.Reject(Napi::String::New(deferred.Env(), "操作失败！"));
+//     }
+//   });
+
+//   asyncOperation.detach();
+
+//   // 返回Promise对象
+//   return deferred.Promise();
+// }
 
 Object Init(Env env, Object exports)
 {
@@ -539,10 +679,15 @@ Object Init(Env env, Object exports)
     exports.Set("hmi_batch_update_screen_data", Function::New(env, hmiBatchUpdateScreenDataJs));
     exports.Set("hmi_create_obj_test_handle", Function::New(env, hmiCreateObjTestJs));
     exports.Set("test_handle", Function::New(env, testHandleJs));
-    exports.Set("testAsync",Function::New(env, TestAsync));
-    exports.Set("hid_write_file_async_handle", Function::New(env, HidWriteFileHandleAsync));
+    // exports.Set("testHandle", Function::New(env, TestHandleAsync));
+    // exports["testHandle"] = Napi::Function::New(env, TestHandleAsync);
+    exports.Set(
+        Napi::String::New(env, "asyncFunction"),
+        Napi::Function::New(env, asyncFunction));
+
+    // napi_property_descriptor desc = { "myMethod", 0, MyMethod, 0, 0, 0, napi_default, 0 };
+    // napi_define_properties(env, exports, 1, &desc);
 
     return exports;
 }
-
 NODE_API_MODULE(NODE_GYP_MODULE_NAME, Init)

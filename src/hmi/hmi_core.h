@@ -18,6 +18,8 @@
 #define  HMI_OBJ_TYPE_PROGRESS_BAR  	(6)
 #define  HMI_OBJ_TYPE_BG_IMAGE   		(7)
 #define  HMI_OBJ_TYPE_BG_VIDEO   		(8)
+#define  HMI_OBJ_TYPE_BG_MUSIC   		(9)
+
 
 
 #define  HMI_OBJ_EVENT_DEFAULT          (0)
@@ -25,6 +27,7 @@
 #define  HMI_OBJ_EVENT_NETTIME_DAY      (2)
 #define  HMI_OBJ_EVENT_NETTIME_HOUR     (3)
 #define  HMI_OBJ_EVENT_URL_DATA         (4)
+
 
 
 #define  HMI_OBJ_DATA_DEFAULT           (0)

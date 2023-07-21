@@ -572,12 +572,12 @@ const hid = require("./hidhandle.js");
 let data = [
     {
         "obj_id": 0,
-        "obj_type": 8,
-        "obj_name": "untitled0",
-        "obj_x": 82,
-        "obj_y": 60,
-        "obj_w": 380,
-        "obj_h": 140,
+        "obj_type": 5,
+        "obj_name": "name",
+        "obj_x": 147,
+        "obj_y": 9,
+        "obj_w": 500,
+        "obj_h": 280,
         "obj_opa": 255,
         "obj_r": 0,
         "obj_g": 0,
@@ -587,23 +587,23 @@ let data = [
         "obj_g_2": 0,
         "obj_b_2": 0,
         "obj_font_size": 0,
-        "obj_font_r": 0,
-        "obj_font_g": 0,
+        "obj_font_r": 115,
+        "obj_font_g": 255,
         "obj_font_b": 0,
         "obj_range_min": 0,
-        "obj_range_max": 1000000,
+        "obj_range_max": 100,
         "obj_angle_range": 0,
         "obj_rotation": 0,
-        "obj_width": 380,
+        "obj_width": 500,
         "obj_point_x_num": 5,
         "obj_point_y_num": 5,
-        "obj_time": 0,
+        "obj_time": 500,
         "obj_var": [
             0
         ],
         "obj_event": 0,
         "obj_action": 0,
-        "obj_data": "01.mp4",
+        "obj_data": "0.04",
         "obj_reserve": "",
         "obj_url": "",
         "obj_field": "",
@@ -617,7 +617,7 @@ hid.HidHandle().then(res => {
     console.info("res: ", res);
     // 生成UI文件
     res.generate_ui_handle(data, "./new_ui");
+    // 写入数据
     console.info("更新UI：", res.hid_write_file_handle('./new_ui/hbin/hmi_res.hbin', 'hmi_res.hbin', 9))
-
 })
 

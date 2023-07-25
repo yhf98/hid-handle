@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-07-13 13:54:39
+ * @LastEditTime: 2023-07-25 18:39:58
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -525,12 +525,47 @@ Promise HidWriteFileHandleAsync(const CallbackInfo &info)
     return promise;
 }
 
+Promise hmiSendWifiInfoHandleAsync(const CallbackInfo &info)
+{
+    Env env = info.Env();
+
+    // 创建 Promise 的执行器函数
+    auto executor = [&](Promise::Deferred deferred)
+    {
+        string wifiName = info[0].As<String>();
+        string wifiPassword = info[1].As<String>();
+        // 异步操作完成后，根据结果决定是解决还是拒绝 Promise
+        int success = hmi_send_wifi_info_handle(wifiName.c_str(), wifiPassword.c_str());
+        if (success == 0)
+        {
+            deferred.Resolve(Number::New(env, success));
+        }
+        else
+        {
+            Error::New(env, "Write file error!").ThrowAsJavaScriptException();
+            deferred.Reject(env.Null()); // 使用 Null 作为拒绝的原因
+        }
+    };
+
+    // 创建 Promise 对象并返回
+    Promise::Deferred deferred = Promise::Deferred::New(env);
+    Promise promise = deferred.Promise();
+
+    // 调用执行器函数，开始异步操作
+    executor(deferred);
+
+    // 返回 Promise 对象给 JavaScript
+    return promise;
+}
+
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
     exports.Set("hid_write_buff_handle", Function::New(env, HidWriteBuffHandleJs));
     exports.Set("hid_io_control_handle", Function::New(env, hidIOControlHandleJs));
     exports.Set("hmi_send_wifi_info_handle", Function::New(env, hmiSendWifiInfoHandleJs));
+    exports.Set("hmi_send_wifi_info_async_handle", Function::New(env, hmiSendWifiInfoHandleAsync));
     exports.Set("generate_ui_handle", Function::New(env, generateUIHandleJs));
     exports.Set("hmi_page_update_elem_var_handle", Function::New(env, hmiPageUpdateElemVarHandleJs));
     exports.Set("hmi_unpacket_file_handle", Function::New(env, hmiUnpacketFileHandleJs));

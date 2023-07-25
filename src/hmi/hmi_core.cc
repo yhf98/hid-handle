@@ -11,6 +11,7 @@
 
 #include <hidapi.h>
 
+
 #include "hmi_core.h"
 
 //******************************************************************
@@ -78,6 +79,12 @@ hmi_element_t* Hmi_elem_create(obj_attr_t para)
 
 	memset(&(obj->elem_attr.obj_data), 0, MAX_OBJ_DATA_LEN);
 	memcpy(&(obj->elem_attr.obj_data),&(para.obj_data),MAX_OBJ_DATA_LEN);
+
+	memset(&(obj->elem_attr.obj_url), 0, MAX_OBJ_URL_LEN);
+	memcpy(&(obj->elem_attr.obj_url),&(para.obj_url),MAX_OBJ_URL_LEN);
+
+	memset(&(obj->elem_attr.obj_field), 0, MAX_OBJ_FIELD_LEN);
+	memcpy(&(obj->elem_attr.obj_field),&(para.obj_field),MAX_OBJ_FIELD_LEN);
 
 	memset(&(obj->elem_attr.obj_reserve), 0, MAX_RESERVE_LEN);
 	memcpy(&(obj->elem_attr.obj_reserve),&(para.obj_reserve),MAX_RESERVE_LEN);
@@ -286,7 +293,10 @@ hmi_page_t* hmi_page_get_default(unsigned int id)
 hmi_page_t* hmi_page_get_by_id(unsigned int id)
 {
 	hmi_page_t* temp = NULL;
-	
+
+
+
+
 	return temp;
 }
 
@@ -561,18 +571,13 @@ int  hmi_page_update_elem_data(hmi_page_t *page,unsigned int id,obj_attr_t para)
 int  hmi_init(void)
 {
 	hmi_page_init(&hmi_main_page,0x01);
-
 	
-	
-
-
 	return 0;
 }
 //**********************************************************************
 
-int hmi_add_obj(hmi_page_t *page, obj_attr_t para)
+int hmi_add_obj(hmi_page_t *page,obj_attr_t para)
 {
-	printf("\n===hmi_add_obj.obj_data= %s ==\n", para.obj_data);
 	int ret = -1;
 	
 	ret = hmi_page_add_elem(page,para);
@@ -601,11 +606,6 @@ int hmi_del_obj(hmi_page_t *page,unsigned int obj_id)
 
 	return 0;
 }
-
-
-
-
-
 
 
 
@@ -698,10 +698,10 @@ void  hid_cmd_elem_update_buff(void)
 	var2 = rand()%100;
 	var3 = rand()%100;
 
-	printf("var0=%d\n",var0);
-	printf("var1=%d\n",var1);
-	printf("var2=%d\n",var2);
-	printf("var3=%d\n",var3);
+	log_d("var0=%d\n",var0);
+	log_d("var1=%d\n",var1);
+	log_d("var2=%d\n",var2);
+	log_d("var3=%d\n",var3);
 
 
 	for( i=0;i<4;i++)
@@ -834,7 +834,7 @@ int hmi_update_firmware(void)
 {
 	int i = 0;
 	unsigned int len = 0;
-	obj_attr_t para;
+	obj_attr_t para ;
 	
 	char control_buff[1024] = {0};
 
@@ -860,23 +860,25 @@ int hmi_create_obj_test(void)
 	memset(&para,0,sizeof(obj_attr_t));
 	memset(control_buff,0,sizeof(control_buff));
 
+	//960x320
+
 #if 1
 	para.obj_id   = 0x01;
 	para.obj_type = HMI_OBJ_TYPE_LABEL;
 	
 	para.obj_x	  = 0;
-	para.obj_y	  = 25;
-	para.obj_w	  = 192;
-	para.obj_h	  = 20;
+	para.obj_y	  = 0;
+	para.obj_w	  = 200;
+	para.obj_h	  = 60;
 	
 	para.obj_opa	= 0;
 	para.obj_r		= 0;
 	para.obj_g		= 0;
 	para.obj_b		= 255;
 
-	para.obj_font_size  = 0;
-	para.obj_font_r		= 255;
-	para.obj_font_g		= 0;
+	para.obj_font_size  = 40;
+	para.obj_font_r		= 0;
+	para.obj_font_g		= 255;
 	para.obj_font_b		= 0;	
 	
 	para.obj_time       = 200;
@@ -886,6 +888,12 @@ int hmi_create_obj_test(void)
 	
 	para.obj_event		= HMI_OBJ_EVENT_NETTIME_DAY;
 	para.obj_action 	= 0;
+
+	len = strlen("https://bilibili-user-reminder-server-urdotpiowj.cn-hangzhou.fcapp.run?525438321");
+
+
+	memcpy(&para.obj_url,"https://bilibili-user-reminder-server-urdotpiowj.cn-hangzhou.fcapp.run?525438321",len);
+	memcpy(&para.obj_field,"mid",strlen("mid"));
 
 	hmi_add_obj(hmi_page_get_default(0),para);
 #endif
@@ -897,16 +905,16 @@ int hmi_create_obj_test(void)
 	para.obj_type = HMI_OBJ_TYPE_LABEL;
 
 	para.obj_x	= 0;
-	para.obj_y	= 25*2+20*1;
-	para.obj_w	= 192;
-	para.obj_h	= 20;
+	para.obj_y	= 70;
+	para.obj_w	= 200;
+	para.obj_h	= 30;
 
 	para.obj_opa	= 0;
 	para.obj_r		= 255;
 	para.obj_g		= 0;
 	para.obj_b		= 0;
 
-	para.obj_font_size	= 0;
+	para.obj_font_size	= 30;
 	para.obj_font_r 	= 0;
 	para.obj_font_g 	= 0;
 	para.obj_font_b 	= 255;	
@@ -923,6 +931,9 @@ int hmi_create_obj_test(void)
 
 #endif
 
+return 0;
+
+
 #if 1
 	memset(&para,0,sizeof(obj_attr_t));
 	para.obj_id = 0x03;
@@ -938,7 +949,7 @@ int hmi_create_obj_test(void)
 	para.obj_g		= 255;
 	para.obj_b		= 0;
 
-	para.obj_font_size	= 0;
+	para.obj_font_size	= 56;
 	para.obj_font_r 	= 255;
 	para.obj_font_g 	= 0;
 	para.obj_font_b 	= 0;	
@@ -980,7 +991,7 @@ int hmi_create_obj_test(void)
 		para.obj_g_2	= 0;
 		para.obj_b_2	= 255;	
 
-		para.obj_font_size	= 0;
+		para.obj_font_size	= 56;
 		para.obj_font_r = 0;
 		para.obj_font_g = 255;
 		para.obj_font_b = 0;		
@@ -1127,158 +1138,158 @@ int hmi_create_obj_test(void)
 #endif
 
 
-// #if 1 //  png obj
-// 	memset(&para,0,sizeof(obj_attr_t));
+#if 1 //  png obj
+	memset(&para,0,sizeof(obj_attr_t));
 
-// 	para.obj_id = 0x08+0;
-// 	para.obj_type = HMI_OBJ_TYPE_IMG;
+	para.obj_id = 0x08+0;
+	para.obj_type = HMI_OBJ_TYPE_IMG;
 
-// 	para.obj_x	= 192;
-// 	para.obj_y	= 0;
-// 	para.obj_w	= 320;
-// 	para.obj_h	= 320;
+	para.obj_x	= 192;
+	para.obj_y	= 0;
+	para.obj_w	= 320;
+	para.obj_h	= 320;
 
-// 	para.obj_opa	= 0;
-// 	para.obj_r		= 255;
-// 	para.obj_g		= 0;
-// 	para.obj_b		= 0;
+	para.obj_opa	= 0;
+	para.obj_r		= 255;
+	para.obj_g		= 0;
+	para.obj_b		= 0;
 
-// 	para.obj_opa_2	= 0;
-// 	para.obj_r_2	= 0;
-// 	para.obj_g_2	= 0;
-// 	para.obj_b_2	= 255;	
+	para.obj_opa_2	= 0;
+	para.obj_r_2	= 0;
+	para.obj_g_2	= 0;
+	para.obj_b_2	= 255;	
 
-// 	para.obj_font_size	= 0;
-// 	para.obj_font_r = 0;
-// 	para.obj_font_g = 255;
-// 	para.obj_font_b = 0;		
+	para.obj_font_size	= 0;
+	para.obj_font_r = 0;
+	para.obj_font_g = 255;
+	para.obj_font_b = 0;		
 
-// 	para.obj_var[0] = 50;
-// 	para.obj_var[1] = 60;
-// 	para.obj_var[2] = 70;
+	para.obj_var[0] = 50;
+	para.obj_var[1] = 60;
+	para.obj_var[2] = 70;
 
-// 	para.obj_range_min	= 0;
-// 	para.obj_range_max	= 100;
+	para.obj_range_min	= 0;
+	para.obj_range_max	= 100;
 
-// 	para.obj_angle_range = 360;
-// 	para.obj_rotation  = 90;
-// 	para.obj_width	= 20;
+	para.obj_angle_range = 360;
+	para.obj_rotation  = 90;
+	para.obj_width	= 20;
 
-// 	para.obj_point_x_num = 0;
-// 	para.obj_point_y_num = 0;
+	para.obj_point_x_num = 0;
+	para.obj_point_y_num = 0;
 
-// 	para.obj_time = 1000;
+	para.obj_time = 1000;
 
-// 	para.obj_event		= 0;
-// 	para.obj_action 	= 0;
+	para.obj_event		= 0;
+	para.obj_action 	= 0;
 
-// 	sprintf((para.obj_data), "%s","menu_4.png");
+	sprintf((para.obj_data), "%s","menu_4.png");
 
-// 	hmi_add_obj(hmi_page_get_default(0),para);
+	hmi_add_obj(hmi_page_get_default(0),para);
 
-// #endif
+#endif
 
-// #if 1 //  png obj
-// 	memset(&para,0,sizeof(obj_attr_t));
+#if 1 //  png obj
+	memset(&para,0,sizeof(obj_attr_t));
 
-// 	para.obj_id = 0x08+1;
-// 	para.obj_type = HMI_OBJ_TYPE_IMG;
+	para.obj_id = 0x08+1;
+	para.obj_type = HMI_OBJ_TYPE_IMG;
 
-// 	para.obj_x	= 192+320;
-// 	para.obj_y	= 0;
-// 	para.obj_w	= 334;
-// 	para.obj_h	= 68;
+	para.obj_x	= 192+320;
+	para.obj_y	= 0;
+	para.obj_w	= 334;
+	para.obj_h	= 68;
 
-// 	para.obj_opa	= 0;
-// 	para.obj_r		= 255;
-// 	para.obj_g		= 0;
-// 	para.obj_b		= 0;
+	para.obj_opa	= 0;
+	para.obj_r		= 255;
+	para.obj_g		= 0;
+	para.obj_b		= 0;
 
-// 	para.obj_opa_2	= 0;
-// 	para.obj_r_2	= 0;
-// 	para.obj_g_2	= 0;
-// 	para.obj_b_2	= 255;	
+	para.obj_opa_2	= 0;
+	para.obj_r_2	= 0;
+	para.obj_g_2	= 0;
+	para.obj_b_2	= 255;	
 
-// 	para.obj_font_size	= 0;
-// 	para.obj_font_r = 0;
-// 	para.obj_font_g = 255;
-// 	para.obj_font_b = 0;		
+	para.obj_font_size	= 0;
+	para.obj_font_r = 0;
+	para.obj_font_g = 255;
+	para.obj_font_b = 0;		
 
-// 	para.obj_var[0] = 50;
-// 	para.obj_var[1] = 60;
-// 	para.obj_var[2] = 70;
+	para.obj_var[0] = 50;
+	para.obj_var[1] = 60;
+	para.obj_var[2] = 70;
 
-// 	para.obj_range_min	= 0;
-// 	para.obj_range_max	= 100;
+	para.obj_range_min	= 0;
+	para.obj_range_max	= 100;
 
-// 	para.obj_angle_range = 360;
-// 	para.obj_rotation  = 90;
-// 	para.obj_width	= 20;
+	para.obj_angle_range = 360;
+	para.obj_rotation  = 90;
+	para.obj_width	= 20;
 
-// 	para.obj_point_x_num = 0;
-// 	para.obj_point_y_num = 0;
+	para.obj_point_x_num = 0;
+	para.obj_point_y_num = 0;
 
-// 	para.obj_time = 1000;
+	para.obj_time = 1000;
 
-// 	para.obj_event		= 0;
-// 	para.obj_action 	= 0;
+	para.obj_event		= 0;
+	para.obj_action 	= 0;
 
-// 	sprintf((para.obj_data), "%s","audio_spect_4.png");
+	sprintf((para.obj_data), "%s","audio_spect_4.png");
 
-// 	hmi_add_obj(hmi_page_get_default(0),para);
+	hmi_add_obj(hmi_page_get_default(0),para);
 	
-// #endif
+#endif
 
-// #if 1 //  jpg obj
-// 	memset(&para,0,sizeof(obj_attr_t));
+#if 1 //  jpg obj
+	memset(&para,0,sizeof(obj_attr_t));
 
-// 	para.obj_id = 0x08+2;
-// 	para.obj_type = HMI_OBJ_TYPE_BG_IMAGE;
+	para.obj_id = 0x08+2;
+	para.obj_type = HMI_OBJ_TYPE_BG_IMAGE;
 
-// 	para.obj_x	= 0;
-// 	para.obj_y	= 0;
-// 	para.obj_w	= 960;
-// 	para.obj_h	= 320;
+	para.obj_x	= 0;
+	para.obj_y	= 0;
+	para.obj_w	= 960;
+	para.obj_h	= 320;
 
-// 	para.obj_opa	= 0;
-// 	para.obj_r		= 255;
-// 	para.obj_g		= 0;
-// 	para.obj_b		= 0;
+	para.obj_opa	= 0;
+	para.obj_r		= 255;
+	para.obj_g		= 0;
+	para.obj_b		= 0;
 
-// 	para.obj_opa_2	= 0;
-// 	para.obj_r_2	= 0;
-// 	para.obj_g_2	= 0;
-// 	para.obj_b_2	= 255;	
+	para.obj_opa_2	= 0;
+	para.obj_r_2	= 0;
+	para.obj_g_2	= 0;
+	para.obj_b_2	= 255;	
 
-// 	para.obj_font_size	= 0;
-// 	para.obj_font_r = 0;
-// 	para.obj_font_g = 255;
-// 	para.obj_font_b = 0;		
+	para.obj_font_size	= 0;
+	para.obj_font_r = 0;
+	para.obj_font_g = 255;
+	para.obj_font_b = 0;		
 
-// 	para.obj_var[0] = 50;
-// 	para.obj_var[1] = 60;
-// 	para.obj_var[2] = 70;
+	para.obj_var[0] = 50;
+	para.obj_var[1] = 60;
+	para.obj_var[2] = 70;
 
-// 	para.obj_range_min	= 0;
-// 	para.obj_range_max	= 100;
+	para.obj_range_min	= 0;
+	para.obj_range_max	= 100;
 
-// 	para.obj_angle_range = 360;
-// 	para.obj_rotation  = 90;
-// 	para.obj_width	= 20;
+	para.obj_angle_range = 360;
+	para.obj_rotation  = 90;
+	para.obj_width	= 20;
 
-// 	para.obj_point_x_num = 0;
-// 	para.obj_point_y_num = 0;
+	para.obj_point_x_num = 0;
+	para.obj_point_y_num = 0;
 
-// 	para.obj_time = 1000;
+	para.obj_time = 1000;
 
-// 	para.obj_event		= 0;
-// 	para.obj_action 	= 0;
+	para.obj_event		= 0;
+	para.obj_action 	= 0;
 
-// 	sprintf((para.obj_data), "%s","1631551139.jpg");
+	sprintf((para.obj_data), "%s","1631551139.jpg");
 
-// 	hmi_add_obj(hmi_page_get_default(0),para);
+	hmi_add_obj(hmi_page_get_default(0),para);
 		
-// #endif
+#endif
 
 
 

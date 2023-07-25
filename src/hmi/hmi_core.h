@@ -17,12 +17,18 @@
 #define  HMI_OBJ_TYPE_STRAIGHT  		(5)
 #define  HMI_OBJ_TYPE_PROGRESS_BAR  	(6)
 #define  HMI_OBJ_TYPE_BG_IMAGE   		(7)
+#define  HMI_OBJ_TYPE_BG_VIDEO   		(8)
+#define  HMI_OBJ_TYPE_BG_MUSIC   		(9)
+
 
 
 #define  HMI_OBJ_EVENT_DEFAULT          (0)
 #define  HMI_OBJ_EVENT_SYSTICK          (1)
 #define  HMI_OBJ_EVENT_NETTIME_DAY      (2)
 #define  HMI_OBJ_EVENT_NETTIME_HOUR     (3)
+#define  HMI_OBJ_EVENT_URL_DATA         (4)
+
+
 
 #define  HMI_OBJ_DATA_DEFAULT           (0)
 #define  HMI_OBJ_DATA_BUFF          	(1)
@@ -32,17 +38,23 @@
 #define  MAX_PAGE_ELEM_NUM   (100)
 
 
-#define  MAX_OBJ_VAR_LEN      (10)
-#define  MAX_OBJ_NAME_LEN     (10)
-#define  MAX_OBJ_DATA_LEN     (100)
-#define  MAX_RESERVE_LEN      (10)
+#define  MAX_OBJ_VAR_LEN      	(10)
+#define  MAX_OBJ_NAME_LEN     	(10)
+#define  MAX_OBJ_DATA_LEN     	(100)
+#define  MAX_RESERVE_LEN      	(10)
+#define  MAX_OBJ_URL_LEN        (256)
+#define  MAX_OBJ_FIELD_LEN      (50)
 
 //********************************************************************
+
+#pragma pack(4)
+
+
 typedef struct obj_attr
 {
 	unsigned int   obj_id;
 	unsigned int   obj_type;
-	char   obj_name[MAX_OBJ_NAME_LEN]; //4+4+10
+		    char   obj_name[MAX_OBJ_NAME_LEN]; //4+4+10
 
 	unsigned int   obj_x;
 	unsigned int   obj_y;
@@ -64,6 +76,7 @@ typedef struct obj_attr
 	unsigned char  obj_font_g;
 	unsigned char  obj_font_b;  //12
 
+
 	unsigned int   obj_range_min;
 	unsigned int   obj_range_max;
 	unsigned int   obj_angle_range;
@@ -79,11 +92,18 @@ typedef struct obj_attr
 
 	unsigned int   obj_event;
 	unsigned int   obj_action;  //8
-	
-	char   obj_data[MAX_OBJ_DATA_LEN]; //100
-	char   obj_reserve[MAX_RESERVE_LEN];//10
+			char   obj_data[MAX_OBJ_DATA_LEN]; //100
 
-}obj_attr_t;
+			char   obj_url[MAX_OBJ_URL_LEN];
+			char   obj_field[MAX_OBJ_FIELD_LEN];
+
+			char   obj_reserve[MAX_RESERVE_LEN];//10
+			
+	unsigned int* obj_font;
+
+			char   obj_align_reserve[8];//for obj align
+
+} obj_attr_t  ;
 
 
 int hmi_para_to_buff(obj_attr_t* para, unsigned char buff[]);

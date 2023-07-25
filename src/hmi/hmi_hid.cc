@@ -11,7 +11,7 @@
 #include <hidapi.h>
 
 #include "hmi_hid.h"
-
+#include "hmi_core.h"
 
 
 unsigned char  writebuff[8192]  = { 0x02,0x12,0x23,0x34,0x56};
@@ -131,12 +131,9 @@ int hid_io_control(hid_device* hid_handle ,unsigned int cmd,const char *file_nam
 
 	a_packet.err_code  = TRAN_ERR_NUKNOWN;
 	while(a_packet.err_code){
-		if(hid_handle == NULL){
-			printf("Error: HID_CALC_Errors------");
-		}
 		ret = hid_write(hid_handle, (unsigned char*)(&m_packet), HID_WRITE_BUFF_LEN);
 		if(ret == -1){
-			printf("========device error======.\n");
+			printf("device error.\n");
 			return SYS_DEVICE_ERROR;
 		}
 	
@@ -574,8 +571,149 @@ int hmi_send_wifi_info(hid_device* hid_handle, const char* wifiname, const char*
 
 
 
+int hmi_update_obj_var(hid_device* hid_handle)
+{
+
+	int i = 0;
+	unsigned int  page_id	 = 0;
+	unsigned int  elem_id	 = 0;
+	unsigned int  data_type  = 0;
+	unsigned int  elem_data_len   = 0;
+	
+	unsigned int  var0	 = 0;
+	unsigned int  var1	 = 0;
+	unsigned int  var2	 = 0;
+	unsigned int  var3	 = 0;
+	
+	char control_buff[24];
+	
+	memset(control_buff,0,sizeof(control_buff));
+	
+	srand(time(0));
+	var0 = rand()%100;
+	var1 = rand()%100;
+	var2 = rand()%100;
+	var3 = rand()%100;
+
+	printf("var0=%d\n",var0);
+	printf("var1=%d\n",var1);
+	printf("var2=%d\n",var2);
+	printf("var3=%d\n",var3);
+
+	
+	page_id = 0;
+	elem_id = 6 ;
+	
+	data_type = HMI_OBJ_DATA_DEFAULT;
+	
+	elem_data_len = 3;
+
+	control_buff[0] = ((page_id>>0)&0xff);
+	control_buff[1] = ((page_id>>8)&0xff);
+
+	control_buff[2] = ((elem_id>>0)&0xff);
+	control_buff[3] = ((elem_id>>8)&0xff);
+
+	control_buff[4] = ((data_type>>0)&0xff);
+	control_buff[5] = ((data_type>>8)&0xff);
+
+	control_buff[6] = ((elem_data_len>>0)&0xff);
+	control_buff[7] = ((elem_data_len>>8)&0xff);
+
+	
+	control_buff[8] = ((var0>>0)&0xff);
+	control_buff[9] = ((var0>>8)&0xff);
+	
+	control_buff[10] = ((var1>>0)&0xff);
+	control_buff[11] = ((var1>>8)&0xff);
+	
+	control_buff[12] = ((var2>>0)&0xff);
+	control_buff[13] = ((var2>>8)&0xff);
+
+	hid_io_control(hid_handle,CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	
+
+	return 0;
+}
 
 
+
+int hmi_update_obj_data(hid_device* hid_handle)
+{
+
+	int i = 0;
+	unsigned int  page_id	 = 0;
+	unsigned int  elem_id	 = 0;
+	unsigned int  data_type  = 0;
+	unsigned int  elem_data_len   = 0;
+	
+	unsigned int  var0	 = 0;
+	unsigned int  var1	 = 0;
+	unsigned int  var2	 = 0;
+	unsigned int  var3	 = 0;
+	
+	char control_buff[24];
+	
+	memset(control_buff,0,sizeof(control_buff));
+	
+	srand(time(0));
+	var0 = rand()%100;
+	var1 = rand()%100;
+	var2 = rand()%100;
+	var3 = rand()%100;
+
+	printf("var0=%d\n",var0);
+	printf("var1=%d\n",var1);
+	printf("var2=%d\n",var2);
+	printf("var3=%d\n",var3);
+
+	
+
+	
+	page_id = 0;
+	elem_id = 6 ;
+	
+	data_type = HMI_OBJ_DATA_BUFF;
+	
+	elem_data_len = 3;
+
+	control_buff[0] = ((page_id>>0)&0xff);
+	control_buff[1] = ((page_id>>8)&0xff);
+
+	control_buff[2] = ((elem_id>>0)&0xff);
+	control_buff[3] = ((elem_id>>8)&0xff);
+
+	control_buff[4] = ((data_type>>0)&0xff);
+	control_buff[5] = ((data_type>>8)&0xff);
+
+	control_buff[6] = ((elem_data_len>>0)&0xff);
+	control_buff[7] = ((elem_data_len>>8)&0xff);
+
+	switch(i){
+	case 0:{
+		sprintf(control_buff+8,"内存:%d%",var0);
+		break;
+	}
+	case 1:{
+		sprintf(control_buff+8,"CPU:%d%",var1);
+		break;
+	}
+	case 2:{
+		sprintf(control_buff+8,"NET:%d%",var2);
+		break;
+	}
+	case 3:{
+		sprintf(control_buff+8,"磁盘:%d%",var3);	
+		break;
+	}
+	default:break;
+	}
+
+	hid_io_control(hid_handle,CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	
+
+	return 0;
+}
 
 
 

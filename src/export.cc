@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-05-24 18:04:58
+ * @LastEditTime: 2023-07-13 13:54:39
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -116,7 +116,7 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // 对象名字,唯一
         std::string obj_name = objAttrT.Get("obj_name").As<String>();
         strcpy_s(para.obj_name, obj_name.c_str());
-        
+
         // 横向起点坐标
         para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
         // 纵向起点坐标
@@ -178,10 +178,22 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // obj_data[MAX_OBJ_DATA_LEN]; 对象的buff区,可通过此更新txt内容
         string obj_data = objAttrT.Get("obj_data").As<String>();
         strcpy_s(para.obj_data, obj_data.c_str());
-        
+
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
         strcpy_s(para.obj_reserve, obj_reserve.c_str());
+
+        // obj_url[MAX_OBJ_URL_LEN] 获取数据API地址
+        string obj_url = objAttrT.Get("obj_url").As<String>();
+        strcpy_s(para.obj_url, obj_url.c_str());
+
+        // obj_field[MAX_OBJ_FIELD_LEN] 数据字段
+        string obj_field = objAttrT.Get("obj_field").As<String>();
+        strcpy_s(para.obj_field, obj_field.c_str());
+
+        // obj_align_reserve[8] 保留字段
+        string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
+        strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
 
         vec_obj_attr_t.push_back(para);
     }
@@ -192,7 +204,8 @@ Value generateUIHandleJs(const CallbackInfo &info)
     return result;
 }
 
-Value hmiPageUpdateElemVarHandleJs(const CallbackInfo &info){
+Value hmiPageUpdateElemVarHandleJs(const CallbackInfo &info)
+{
     auto env = info.Env();
 
     unsigned int id = 0;
@@ -246,26 +259,26 @@ Value hmiPageUpdateElemVarHandleJs(const CallbackInfo &info){
     const auto res = hmi_page_update_elem_var_handle(id, para);
 
     Number result = Number::New(env, res);
-    
+
     return result;
-
-
 }
 
-Value hmiUnpacketFileHandleJs(const CallbackInfo &info){
+Value hmiUnpacketFileHandleJs(const CallbackInfo &info)
+{
     auto env = info.Env();
 
     string filepath = info[0].As<String>();
     string out_path = info[1].As<String>();
 
     const auto res = hmi_unpacket_file_handle(filepath.c_str(), out_path.c_str());
-    
+
     Number result = Number::New(env, res);
 
     return result;
 }
 
-Value hmiUpdateObjVarHandleJs(const CallbackInfo &info){
+Value hmiUpdateObjVarHandleJs(const CallbackInfo &info)
+{
     auto env = info.Env();
 
     const auto res = hmi_update_obj_var_handle();
@@ -275,8 +288,8 @@ Value hmiUpdateObjVarHandleJs(const CallbackInfo &info){
     return result;
 }
 
-
-Value hmiUpdateScreenDataJs(const CallbackInfo &info){
+Value hmiUpdateScreenDataJs(const CallbackInfo &info)
+{
     auto env = info.Env();
 
     unsigned elem_id = info[0].As<Number>().Int32Value();
@@ -290,7 +303,8 @@ Value hmiUpdateScreenDataJs(const CallbackInfo &info){
     return result;
 }
 
-Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info){
+Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info)
+{
     auto env = info.Env();
 
     if (info.Length() < 1 || !info[0].IsArray())
@@ -301,7 +315,7 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info){
 
     Array objAttrTs = info[0].As<Array>();
     vector<obj_attr_t> vec_obj_attr_t;
-    
+
     for (uint32_t i = 0; i < objAttrTs.Length(); i++)
     {
         Value value = objAttrTs.Get(i);
@@ -323,7 +337,7 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info){
         // 对象名字,唯一
         std::string obj_name = objAttrT.Get("obj_name").As<String>();
         strcpy_s(para.obj_name, obj_name.c_str());
-        
+
         // 横向起点坐标
         para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
         // 纵向起点坐标
@@ -385,24 +399,37 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info){
         // obj_data[MAX_OBJ_DATA_LEN]; 对象的buff区,可通过此更新txt内容
         string obj_data = objAttrT.Get("obj_data").As<String>();
         strcpy_s(para.obj_data, obj_data.c_str());
-        
+
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
         strcpy_s(para.obj_reserve, obj_reserve.c_str());
+
+        // obj_url[MAX_OBJ_URL_LEN] 获取数据API地址
+        string obj_url = objAttrT.Get("obj_url").As<String>();
+        strcpy_s(para.obj_url, obj_url.c_str());
+
+        // obj_field[MAX_OBJ_FIELD_LEN] 数据字段
+        string obj_field = objAttrT.Get("obj_field").As<String>();
+        strcpy_s(para.obj_field, obj_field.c_str());
+
+        // obj_align_reserve[8] 保留字段
+        string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
+        strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
 
         vec_obj_attr_t.push_back(para);
     }
 
     const auto res = hmi_batch_update_screen_data(vec_obj_attr_t);
-    
+
     Number result = Number::New(env, res);
 
     return result;
 }
 
-Value hmiCreateObjTestJs(const CallbackInfo &info){
+Value hmiCreateObjTestJs(const CallbackInfo &info)
+{
     auto env = info.Env();
-    
+
     const auto res = hmi_create_obj_test_handle();
 
     Number result = Number::New(env, res);
@@ -410,7 +437,8 @@ Value hmiCreateObjTestJs(const CallbackInfo &info){
     return result;
 }
 
-Value hmiUnpacketHandleJs(const CallbackInfo &info){
+Value hmiUnpacketHandleJs(const CallbackInfo &info)
+{
     auto env = info.Env();
 
     const auto res = hmi_update_obj_var_handle();
@@ -418,6 +446,83 @@ Value hmiUnpacketHandleJs(const CallbackInfo &info){
     Number result = Number::New(env, res);
 
     return result;
+}
+
+Value testHandleJs(const CallbackInfo &info)
+{
+    auto env = info.Env();
+
+    const auto res = test_handle();
+
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
+Promise TestAsync(const CallbackInfo &info)
+{
+    Env env = info.Env();
+
+    // 创建 Promise 的执行器函数
+    auto executor = [&](Promise::Deferred deferred)
+    {
+        // 异步操作完成后，根据结果决定是解决还是拒绝 Promise
+        bool success = async_test_handle();
+        if (success == 0)
+        {
+            printf("\nSuccess\n");
+            deferred.Resolve(String::New(env, "Async operation completed"));
+        }
+        else
+        {
+            Error::New(env, "Async operation failed").ThrowAsJavaScriptException();
+            deferred.Reject(env.Null()); // 使用 Null 作为拒绝的原因
+        }
+    };
+
+    // 创建 Promise 对象并返回
+    Promise::Deferred deferred = Promise::Deferred::New(env);
+    Promise promise = deferred.Promise();
+
+    // 调用执行器函数，开始异步操作
+    executor(deferred);
+
+    // 返回 Promise 对象给 JavaScript
+    return promise;
+}
+
+Promise HidWriteFileHandleAsync(const CallbackInfo &info)
+{
+    Env env = info.Env();
+
+    // 创建 Promise 的执行器函数
+    auto executor = [&](Promise::Deferred deferred)
+    {
+        string arg0 = info[0].As<String>();
+        string arg1 = info[1].As<String>();
+        int arg2 = info[2].As<Number>().Int32Value();
+        // 异步操作完成后，根据结果决定是解决还是拒绝 Promise
+        int success = hid_write_file_handle(arg0.c_str(), arg1.c_str(), arg2);
+        if (success == 0)
+        {
+            deferred.Resolve(Number::New(env, success));
+        }
+        else
+        {
+            Error::New(env, "Write file error!").ThrowAsJavaScriptException();
+            deferred.Reject(env.Null()); // 使用 Null 作为拒绝的原因
+        }
+    };
+
+    // 创建 Promise 对象并返回
+    Promise::Deferred deferred = Promise::Deferred::New(env);
+    Promise promise = deferred.Promise();
+
+    // 调用执行器函数，开始异步操作
+    executor(deferred);
+
+    // 返回 Promise 对象给 JavaScript
+    return promise;
 }
 
 Object Init(Env env, Object exports)
@@ -433,7 +538,11 @@ Object Init(Env env, Object exports)
     exports.Set("hmi_update_screen_data", Function::New(env, hmiUpdateScreenDataJs));
     exports.Set("hmi_batch_update_screen_data", Function::New(env, hmiBatchUpdateScreenDataJs));
     exports.Set("hmi_create_obj_test_handle", Function::New(env, hmiCreateObjTestJs));
+    exports.Set("test_handle", Function::New(env, testHandleJs));
+    exports.Set("testAsync",Function::New(env, TestAsync));
+    exports.Set("hid_write_file_async_handle", Function::New(env, HidWriteFileHandleAsync));
 
     return exports;
 }
+
 NODE_API_MODULE(NODE_GYP_MODULE_NAME, Init)

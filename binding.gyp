@@ -6,7 +6,7 @@
     'targets': [
         {
             'target_name': 'hidhandle',
-            'sources': [ 'src/export.cc' ],
+            'sources': [ "src/export.cc", "src/hidhandle.cc","src/hmi/hmi_core.cc", "src/hmi/hmi_hid.cc", "src/hmi/hmi_packet.cc", "src/hmi/list.c" ],
             'dependencies': ['hidapi'],
             'defines': [
                 '_LARGEFILE_SOURCE',
@@ -21,7 +21,7 @@
                     ],
                     'xcode_settings': {
                         'CLANG_CXX_LIBRARY': 'libc++',
-                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'MACOSX_DEPLOYMENT_TARGET': '13.3',
                         'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
                         'OTHER_LDFLAGS': [
                             '-framework IOKit',

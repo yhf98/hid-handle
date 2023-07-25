@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-05-31 17:06:52
+ * @LastEditTime: 2023-07-13 13:47:48
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -74,7 +74,8 @@ int hid_handle_init()
 int hid_write_file_handle(const char *full_path, const char *file_name, unsigned int file_type)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	ret = hid_write_file(hid_handle, full_path, file_name, file_type);
 
@@ -94,7 +95,8 @@ int hid_write_file_handle(const char *full_path, const char *file_name, unsigned
 int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsigned int file_type)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	ret = hid_write_buff(hid_handle, buff, buff_len, file_type);
 
@@ -115,7 +117,8 @@ int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsi
 int hid_io_control_handle(unsigned int cmd, const char *file_name, char *reserve, unsigned int rese_len)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	ret = hid_io_control(hid_handle, cmd, file_name, reserve, rese_len);
 	hid_close(hid_handle);
@@ -135,7 +138,8 @@ int hid_io_control_handle(unsigned int cmd, const char *file_name, char *reserve
 int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	ret = hmi_send_wifi_info(hid_handle, wifiname, wifipasswd);
 
@@ -155,7 +159,8 @@ int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
 int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	hmi_init();
 
@@ -166,7 +171,7 @@ int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 		printf("\n#######Generate: #########: %d\n", obj.obj_id);
 	}
 	ret = hmi_packet_file(page, pkg_path);
-	
+
 	hid_close(hid_handle);
 	hid_handle = NULL;
 	printf("\n---close Devices---\n");
@@ -177,7 +182,8 @@ int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
 int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	int i = 0;
 	unsigned int page_id = 0;
@@ -352,10 +358,11 @@ int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para)
 int hmi_unpacket_file_handle(const char *filepath, const char *out_path)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	ret = hmi_unpacket_file(filepath, out_path);
-	
+
 	hid_close(hid_handle);
 	hid_handle = NULL;
 	printf("\n---close Devices---\n");
@@ -366,8 +373,8 @@ int hmi_unpacket_file_handle(const char *filepath, const char *out_path)
 int hmi_update_obj_var_handle()
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
-
+	if (ret != 0)
+		return ret;
 
 	int i = 0;
 	unsigned int page_id = 0;
@@ -441,7 +448,8 @@ int hmi_update_obj_var_handle()
 int hmi_update_screen_data(unsigned int elem_id, const char *data)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	int i = 0;
 	unsigned int page_id = 0;
@@ -493,7 +501,8 @@ int hmi_update_screen_data(unsigned int elem_id, const char *data)
 int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	unsigned int page_id = 0;
 	unsigned int elem_id = 0;
@@ -568,7 +577,8 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 int hmi_create_obj_test_handle(void)
 {
 	unsigned int ret = hid_handle_init();
-	if (ret != 0) return ret;
+	if (ret != 0)
+		return ret;
 
 	hmi_init();
 	int i = 0;
@@ -614,4 +624,18 @@ int hmi_create_obj_test_handle(void)
 	printf("\n---close Devices---\n");
 
 	return ret;
+}
+
+int test_handle(void)
+{
+	return 0;
+}
+
+int async_test_handle(void)
+{
+	for (int i = 0; i < 100; i++)
+	{
+		printf("\n==[%d]==\n", i);
+	}
+	return 0;
 }

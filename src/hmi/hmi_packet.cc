@@ -11,6 +11,8 @@
 
 #include <hidapi.h>
 
+#include "hmi_config.h"
+
 #include "hmi_core.h"
 
 #define RES_START_CODE (0x0001c6d7)
@@ -28,8 +30,10 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 	char *p_buff = NULL;
 
 	FILE *fp_packet = NULL;
-	FILE *fp_png = NULL;
-	FILE *fp_jpg = NULL;
+	FILE *fp_png    = NULL;
+	FILE *fp_jpg	= NULL;
+	FILE *fp_video	= NULL;
+	FILE *fp_music	= NULL;  
 
 	unsigned int start_code = RES_START_CODE;
 	unsigned int end_code = RES_END_CODE;
@@ -45,9 +49,12 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 	unsigned int png_elem_num = 0;
 	unsigned int jpg_elem_num = 0;
 
-	memset(obj_reserve, 0, sizeof(obj_reserve));
+	unsigned int  video_elem_num  	= 0;
+	unsigned int  music_elem_num    = 0;	
 
-	for (i = 0; i < sizeof(obj_reserve); i++)
+	memset(obj_reserve,0,sizeof(obj_reserve));
+	
+	for(i=0;i<sizeof(obj_reserve);i++)
 		obj_reserve[i] = i;
 
 	if (page == NULL)
@@ -124,7 +131,41 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 	printf("jpg_elem_num=%d\n", jpg_elem_num);
 	fwrite(&jpg_elem_num, sizeof(unsigned int), 1, fp_packet);
 	//**********************************************************
-	// 6.write reserve data
+	//6.write video elem num
+
+	video_elem_num = 0;
+	slist_for_each(node, (page->page_elem_head))
+	{
+		elem = slist_entry(node, hmi_element_t, elem_l_tail);
+		if(elem){
+			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_BG_VIDEO)
+			{
+				video_elem_num ++;
+			}	
+		}
+	}	
+	
+	printf("video_elem_num=%d\n",video_elem_num);
+	fwrite(&video_elem_num,sizeof(unsigned int),1,fp_packet);
+	//**********************************************************
+	//7.write music elem num
+
+	music_elem_num = 0;
+	slist_for_each(node, (page->page_elem_head))
+	{
+		elem = slist_entry(node, hmi_element_t, elem_l_tail);
+		if(elem){
+			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_BG_MUSIC)
+			{
+				music_elem_num ++;
+			}	
+		}
+	}	
+	
+	printf("music_elem_num=%d\n",music_elem_num);
+	fwrite(&music_elem_num,sizeof(unsigned int),1,fp_packet);
+	//**********************************************************
+	//6.write reserve data
 
 	fwrite(obj_reserve, sizeof(obj_reserve), 1, fp_packet);
 	//**********************************************************
@@ -238,17 +279,144 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 					fp_jpg = NULL;
 				}
 				//****************************************************************
-				// 7.file start code
-				fwrite(&file_start_code, sizeof(unsigned int), 1, fp_packet);
-				fwrite(&elem->elem_attr.obj_id, sizeof(unsigned int), 1, fp_packet);
 
-				fwrite(&file_name_len, sizeof(unsigned int), 1, fp_packet);
-				fwrite(&elem->elem_attr.obj_data, file_name_len, 1, fp_packet);
+				file_name_len = strlen(elem->elem_attr.obj_data);
 
-				fwrite(&file_size, sizeof(unsigned int), 1, fp_packet);
-				fwrite(p_buff, file_size, 1, fp_packet);
+				//****************************************************************
+				//7.file start code
+				fwrite(&file_start_code,       sizeof(unsigned int),1,fp_packet);
+				fwrite(&elem->elem_attr.obj_id,sizeof(unsigned int),1,fp_packet);
 
-				fwrite(&file_end_code, sizeof(unsigned int), 1, fp_packet);
+				fwrite(&file_name_len,		      sizeof(unsigned int),1,fp_packet);
+				fwrite(&elem->elem_attr.obj_data, file_name_len,       1,fp_packet);
+				
+				fwrite(&file_size,             sizeof(unsigned int),1,fp_packet);
+				fwrite(p_buff,                 file_size,           1,fp_packet);
+
+				fwrite(&file_end_code,         sizeof(unsigned int),1,fp_packet);
+				//****************************************************************
+				free(p_buff);
+				p_buff = NULL;
+				//****************************************************************
+			}
+		}
+	}	
+	//****************************************************************
+	//7.write video data
+	slist_for_each(node, (page->page_elem_head))
+	{
+		elem = slist_entry(node, hmi_element_t, elem_l_tail);
+		if(elem){
+			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_BG_VIDEO)
+			{
+				memset(filename,0,sizeof(filename));
+
+				sprintf(filename, "%s/img/%s", rootpath, elem->elem_attr.obj_data);
+				printf("filename: %s\n", filename);
+
+				fp_video = fopen(filename,"rb");
+				if(!fp_video){
+					printf("file open error %s.\n",filename);
+					break;;
+				}
+
+				fseek(fp_video,0L,SEEK_END);
+				file_size = ftell(fp_video);
+				fseek(fp_video,0L,SEEK_SET);
+
+				p_buff = (char*)malloc(file_size);
+				if(!p_buff){
+					printf("malloc buff error %s\n");
+					if(fp_video){
+						fclose(fp_video);
+						fp_video = NULL;
+					}
+					break;
+				}
+
+				fread(p_buff,file_size,1,fp_video);
+				if(fp_video){
+					fclose(fp_video);
+					fp_video = NULL;
+				}	
+				
+				//****************************************************************
+
+				file_name_len = strlen(elem->elem_attr.obj_data);
+
+				//****************************************************************
+				//7.file start code
+				fwrite(&file_start_code,       sizeof(unsigned int),1,fp_packet);
+				fwrite(&elem->elem_attr.obj_id,sizeof(unsigned int),1,fp_packet);
+
+				fwrite(&file_name_len,		      sizeof(unsigned int),1,fp_packet);
+				fwrite(&elem->elem_attr.obj_data, file_name_len,       1,fp_packet);
+				
+				fwrite(&file_size,             sizeof(unsigned int),1,fp_packet);
+				fwrite(p_buff,                 file_size,           1,fp_packet);
+
+				fwrite(&file_end_code,         sizeof(unsigned int),1,fp_packet);
+				//****************************************************************
+				free(p_buff);
+				p_buff = NULL;
+				//****************************************************************
+			}
+		}
+	}	//****************************************************************
+	//8.write music data
+	slist_for_each(node, (page->page_elem_head))
+	{
+		elem = slist_entry(node, hmi_element_t, elem_l_tail);
+		if(elem){
+			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_BG_MUSIC)
+			{
+				memset(filename,0,sizeof(filename));
+
+				sprintf(filename, "%s/img/%s", rootpath, elem->elem_attr.obj_data);
+				printf("filename: %s\n", filename);
+
+				fp_music = fopen(filename,"rb");
+				if(!fp_music){
+					printf("file open error %s.\n",filename);
+					break;;
+				}
+
+				fseek(fp_music,0L,SEEK_END);
+				file_size = ftell(fp_music);
+				fseek(fp_music,0L,SEEK_SET);
+
+				p_buff = (char*)malloc(file_size);
+				if(!p_buff){
+					printf("malloc buff error %s\n");
+					if(fp_music){
+						fclose(fp_music);
+						fp_music = NULL;
+					}
+					break;
+				}
+
+				fread(p_buff,file_size,1,fp_music);
+				if(fp_music){
+					fclose(fp_music);
+					fp_music = NULL;
+				}	
+				
+				//****************************************************************
+
+				file_name_len = strlen(elem->elem_attr.obj_data);
+
+				//****************************************************************
+				//7.file start code
+				fwrite(&file_start_code,       sizeof(unsigned int),1,fp_packet);
+				fwrite(&elem->elem_attr.obj_id,sizeof(unsigned int),1,fp_packet);
+
+				fwrite(&file_name_len,		      sizeof(unsigned int),1,fp_packet);
+				fwrite(&elem->elem_attr.obj_data, file_name_len,       1,fp_packet);
+				
+				fwrite(&file_size,             sizeof(unsigned int),1,fp_packet);
+				fwrite(p_buff,                 file_size,           1,fp_packet);
+
+				fwrite(&file_end_code,         sizeof(unsigned int),1,fp_packet);
 				//****************************************************************
 				free(p_buff);
 				p_buff = NULL;

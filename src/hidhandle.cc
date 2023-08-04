@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-07-13 13:47:48
+ * @LastEditTime: 2023-08-04 17:23:27
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -42,21 +42,24 @@ int hid_handle_init()
 	{
 		hid_init();
 		hid_handle = hid_open(0x264a, 0x232a, NULL);
-		if (hid_handle == NULL)
+		if (hid_handle == NULL || hid_handle == nullptr)
 		{
 			printf(" open hid error!\n");
 			return -1;
 		}
-		hid_set_nonblocking(hid_handle, 0);
 
-		hid_get_manufacturer_string(hid_handle, manufact, sizeof(manufact));
-		printf("manufact     = %ls\n", manufact);
-		hid_get_product_string(hid_handle, product, sizeof(product));
-		printf("product      = %ls\n", product);
-		hid_get_serial_number_string(hid_handle, serial_num, sizeof(serial_num));
-		printf("serial_num   = %ls\n", serial_num);
-		hid_get_indexed_string(hid_handle, string_index, indexed, sizeof(indexed));
-		printf("indexed      = %ls\n", indexed);
+		// 阻塞模式
+		hid_set_nonblocking(hid_handle, 0);
+		
+		// 获取设备信息
+		// hid_get_manufacturer_string(hid_handle, manufact, sizeof(manufact));
+		// printf("manufact     = %ls\n", manufact);
+		// hid_get_product_string(hid_handle, product, sizeof(product));
+		// printf("product      = %ls\n", product);
+		// hid_get_serial_number_string(hid_handle, serial_num, sizeof(serial_num));
+		// printf("serial_num   = %ls\n", serial_num);
+		// hid_get_indexed_string(hid_handle, string_index, indexed, sizeof(indexed));
+		// printf("indexed      = %ls\n", indexed);
 	}
 	else
 	{

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:46:10
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-07-07 17:13:02
+ * @LastEditTime: 2023-08-05 11:44:08
  * @FilePath: \hid-handle\src\hidhandle.h
  * @Description: hidhandle.h
  */
@@ -39,5 +39,9 @@ int hmi_create_obj_test_handle(void);
 int test_handle(void);
 
 int async_test_handle(void);
+
+device_info_t get_hid_device_info(void);
+
+int hid_handle_init(void);
 
 #endif

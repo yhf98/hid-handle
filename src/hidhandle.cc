@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-04 17:23:27
+ * @LastEditTime: 2023-08-05 11:48:53
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -50,7 +50,7 @@ int hid_handle_init()
 
 		// 阻塞模式
 		hid_set_nonblocking(hid_handle, 0);
-		
+
 		// 获取设备信息
 		// hid_get_manufacturer_string(hid_handle, manufact, sizeof(manufact));
 		// printf("manufact     = %ls\n", manufact);
@@ -66,6 +66,29 @@ int hid_handle_init()
 		printf("HID Driver was opened!\n");
 	}
 	return 0;
+}
+
+device_info_t get_hid_device_info()
+{
+	device_info_t device_info;
+
+	unsigned int ret = hid_handle_init();
+	int string_index = 1;
+
+	if (ret != 0)
+		return device_info;
+	
+	// 获取设备信息
+	hid_get_manufacturer_string(hid_handle, device_info.manufact, sizeof(device_info.manufact));
+	printf("manufact     = %ls\n", device_info.manufact);
+	hid_get_product_string(hid_handle, device_info.product, sizeof(device_info.product));
+	printf("product      = %ls\n", product);
+	hid_get_serial_number_string(hid_handle, device_info.serial_num, sizeof(device_info.serial_num));
+	printf("serial_num   = %ls\n", serial_num);
+	hid_get_indexed_string(hid_handle, string_index, device_info.indexed, sizeof(device_info.indexed));
+	printf("indexed      = %ls\n", indexed);
+
+	return device_info;
 }
 
 /**

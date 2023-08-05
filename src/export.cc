@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-07-25 18:39:58
+ * @LastEditTime: 2023-08-05 13:48:18
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -558,6 +558,38 @@ Promise hmiSendWifiInfoHandleAsync(const CallbackInfo &info)
     return promise;
 }
 
+Value hidHandleInitJs(const CallbackInfo &info)
+{
+    auto env = info.Env();
+
+    const auto res = hid_handle_init();
+
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
+Object CreateDeviceInfoObject(const Env& env, const device_info_t* info) {
+    Object obj = Object::New(env);
+    
+    obj.Set("manufact", String::New(env, reinterpret_cast<const char16_t*>(info->manufact)));
+    obj.Set("product", String::New(env, reinterpret_cast<const char16_t*>(info->product)));
+    obj.Set("serial_num", String::New(env, reinterpret_cast<const char16_t*>(info->serial_num)));
+    obj.Set("indexed", String::New(env, reinterpret_cast<const char16_t*>(info->indexed)));
+
+    return obj;
+}
+
+Value getDeviceInfoJs(const CallbackInfo& info) {
+    Env env = info.Env();
+
+    // 创建要返回的结构体对象
+    device_info_t device_info = get_hid_device_info();
+
+    Object result = CreateDeviceInfoObject(env, &device_info);
+
+    return result;
+}
 
 Object Init(Env env, Object exports)
 {
@@ -574,8 +606,10 @@ Object Init(Env env, Object exports)
     exports.Set("hmi_batch_update_screen_data", Function::New(env, hmiBatchUpdateScreenDataJs));
     exports.Set("hmi_create_obj_test_handle", Function::New(env, hmiCreateObjTestJs));
     exports.Set("test_handle", Function::New(env, testHandleJs));
-    exports.Set("testAsync",Function::New(env, TestAsync));
+    exports.Set("testAsync", Function::New(env, TestAsync));
     exports.Set("hid_write_file_async_handle", Function::New(env, HidWriteFileHandleAsync));
+    exports.Set("hid_init_handle", Function::New(env, hidHandleInitJs));
+    exports.Set("get_device_info", Function::New(env, getDeviceInfoJs));
 
     return exports;
 }

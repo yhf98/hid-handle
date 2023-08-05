@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-05 13:48:18
+ * @LastEditTime: 2023-08-05 17:59:08
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -562,7 +562,7 @@ Value hidHandleInitJs(const CallbackInfo &info)
 {
     auto env = info.Env();
 
-    const auto res = hid_handle_init();
+    const auto res = hid_state_handle();
 
     Number result = Number::New(env, res);
 

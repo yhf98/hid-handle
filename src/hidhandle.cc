@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:45:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-05 11:48:53
+ * @LastEditTime: 2023-08-05 17:58:25
  * @FilePath: \hid-handle\src\hidhandle.cc
  * @Description: hidhandle.cc
  */
@@ -68,6 +68,20 @@ int hid_handle_init()
 	return 0;
 }
 
+int hid_state_handle()
+{
+	unsigned int ret = hid_handle_init();
+
+	if (ret != 0)
+		return -1;
+	
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
+
+	return 0;
+}
+
 device_info_t get_hid_device_info()
 {
 	device_info_t device_info;
@@ -77,7 +91,7 @@ device_info_t get_hid_device_info()
 
 	if (ret != 0)
 		return device_info;
-	
+
 	// 获取设备信息
 	hid_get_manufacturer_string(hid_handle, device_info.manufact, sizeof(device_info.manufact));
 	printf("manufact     = %ls\n", device_info.manufact);
@@ -87,6 +101,10 @@ device_info_t get_hid_device_info()
 	printf("serial_num   = %ls\n", serial_num);
 	hid_get_indexed_string(hid_handle, string_index, device_info.indexed, sizeof(device_info.indexed));
 	printf("indexed      = %ls\n", indexed);
+
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	printf("\n---close Devices---\n");
 
 	return device_info;
 }

@@ -1,18 +1,4 @@
-/*
- * @Author: yaohengfeng 1921934563@qq.com
- * @Date: 2023-01-13 10:45:03
- * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-05 17:58:25
- * @FilePath: \hid-handle\src\hidhandle.cc
- * @Description: hidhandle.cc
- */
-#include <windows.h>
-#include <winioctl.h>
-#include <setupapi.h>
-#include <initguid.h>
 #include <stdio.h>
-#include <hidsdi.h>
-#include <tchar.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -200,13 +186,15 @@ int hmi_send_wifi_info_handle(const char *wifiname, const char *wifipasswd)
  * @param para
  * @return int
  */
-int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path)
+int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path, const char *wifi_name, const char *wifi_pwd)
 {
 	unsigned int ret = hid_handle_init();
 	if (ret != 0)
 		return ret;
 
 	hmi_init();
+
+	hmi_config_wifi_info(wifi_name, wifi_pwd);
 
 	hmi_page_t *page = hmi_page_get_default(0);
 	for (const auto &obj : paras)

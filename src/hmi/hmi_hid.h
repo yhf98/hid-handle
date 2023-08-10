@@ -37,7 +37,7 @@
 #define    CRC_CALC_LEN                 (1016)
 #define    READ_DATA_LEN                (1000)
 
-#define    HID_END_POINT                0x02
+#define    HID_END_POINT                0x02 
 
 #define    TRAN_START_FRAME_HEDA        0xFA
 #define    TRAN_START_FRAME_TAIL        0xFB

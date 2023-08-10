@@ -1,4 +1,3 @@
-
 #include <windows.h>
 #include <winioctl.h>
 #include <setupapi.h>
@@ -7,7 +6,7 @@
 #include <hidsdi.h>
 #include <tchar.h>
 #include <stdlib.h> 
-#include <time.h> 
+#include <time.h>
 #include <hidapi.h>
 
 #include "hmi_hid.h"
@@ -714,35 +713,3 @@ int hmi_update_obj_data(hid_device* hid_handle)
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-05 17:59:08
+ * @LastEditTime: 2023-08-10 11:39:08
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -89,9 +89,13 @@ Value generateUIHandleJs(const CallbackInfo &info)
         return env.Null();
     }
 
+    printf("\n---1111111111---\n");
+
     Array objAttrTs = info[0].As<Array>();
 
     string pkgPath = info[1].As<String>();
+    string wifiName = info[2].As<String>();
+    string wifiPwd = info[3].As<String>();
 
     vector<obj_attr_t> vec_obj_attr_t;
 
@@ -138,6 +142,9 @@ Value generateUIHandleJs(const CallbackInfo &info)
         para.obj_b_2 = objAttrT.Get("obj_b_2").As<Number>().Int32Value();
         // 字体大小
         para.obj_font_size = objAttrT.Get("obj_font_size").As<Number>().Int32Value();
+        // 字体名字
+        string obj_font_name = objAttrT.Get("obj_font_name").As<String>();
+        strcpy_s(para.obj_font_name, obj_font_name.c_str());
         // 字体颜色
         para.obj_font_r = objAttrT.Get("obj_font_r").As<Number>().Int32Value();
         para.obj_font_g = objAttrT.Get("obj_font_g").As<Number>().Int32Value();
@@ -198,7 +205,9 @@ Value generateUIHandleJs(const CallbackInfo &info)
         vec_obj_attr_t.push_back(para);
     }
 
-    const auto res = generate_ui_handle(vec_obj_attr_t, pkgPath.c_str());
+    printf("\n---222222222---\n");
+
+    const auto res = generate_ui_handle(vec_obj_attr_t, pkgPath.c_str(), wifiName.c_str(), wifiPwd.c_str());
     Number result = Number::New(env, res);
 
     return result;
@@ -359,6 +368,9 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info)
         para.obj_b_2 = objAttrT.Get("obj_b_2").As<Number>().Int32Value();
         // 字体大小
         para.obj_font_size = objAttrT.Get("obj_font_size").As<Number>().Int32Value();
+        // 字体名字
+        string obj_font_name = objAttrT.Get("obj_font_name").As<String>();
+        strcpy_s(para.obj_font_name, obj_font_name.c_str());
         // 字体颜色
         para.obj_font_r = objAttrT.Get("obj_font_r").As<Number>().Int32Value();
         para.obj_font_g = objAttrT.Get("obj_font_g").As<Number>().Int32Value();

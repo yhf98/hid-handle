@@ -10,8 +10,6 @@
 #include <time.h> 
 
 #include <hidapi.h>
-
-
 #include "hmi_core.h"
 
 //******************************************************************
@@ -34,61 +32,7 @@ hmi_element_t* Hmi_elem_create(obj_attr_t para)
 	memset(obj, 0, sizeof(hmi_element_t));
 	slist_init(&(obj->elem_l_tail));
 
-	obj->elem_attr.obj_id 	= para.obj_id;
-	obj->elem_attr.obj_type = para.obj_type;
-
-	memset(&(obj->elem_attr.obj_name), 0, MAX_OBJ_NAME_LEN);
-	memcpy(&(obj->elem_attr.obj_name),&(para.obj_name),MAX_OBJ_NAME_LEN);
-	
-	obj->elem_attr.obj_x    = para.obj_x;
-	obj->elem_attr.obj_y    = para.obj_y;
-	obj->elem_attr.obj_w    = para.obj_w;
-	obj->elem_attr.obj_h    = para.obj_h;
-
-	obj->elem_attr.obj_opa  = para.obj_opa;
-	obj->elem_attr.obj_r    = para.obj_r;
-	obj->elem_attr.obj_g   	= para.obj_g;
-	obj->elem_attr.obj_b    = para.obj_b;
-
-	obj->elem_attr.obj_opa_2    = para.obj_opa_2;
-	obj->elem_attr.obj_r_2      = para.obj_r_2;
-	obj->elem_attr.obj_g_2   	= para.obj_g_2;
-	obj->elem_attr.obj_b_2      = para.obj_b_2;
-
-
-	obj->elem_attr.obj_font_size  = para.obj_font_size;
-	obj->elem_attr.obj_font_r     = para.obj_font_r;
-	obj->elem_attr.obj_font_g     = para.obj_font_g;
-	obj->elem_attr.obj_font_b     = para.obj_font_b;	
-
-	obj->elem_attr.obj_range_min  = para.obj_range_min;
-	obj->elem_attr.obj_range_max  = para.obj_range_max;
-	obj->elem_attr.obj_angle_range  = para.obj_angle_range;
-	obj->elem_attr.obj_rotation     = para.obj_rotation;
-	obj->elem_attr.obj_width        = para.obj_width;
-
-	obj->elem_attr.obj_point_x_num = para.obj_point_x_num;
-	obj->elem_attr.obj_point_y_num = para.obj_point_y_num;
-	obj->elem_attr.obj_time        = para.obj_time;
-
-	obj->elem_attr.obj_event      = para.obj_event;
-	obj->elem_attr.obj_action     = para.obj_action;
-
-	memset(&(obj->elem_attr.obj_var), 0, MAX_OBJ_VAR_LEN);
-	memcpy(&(obj->elem_attr.obj_var),&(para.obj_var),MAX_OBJ_VAR_LEN);
-
-	memset(&(obj->elem_attr.obj_data), 0, MAX_OBJ_DATA_LEN);
-	memcpy(&(obj->elem_attr.obj_data),&(para.obj_data),MAX_OBJ_DATA_LEN);
-
-	memset(&(obj->elem_attr.obj_url), 0, MAX_OBJ_URL_LEN);
-	memcpy(&(obj->elem_attr.obj_url),&(para.obj_url),MAX_OBJ_URL_LEN);
-
-	memset(&(obj->elem_attr.obj_field), 0, MAX_OBJ_FIELD_LEN);
-	memcpy(&(obj->elem_attr.obj_field),&(para.obj_field),MAX_OBJ_FIELD_LEN);
-
-	memset(&(obj->elem_attr.obj_reserve), 0, MAX_RESERVE_LEN);
-	memcpy(&(obj->elem_attr.obj_reserve),&(para.obj_reserve),MAX_RESERVE_LEN);
-
+	memcpy(&obj->elem_attr,&para,sizeof(obj_attr_t));
 	
 	return obj;
 }
@@ -571,7 +515,11 @@ int  hmi_page_update_elem_data(hmi_page_t *page,unsigned int id,obj_attr_t para)
 int  hmi_init(void)
 {
 	hmi_page_init(&hmi_main_page,0x01);
+
 	
+	
+
+
 	return 0;
 }
 //**********************************************************************
@@ -698,10 +646,10 @@ void  hid_cmd_elem_update_buff(void)
 	var2 = rand()%100;
 	var3 = rand()%100;
 
-	log_d("var0=%d\n",var0);
-	log_d("var1=%d\n",var1);
-	log_d("var2=%d\n",var2);
-	log_d("var3=%d\n",var3);
+	printf("var0=%d\n",var0);
+	printf("var1=%d\n",var1);
+	printf("var2=%d\n",var2);
+	printf("var3=%d\n",var3);
 
 
 	for( i=0;i<4;i++)
@@ -848,7 +796,485 @@ int hmi_update_firmware(void)
 }
 #endif
 
-#if 1
+
+int hmi_config_wifi_info(const char *wifi_name, const char *wifi_pwd)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = 0;
+	para.obj_type = HMI_OBJ_TYPE_WIFI_INFO;
+
+	memcpy(&para.obj_wifi_name, wifi_name, strlen(wifi_name));
+	memcpy(&para.obj_wifi_pass, wifi_pwd, strlen(wifi_pwd));
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+
+	return 0;
+}
+
+
+int hmi_laber_create_test(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_LABEL;
+
+	memcpy(&para.obj_name,"label",strlen("label"));
+	
+	para.obj_x	  = 0;
+	para.obj_y	  = 0;
+	para.obj_w	  = 640;
+	para.obj_h	  = 80;
+	
+	para.obj_opa		 = 0;
+	para.obj_r			 = 0;
+	para.obj_g			 = 0;
+	para.obj_b			 = 255;
+
+	para.obj_opa_2		 = 255;
+	para.obj_r_2		 = 0;
+	para.obj_g_2		 = 0;
+	para.obj_b_2		 = 0;
+
+	memcpy(&para.obj_font_name, "aa.ttf", strlen("aa.ttf"));
+
+	para.obj_font_size   = 80;
+	para.obj_font_r		 = 0;
+	para.obj_font_g		 = 255;
+	para.obj_font_b		 = 0;	
+	
+	para.obj_time        = 1000;
+
+	para.obj_point_x_num = 20;
+	para.obj_point_y_num = 5;
+
+	para.obj_range_min	 = 0;
+	para.obj_range_max	 = 100000;
+	
+	para.obj_event		 = HMI_OBJ_EVENT_DEFAULT;
+	para.obj_action 	 = 0;
+
+	memcpy(&para.obj_data, "label包图小白体.ttf测试", strlen("label包图小白体.ttf测试"));
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+
+	return 0;
+}
+
+int hmi_laber_create_test2(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_LABEL;
+
+	memcpy(&para.obj_name,"label",strlen("label"));
+	
+	para.obj_x	  = 0;
+	para.obj_y	  = 150;
+	para.obj_w	  = 640;
+	para.obj_h	  = 80;
+	
+	para.obj_opa		 = 0;
+	para.obj_r			 = 0;
+	para.obj_g			 = 0;
+	para.obj_b			 = 255;
+
+	para.obj_opa_2		 = 255;
+	para.obj_r_2		 = 0;
+	para.obj_g_2		 = 0;
+	para.obj_b_2		 = 0;
+
+	memcpy(&para.obj_font_name, "bb.ttf", strlen("bb.ttf"));
+
+	para.obj_font_size   = 80;
+	para.obj_font_r		 = 255;
+	para.obj_font_g		 = 0;
+	para.obj_font_b		 = 0;	
+	
+	para.obj_time        = 1000;
+
+	para.obj_point_x_num = 20;
+	para.obj_point_y_num = 5;
+
+	para.obj_range_min	 = 0;
+	para.obj_range_max	 = 100000;
+	
+	para.obj_event		 = HMI_OBJ_EVENT_DEFAULT;
+	para.obj_action 	 = 0;
+
+	memcpy(&para.obj_data, "label今年也要加油鸭.ttf测试", strlen("label今年也要加油鸭.ttf测试"));
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+
+	return 0;
+}
+
+int hmi_img_create_test(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_IMG;
+	
+	para.obj_x	  = 160;
+	para.obj_y	  = 0;
+	para.obj_w	  = 320;
+	para.obj_h	  = 320;
+	
+	para.obj_opa	= 0;
+	para.obj_r		= 0;
+	para.obj_g		= 0;
+	para.obj_b		= 255;
+
+	para.obj_opa_2	= 0;
+	para.obj_r_2	= 0;
+	para.obj_g_2	= 0;
+	para.obj_b_2	= 255;
+
+	para.obj_font_size  = 0;
+	para.obj_font_r		= 0;
+	para.obj_font_g		= 0;
+	para.obj_font_b		= 0;	
+	
+	para.obj_time       = 1000;
+
+	para.obj_point_x_num = 0;
+	para.obj_point_y_num = 0;
+
+	para.obj_range_min	= 0;
+	para.obj_range_max	= 0;
+	
+	para.obj_event		= HMI_OBJ_EVENT_DEFAULT;
+	para.obj_action 	= 0;
+
+	memcpy(para.obj_data, "menu_4.png", strlen("menu_4.png"));
+
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+
+
+	return 0;
+}
+
+
+int hmi_chart_line_create_test(unsigned int id)
+{
+	int len = 0;
+	
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_BROKEN;
+
+	memcpy(&para.obj_name,"chart line",strlen("chart line"));
+	
+	para.obj_x	  = 0;
+	para.obj_y	  = 0;
+	para.obj_w	  = 320;
+	para.obj_h	  = 320;
+	
+	para.obj_opa		 = 0;
+	para.obj_r			 = 0;
+	para.obj_g			 = 0;
+	para.obj_b			 = 255;
+
+	para.obj_opa_2		 = 255;
+	para.obj_r_2		 = 0;
+	para.obj_g_2		 = 0;
+	para.obj_b_2		 = 255;
+
+	para.obj_font_size   = 20;
+	para.obj_font_r		 = 0;
+	para.obj_font_g		 = 255;
+	para.obj_font_b		 = 0;
+
+	para.obj_rise_r = 255;
+	para.obj_rise_g = 0;
+	para.obj_rise_b = 0;	
+
+	para.obj_fall_r = 0;
+	para.obj_fall_g = 255;
+	para.obj_fall_b = 0; 	
+	
+	para.obj_time        = 1000;
+
+	para.obj_point_x_num = 5;
+	para.obj_point_y_num = 5;
+
+	para.obj_range_min	 = 0;
+	para.obj_range_max	 = 10;
+	
+	para.obj_event		 = HMI_OBJ_EVENT_URL_DATA;
+	para.obj_action 	 = 0;
+
+	len = strlen("https://stock-f-reminr-server-aybofoxbug.us-west-1.fcapp.run?BABA");
+
+	memcpy(&para.obj_url,"https://stock-f-reminr-server-aybofoxbug.us-west-1.fcapp.run?BABA",len);
+	memcpy(&para.obj_field,"increase",strlen("increase"));
+
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+	return 0;
+}
+
+int hmi_chart_line_create_test2(unsigned int id)
+{
+	int len = 0;
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_BROKEN;
+
+	memcpy(&para.obj_name,"chart line",strlen("chart line"));
+	
+	para.obj_x	  = 320;
+	para.obj_y	  = 0;
+	para.obj_w	  = 320;
+	para.obj_h	  = 320;
+	
+	para.obj_opa		 = 0;
+	para.obj_r			 = 0;
+	para.obj_g			 = 0;
+	para.obj_b			 = 255;
+
+	para.obj_opa_2		 = 255;
+	para.obj_r_2		 = 0;
+	para.obj_g_2		 = 0;
+	para.obj_b_2		 = 255;
+
+	para.obj_font_size   = 20;
+	para.obj_font_r		 = 0;
+	para.obj_font_g		 = 255;
+	para.obj_font_b		 = 0;	
+
+	para.obj_rise_r = 255;
+	para.obj_rise_g = 0;
+	para.obj_rise_b = 0;	
+
+	para.obj_fall_r = 0;
+	para.obj_fall_g = 255;
+	para.obj_fall_b = 0; 	
+
+	
+	para.obj_time        = 1000;
+
+	para.obj_point_x_num = 5;
+	para.obj_point_y_num = 5;
+
+	para.obj_range_min	 = 0;
+	para.obj_range_max	 = 10;
+	
+	para.obj_event		 = HMI_OBJ_EVENT_URL_DATA;
+	para.obj_action 	 = 0;
+
+	len = strlen("https://stock-f-reminr-server-aybofoxbug.us-west-1.fcapp.run?00700");
+
+	memcpy(&para.obj_url,"https://stock-f-reminr-server-aybofoxbug.us-west-1.fcapp.run?00700",len);
+	memcpy(&para.obj_field,"increase",strlen("increase"));	
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+	return 0;
+}
+
+
+
+int hmi_metter_crc_create_test(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_CRC;
+	
+	para.obj_x	  = 0;
+	para.obj_y	  = 0;
+	para.obj_w	  = 320;
+	para.obj_h	  = 320;
+	
+	para.obj_opa		 = 255;
+	para.obj_r			 = 128;
+	para.obj_g			 = 0;
+	para.obj_b			 = 0;
+
+	para.obj_opa_2		 = 255;
+	para.obj_r_2		 = 0;
+	para.obj_g_2		  = 0;
+	para.obj_b_2		  = 255;
+
+	para.obj_time        = 1000;
+
+	para.obj_range_min	 = 0;
+	para.obj_range_max	 = 360;
+	para.obj_var[0]       = 360;
+
+	para.obj_angle_range = 360; //0-360 
+  	para.obj_rotation    = 90;
+	para.obj_width       = 10;
+
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+	return 0;
+}
+
+int hmi_chart_straight_create_test(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_STRAIGHT;
+
+	memcpy(&para.obj_name,"straight",strlen("straight"));
+
+	para.obj_x	  = 0;
+	para.obj_y	  = 0;
+	para.obj_w	  = 960;
+	para.obj_h	  = 320;
+	
+	para.obj_opa		 = 0;
+	para.obj_r			 = 0;
+	para.obj_g			 = 0;
+	para.obj_b			 = 0;
+
+	para.obj_opa_2		 = 255;
+	para.obj_r_2		 = 0;
+	para.obj_g_2		  = 0;
+	para.obj_b_2		  = 255;
+
+	para.obj_opa_3		 = 255;
+	para.obj_r_3		 = 255;
+	para.obj_g_3		  = 0;
+	para.obj_b_3		  = 0;
+
+	para.obj_time        = 1000;
+	
+	para.obj_point_x_num = 20;
+	para.obj_point_y_num = 10;
+	
+	para.obj_range_min = 0;
+	para.obj_range_max = 100000;
+
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+	return 0;
+}
+
+
+
+int hmi_bar_create_test(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_PROGRESS_BAR;
+
+
+	para.obj_x	  = 0;
+	para.obj_y	  = 160;
+	para.obj_w	  = 960;
+	para.obj_h	  = 80;
+	
+	para.obj_opa		 = 0;
+	para.obj_r			 = 0;
+	para.obj_g			 = 0;
+	para.obj_b			 = 0;
+
+	para.obj_opa_2		 = 255;
+	para.obj_r_2		 = 0;
+	para.obj_g_2		 = 0;
+	para.obj_b_2		 = 255;
+
+	para.obj_font_size   = 80;
+
+	para.obj_font_r  = 255;
+	para.obj_font_g  = 0;
+	para.obj_font_b  = 0;
+
+	para.obj_time        = 1000;
+
+	para.obj_range_min = 0;
+	para.obj_range_max = 2000;
+	para.obj_var[0] = 500;
+
+	memcpy(para.obj_data, "bar 中文 测试sfadfasfdasfasdsaf", strlen("bar 中文 测试sfadfasfdasfasdsaf"));
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+	return 0;
+}
+
+
+int hmi_bgimage_create_test(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_BG_IMAGE;
+
+	para.obj_x	  = 320;
+	para.obj_y	  = 0;
+	para.obj_w	  = 320;
+	para.obj_h	  = 320;
+	
+	memcpy(para.obj_data, "00.jpg", strlen("00.jpg"));
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+	return 0;
+}
+
+
+int hmi_bgvideo_create_test(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_BG_VIDEO;
+
+	para.obj_x	  = 640;
+	para.obj_y	  = 0;
+	para.obj_w	  = 320;
+	para.obj_h	  = 320;
+	
+	memcpy(para.obj_data, "00.mp4", strlen("00.mp4"));
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+	return 0;
+}
+
+
+
 int hmi_create_obj_test(void)
 {
 	int i = 0;
@@ -860,470 +1286,41 @@ int hmi_create_obj_test(void)
 	memset(&para,0,sizeof(obj_attr_t));
 	memset(control_buff,0,sizeof(control_buff));
 
-	//960x320
 
-#if 1
-	para.obj_id   = 0x01;
-	para.obj_type = HMI_OBJ_TYPE_LABEL;
+
+	hmi_config_wifi_info("wifi", "pwd");
+
+	hmi_laber_create_test(1);
+	//hmi_laber_create_test2(2);
+
+	hmi_img_create_test(2);
+
+	hmi_chart_line_create_test(3);
+	hmi_chart_line_create_test2(9);
+
+	//hmi_metter_crc_create_test(4);
+
+	//hmi_chart_straight_create_test(5);
+
+	//hmi_bar_create_test(6);
+
+	//hmi_bgimage_create_test(7);
+
+	hmi_bgvideo_create_test(8);
 	
-	para.obj_x	  = 0;
-	para.obj_y	  = 0;
-	para.obj_w	  = 200;
-	para.obj_h	  = 60;
+
 	
-	para.obj_opa	= 0;
-	para.obj_r		= 0;
-	para.obj_g		= 0;
-	para.obj_b		= 255;
-
-	para.obj_font_size  = 40;
-	para.obj_font_r		= 0;
-	para.obj_font_g		= 255;
-	para.obj_font_b		= 0;	
-	
-	para.obj_time       = 200;
-
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
-	
-	para.obj_event		= HMI_OBJ_EVENT_NETTIME_DAY;
-	para.obj_action 	= 0;
-
-	len = strlen("https://bilibili-user-reminder-server-urdotpiowj.cn-hangzhou.fcapp.run?525438321");
-
-
-	memcpy(&para.obj_url,"https://bilibili-user-reminder-server-urdotpiowj.cn-hangzhou.fcapp.run?525438321",len);
-	memcpy(&para.obj_field,"mid",strlen("mid"));
-
-	hmi_add_obj(hmi_page_get_default(0),para);
-#endif
-
-
-#if 1
-
-	para.obj_id = 0x02;
-	para.obj_type = HMI_OBJ_TYPE_LABEL;
-
-	para.obj_x	= 0;
-	para.obj_y	= 70;
-	para.obj_w	= 200;
-	para.obj_h	= 30;
-
-	para.obj_opa	= 0;
-	para.obj_r		= 255;
-	para.obj_g		= 0;
-	para.obj_b		= 0;
-
-	para.obj_font_size	= 30;
-	para.obj_font_r 	= 0;
-	para.obj_font_g 	= 0;
-	para.obj_font_b 	= 255;	
-
-	para.obj_time = 200;
-
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
-
-	para.obj_event		= HMI_OBJ_EVENT_NETTIME_HOUR;
-	para.obj_action 	= 0;
-
-	hmi_add_obj(hmi_page_get_default(0),para);
-
-#endif
-
-return 0;
-
-
-#if 1
-	memset(&para,0,sizeof(obj_attr_t));
-	para.obj_id = 0x03;
-	para.obj_type = HMI_OBJ_TYPE_LABEL;
-
-	para.obj_x	= 0;
-	para.obj_y	= 25*3+20*2;
-	para.obj_w	= 192;
-	para.obj_h	= 20;
-
-	para.obj_opa	= 0;
-	para.obj_r		= 0;
-	para.obj_g		= 255;
-	para.obj_b		= 0;
-
-	para.obj_font_size	= 56;
-	para.obj_font_r 	= 255;
-	para.obj_font_g 	= 0;
-	para.obj_font_b 	= 0;	
-
-	para.obj_time = 200;
-
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
-
-	para.obj_event		= HMI_OBJ_EVENT_SYSTICK;
-	para.obj_action 	= 0;
-
-	hmi_add_obj(hmi_page_get_default(0),para);
-
-#endif
-
-
-#if 1
-	
-	for(i=0;i<4;i++)
-	{
-		memset(&para,0,sizeof(obj_attr_t));
-		
-		para.obj_id = 0x07+i;
-		para.obj_type = HMI_OBJ_TYPE_PROGRESS_BAR;
-		
-		para.obj_x	= 0;
-		para.obj_y	= 170+40*i;
-		para.obj_w	= 192;
-		para.obj_h	= 20;
-		
-		para.obj_opa	= 255;
-		para.obj_r		= 255;
-		para.obj_g		= 0;
-		para.obj_b		= 0;
-		
-		para.obj_opa_2	= 255;
-		para.obj_r_2	= 0;
-		para.obj_g_2	= 0;
-		para.obj_b_2	= 255;	
-
-		para.obj_font_size	= 56;
-		para.obj_font_r = 0;
-		para.obj_font_g = 255;
-		para.obj_font_b = 0;		
-
-		para.obj_var[0] = 50;
-		para.obj_var[1] = 60;
-		para.obj_var[2] = 70;
-		
-		para.obj_range_min	= 0;
-		para.obj_range_max	= 100;
-		
-		para.obj_angle_range = 360;
-		para.obj_rotation  = 90;
-		para.obj_width	= 20;
-		
-		para.obj_point_x_num = 0;
-		para.obj_point_y_num = 0;
-		
-		para.obj_time = 1000;
-		
-		para.obj_event		= 0;
-		para.obj_action 	= 0;
-
-		switch(i){
-		case 0:{
-			sprintf((para.obj_data), "abcdefg:%d",para.obj_var[0]);
-			break;
-		}
-		case 1:{
-			sprintf((para.obj_data), "hijklmn:%d",para.obj_var[0]);
-			break;
-		}
-		case 2:{
-			sprintf((para.obj_data), "%s","网络正常");
-			break;
-		}
-		case 3:{
-			sprintf((para.obj_data), "磁盘:%d%",para.obj_var[0]);
-			break;
-		}
-		}
-
-		hmi_add_obj(hmi_page_get_default(0),para);
-
-	}
-#endif
-
-
-#if 1
-	for(i=0;i<8;i++)
-	{
-		memset(&para,0,sizeof(obj_attr_t));
-
-		if(i<4)
-		{
-			para.obj_x	= 192 + (i*192);
-			para.obj_y	= 0;
-			para.obj_w	= 192;
-			para.obj_h	= 160;
-
-		}
-		else
-		{
-			para.obj_x	= 192 + (i-4)*192;
-			para.obj_y	= 160;
-			para.obj_w	= 192;
-			para.obj_h	= 160;
-
-		}
-		
-		para.obj_id   = 0x11+i;
-		para.obj_type = HMI_OBJ_TYPE_STRAIGHT;
-
-
-		para.obj_opa	= 0;
-		para.obj_r		= 0;
-		para.obj_g		= 255;
-		para.obj_b		= 0;
-
-		
-		para.obj_var[0] = 50;
-		para.obj_var[1] = 50;
-		para.obj_var[2] = 50;
-		
-		para.obj_range_min	= 0;
-		para.obj_range_max	= 100;
-		
-		para.obj_angle_range = 360;
-		para.obj_rotation  = 90;
-		para.obj_width	= 20;
-		
-		para.obj_point_x_num = 1;
-		para.obj_point_y_num = 5;
-		
-		para.obj_time = 1000;
-
-		switch(i){
-		case 0:{
-			sprintf((para.obj_data), "%s","Bilibili");
-			break;
-		}
-		case 1:{
-			sprintf((para.obj_data), "%s","Douyin");
-			break;
-		}
-		case 2:{
-			sprintf((para.obj_data), "%s","Currency");
-			break;
-		}
-		case 3:{
-			sprintf((para.obj_data), "%s","Stock");
-
-			break;
-		}
-		case 4:{
-			sprintf((para.obj_data), "%s","Kickstarter");
-
-			break;
-		}
-		case 5:{
-			sprintf((para.obj_data), "%s","IndieGogo");
-
-			break;
-		}
-		case 6:{
-			sprintf((para.obj_data), "%s","Stock");
-
-			break;
-		}
-		case 7:{
-			sprintf((para.obj_data), "%s","Stock");
-
-			break;
-		}
-		default:break;
-		}
-		
-		para.obj_event		= 0;
-		para.obj_action 	= 0;
-
-		hmi_add_obj(hmi_page_get_default(0),para);
-
-	}
-#endif
-
-
-#if 1 //  png obj
-	memset(&para,0,sizeof(obj_attr_t));
-
-	para.obj_id = 0x08+0;
-	para.obj_type = HMI_OBJ_TYPE_IMG;
-
-	para.obj_x	= 192;
-	para.obj_y	= 0;
-	para.obj_w	= 320;
-	para.obj_h	= 320;
-
-	para.obj_opa	= 0;
-	para.obj_r		= 255;
-	para.obj_g		= 0;
-	para.obj_b		= 0;
-
-	para.obj_opa_2	= 0;
-	para.obj_r_2	= 0;
-	para.obj_g_2	= 0;
-	para.obj_b_2	= 255;	
-
-	para.obj_font_size	= 0;
-	para.obj_font_r = 0;
-	para.obj_font_g = 255;
-	para.obj_font_b = 0;		
-
-	para.obj_var[0] = 50;
-	para.obj_var[1] = 60;
-	para.obj_var[2] = 70;
-
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
-
-	para.obj_angle_range = 360;
-	para.obj_rotation  = 90;
-	para.obj_width	= 20;
-
-	para.obj_point_x_num = 0;
-	para.obj_point_y_num = 0;
-
-	para.obj_time = 1000;
-
-	para.obj_event		= 0;
-	para.obj_action 	= 0;
-
-	sprintf((para.obj_data), "%s","menu_4.png");
-
-	hmi_add_obj(hmi_page_get_default(0),para);
-
-#endif
-
-#if 1 //  png obj
-	memset(&para,0,sizeof(obj_attr_t));
-
-	para.obj_id = 0x08+1;
-	para.obj_type = HMI_OBJ_TYPE_IMG;
-
-	para.obj_x	= 192+320;
-	para.obj_y	= 0;
-	para.obj_w	= 334;
-	para.obj_h	= 68;
-
-	para.obj_opa	= 0;
-	para.obj_r		= 255;
-	para.obj_g		= 0;
-	para.obj_b		= 0;
-
-	para.obj_opa_2	= 0;
-	para.obj_r_2	= 0;
-	para.obj_g_2	= 0;
-	para.obj_b_2	= 255;	
-
-	para.obj_font_size	= 0;
-	para.obj_font_r = 0;
-	para.obj_font_g = 255;
-	para.obj_font_b = 0;		
-
-	para.obj_var[0] = 50;
-	para.obj_var[1] = 60;
-	para.obj_var[2] = 70;
-
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
-
-	para.obj_angle_range = 360;
-	para.obj_rotation  = 90;
-	para.obj_width	= 20;
-
-	para.obj_point_x_num = 0;
-	para.obj_point_y_num = 0;
-
-	para.obj_time = 1000;
-
-	para.obj_event		= 0;
-	para.obj_action 	= 0;
-
-	sprintf((para.obj_data), "%s","audio_spect_4.png");
-
-	hmi_add_obj(hmi_page_get_default(0),para);
-	
-#endif
-
-#if 1 //  jpg obj
-	memset(&para,0,sizeof(obj_attr_t));
-
-	para.obj_id = 0x08+2;
-	para.obj_type = HMI_OBJ_TYPE_BG_IMAGE;
-
-	para.obj_x	= 0;
-	para.obj_y	= 0;
-	para.obj_w	= 960;
-	para.obj_h	= 320;
-
-	para.obj_opa	= 0;
-	para.obj_r		= 255;
-	para.obj_g		= 0;
-	para.obj_b		= 0;
-
-	para.obj_opa_2	= 0;
-	para.obj_r_2	= 0;
-	para.obj_g_2	= 0;
-	para.obj_b_2	= 255;	
-
-	para.obj_font_size	= 0;
-	para.obj_font_r = 0;
-	para.obj_font_g = 255;
-	para.obj_font_b = 0;		
-
-	para.obj_var[0] = 50;
-	para.obj_var[1] = 60;
-	para.obj_var[2] = 70;
-
-	para.obj_range_min	= 0;
-	para.obj_range_max	= 100;
-
-	para.obj_angle_range = 360;
-	para.obj_rotation  = 90;
-	para.obj_width	= 20;
-
-	para.obj_point_x_num = 0;
-	para.obj_point_y_num = 0;
-
-	para.obj_time = 1000;
-
-	para.obj_event		= 0;
-	para.obj_action 	= 0;
-
-	sprintf((para.obj_data), "%s","1631551139.jpg");
-
-	hmi_add_obj(hmi_page_get_default(0),para);
-		
-#endif
-
-
 
 	return 0;
 }
 
-#endif
 
-#if 0
 int hmi_delete_obj(unsigned int id)
 {
-	int i = 0;
-	unsigned int len = 0;
-	obj_attr_t para ;
-	
-	char control_buff[1024] = {0};
-
-	memset(&para,0,sizeof(obj_attr_t));
-	memset(control_buff,0,sizeof(control_buff));
-
-#if 1
-	para.obj_id   = id;
-
-	hmi_para_to_buff(&para,control_buff,&len);
-	printf("len=%d.\n",len);
-	hid_io_control(CMD_OBJ_DEL, " ", control_buff,len );
-#endif
-
-
 
 
 	return 0;
 }
-#endif
 
 
 

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:46:10
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-05 17:56:27
+ * @LastEditTime: 2023-08-10 11:06:33
  * @FilePath: \hid-handle\src\hidhandle.h
  * @Description: hidhandle.h
  */
@@ -22,7 +22,7 @@ int hid_write_buff_handle(unsigned char *buff, const unsigned int buff_len, unsi
 
 int hmi_send_wifi_info_handle(const char* wifiname, const char* wifipasswd);
 
-int generate_ui_handle(vector<obj_attr_t>& paras, const char *pkg_path);
+int generate_ui_handle(vector<obj_attr_t>& paras, const char *pkg_path, const char *wifi_name, const char *wifi_pwd);
 
 int hmi_page_update_elem_var_handle(unsigned int id, obj_attr_t para);
 

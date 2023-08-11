@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-10 11:39:08
+ * @LastEditTime: 2023-08-11 12:03:37
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -88,14 +88,14 @@ Value generateUIHandleJs(const CallbackInfo &info)
         TypeError::New(env, "Array expected").ThrowAsJavaScriptException();
         return env.Null();
     }
-
-    printf("\n---1111111111---\n");
-
+    
     Array objAttrTs = info[0].As<Array>();
 
     string pkgPath = info[1].As<String>();
     string wifiName = info[2].As<String>();
     string wifiPwd = info[3].As<String>();
+
+    printf("\n\n--11--\n\n");
 
     vector<obj_attr_t> vec_obj_attr_t;
 
@@ -120,7 +120,12 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // 对象名字,唯一
         std::string obj_name = objAttrT.Get("obj_name").As<String>();
         strcpy_s(para.obj_name, obj_name.c_str());
-
+        // Wifi 名称 
+        // std::string obj_wifi_name = objAttrT.Get("obj_wifi_name").As<String>();
+        // strcpy_s(para.obj_wifi_name, obj_wifi_name.c_str());
+        //  // Wifi 密码
+        // std::string obj_wifi_pass = objAttrT.Get("obj_wifi_pass").As<String>();
+        // strcpy_s(para.obj_wifi_pass, obj_wifi_pass.c_str());
         // 横向起点坐标
         para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
         // 纵向起点坐标
@@ -129,26 +134,40 @@ Value generateUIHandleJs(const CallbackInfo &info)
         para.obj_w = objAttrT.Get("obj_w").As<Number>().Int32Value();
         // 高度
         para.obj_h = objAttrT.Get("obj_h").As<Number>().Int32Value();
-        // 主透明度
-        // std::string obj_opa = objAttrT.Get("obj_opa").As<String>();
+        // 主透明度/颜色
         para.obj_opa = objAttrT.Get("obj_opa").As<Number>().Int32Value();
-        // 颜色
         para.obj_r = objAttrT.Get("obj_r").As<Number>().Int32Value();
         para.obj_g = objAttrT.Get("obj_g").As<Number>().Int32Value();
         para.obj_b = objAttrT.Get("obj_b").As<Number>().Int32Value();
-        // 次透明度
+        // 次透明度/颜色
         para.obj_opa_2 = objAttrT.Get("obj_opa_2").As<Number>().Int32Value();
+        para.obj_r_2 = objAttrT.Get("obj_r_2").As<Number>().Int32Value();
         para.obj_g_2 = objAttrT.Get("obj_g_2").As<Number>().Int32Value();
         para.obj_b_2 = objAttrT.Get("obj_b_2").As<Number>().Int32Value();
-        // 字体大小
-        para.obj_font_size = objAttrT.Get("obj_font_size").As<Number>().Int32Value();
+        // 次透明度/颜色
+        para.obj_opa_3 = objAttrT.Get("obj_opa_3").As<Number>().Int32Value();
+        para.obj_r_3 = objAttrT.Get("obj_r_3").As<Number>().Int32Value();
+        para.obj_g_3 = objAttrT.Get("obj_g_3").As<Number>().Int32Value();
+        para.obj_b_3 = objAttrT.Get("obj_b_3").As<Number>().Int32Value();
         // 字体名字
         string obj_font_name = objAttrT.Get("obj_font_name").As<String>();
         strcpy_s(para.obj_font_name, obj_font_name.c_str());
+        // 字体大小
+        para.obj_font_size = objAttrT.Get("obj_font_size").As<Number>().Int32Value();
         // 字体颜色
         para.obj_font_r = objAttrT.Get("obj_font_r").As<Number>().Int32Value();
         para.obj_font_g = objAttrT.Get("obj_font_g").As<Number>().Int32Value();
         para.obj_font_b = objAttrT.Get("obj_font_b").As<Number>().Int32Value();
+        // 数值标签
+        para.obj_val_flag = objAttrT.Get("obj_val_flag").As<Number>().Int32Value();
+        // 上涨颜色
+        para.obj_rise_r = objAttrT.Get("obj_rise_r").As<Number>().Int32Value();
+        para.obj_rise_g = objAttrT.Get("obj_rise_g").As<Number>().Int32Value();
+        para.obj_rise_b = objAttrT.Get("obj_rise_b").As<Number>().Int32Value();
+        // 下跌颜色
+        para.obj_fall_r = objAttrT.Get("obj_fall_r").As<Number>().Int32Value();
+        para.obj_fall_g = objAttrT.Get("obj_fall_g").As<Number>().Int32Value();
+        para.obj_fall_b = objAttrT.Get("obj_fall_b").As<Number>().Int32Value();
         // 范围最小值
         para.obj_range_min = objAttrT.Get("obj_range_min").As<Number>().Int32Value();
         // 范围最大值
@@ -166,18 +185,12 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // 定时时间,0则不定时
         para.obj_time = objAttrT.Get("obj_time").As<Number>().Int32Value();
         // 对象内置的一些数据更新接口 obj_var[MAX_OBJ_VAR_LEN];
-        // para.obj_var = objAttrT.Get("obj_var").As<Number>().Int32Value();
-
         Array value_obj_arr = objAttrT.Get("obj_var").As<Array>();
-        // unsigned int obj_var[MAX_OBJ_VAR_LEN];
         for (int i = 0; i < MAX_OBJ_VAR_LEN && i < value_obj_arr.Length(); i++)
         {
             Value val = value_obj_arr[i];
-            // obj_var[i] = val.As<Number>().Int32Value();
             para.obj_var[i] = val.As<Number>().Int32Value();
         }
-        // para.obj_var = obj_var;
-
         // 对象事件
         para.obj_event = objAttrT.Get("obj_event").As<Number>().Int32Value();
         // 事件对应的操作
@@ -185,7 +198,6 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // obj_data[MAX_OBJ_DATA_LEN]; 对象的buff区,可通过此更新txt内容
         string obj_data = objAttrT.Get("obj_data").As<String>();
         strcpy_s(para.obj_data, obj_data.c_str());
-
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
         strcpy_s(para.obj_reserve, obj_reserve.c_str());
@@ -204,9 +216,7 @@ Value generateUIHandleJs(const CallbackInfo &info)
 
         vec_obj_attr_t.push_back(para);
     }
-
-    printf("\n---222222222---\n");
-
+    
     const auto res = generate_ui_handle(vec_obj_attr_t, pkgPath.c_str(), wifiName.c_str(), wifiPwd.c_str());
     Number result = Number::New(env, res);
 
@@ -428,6 +438,8 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info)
         string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
         strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
 
+        // unsigned int* obj_font;
+        
         vec_obj_attr_t.push_back(para);
     }
 

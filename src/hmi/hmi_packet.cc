@@ -447,7 +447,7 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 			if(strlen(elem->elem_attr.obj_font_name) > 0)
 			{
 				memset(filename,0,sizeof(filename));
-				sprintf(filename, "%s/img/%s", rootpath, elem->elem_attr.obj_font_name);
+				sprintf(filename, "%s/fonts/%s", rootpath, elem->elem_attr.obj_font_name);
 
 				printf("[font]: %s\n", filename);
 				printf("[fontPath]: %s\n", elem->elem_attr.obj_font_name);

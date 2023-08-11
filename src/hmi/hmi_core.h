@@ -39,7 +39,7 @@
 #define MAX_OBJ_URL_LEN (256)
 #define MAX_OBJ_FIELD_LEN (50)
 
-#define MAX_OBJ_FONT_LEN (20)
+#define MAX_OBJ_FONT_LEN (10)
 
 #define MAX_OBJ_WIFI_LEN (10)
 
@@ -49,76 +49,76 @@
 
 typedef struct obj_attr
 {
-	unsigned int obj_id;
-	unsigned int obj_type;
-	char obj_name[MAX_OBJ_NAME_LEN]; //4+4+10
+	unsigned int   obj_id;
+	unsigned int   obj_type;
+		    char   obj_name[MAX_OBJ_NAME_LEN]; //4+4+10
+			
+		    char   obj_wifi_name[MAX_OBJ_WIFI_LEN]; 
+		    char   obj_wifi_pass[MAX_OBJ_WIFI_LEN]; 
 
-	char obj_wifi_name[MAX_OBJ_WIFI_LEN];
-	char obj_wifi_pass[MAX_OBJ_WIFI_LEN];
+	unsigned int   obj_x;
+	unsigned int   obj_y;
+	unsigned int   obj_w;
+	unsigned int   obj_h; //16
 
-	unsigned int obj_x;
-	unsigned int obj_y;
-	unsigned int obj_w;
-	unsigned int obj_h; //16
+	unsigned char  obj_opa;
+	unsigned char  obj_r;
+	unsigned char  obj_g;
+	unsigned char  obj_b;
 
-	unsigned char obj_opa;
-	unsigned char obj_r;
-	unsigned char obj_g;
-	unsigned char obj_b;
+	unsigned char  obj_opa_2;
+	unsigned char  obj_r_2;
+	unsigned char  obj_g_2;
+	unsigned char  obj_b_2;
 
-	unsigned char obj_opa_2;
-	unsigned char obj_r_2;
-	unsigned char obj_g_2;
-	unsigned char obj_b_2;
+	unsigned char  obj_opa_3;
+	unsigned char  obj_r_3;
+	unsigned char  obj_g_3;
+	unsigned char  obj_b_3;
 
-	unsigned char obj_opa_3;
-	unsigned char obj_r_3;
-	unsigned char obj_g_3;
-	unsigned char obj_b_3;
+			char   obj_font_name[MAX_OBJ_FONT_LEN]; 
+	unsigned char  obj_font_size;
+	unsigned char  obj_font_r;
+	unsigned char  obj_font_g;
+	unsigned char  obj_font_b;  //12
 
-	char obj_font_name[MAX_OBJ_FONT_LEN];
-	unsigned char obj_font_size;
-	unsigned char obj_font_r;
-	unsigned char obj_font_g;
-	unsigned char obj_font_b; //12
+	unsigned int  obj_val_flag;
 
-	unsigned int obj_val_flag;
+	unsigned int  obj_rise_r;
+	unsigned int  obj_rise_g;
+	unsigned int  obj_rise_b;
 
-	unsigned int obj_rise_r;
-	unsigned int obj_rise_g;
-	unsigned int obj_rise_b;
+	unsigned int  obj_fall_r;
+	unsigned int  obj_fall_g;
+	unsigned int  obj_fall_b;
 
-	unsigned int obj_fall_r;
-	unsigned int obj_fall_g;
-	unsigned int obj_fall_b;
+	unsigned int   obj_range_min;
+	unsigned int   obj_range_max;
+	unsigned int   obj_angle_range;
+	unsigned int   obj_rotation;
+	unsigned int   obj_width;   //20
 
-	unsigned int obj_range_min;
-	unsigned int obj_range_max;
-	unsigned int obj_angle_range;
-	unsigned int obj_rotation;
-	unsigned int obj_width; // 20
+	unsigned int   obj_point_x_num;
+	unsigned int   obj_point_y_num;  //8
 
-	unsigned int obj_point_x_num;
-	unsigned int obj_point_y_num; // 8
+	unsigned int   obj_time;  //4
 
-	unsigned int obj_time; // 4
+	unsigned int   obj_var[MAX_OBJ_VAR_LEN]; //40
 
-	unsigned int obj_var[MAX_OBJ_VAR_LEN]; // 40
+	unsigned int   obj_event;
+	unsigned int   obj_action;  //8
+			char   obj_data[MAX_OBJ_DATA_LEN]; //100
 
-	unsigned int obj_event;
-	unsigned int obj_action;		 //8
-	char obj_data[MAX_OBJ_DATA_LEN]; //100
+			char   obj_url[MAX_OBJ_URL_LEN];
+			char   obj_field[MAX_OBJ_FIELD_LEN];
 
-	char obj_url[MAX_OBJ_URL_LEN];
-	char obj_field[MAX_OBJ_FIELD_LEN];
+			char   obj_reserve[MAX_RESERVE_LEN];//10
+			
+	unsigned int* obj_font;
 
-	char obj_reserve[MAX_RESERVE_LEN]; //10
+			char   obj_align_reserve[8];//for obj align
 
-	unsigned int *obj_font;
-
-	char obj_align_reserve[8]; //for obj align
-
-} obj_attr_t;
+} obj_attr_t  ;
 
 typedef struct device_info
 {

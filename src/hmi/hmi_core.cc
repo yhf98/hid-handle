@@ -805,9 +805,9 @@ int hmi_config_wifi_info(const char *wifi_name, const char *wifi_pwd)
 
 	para.obj_id   = 0;
 	para.obj_type = HMI_OBJ_TYPE_WIFI_INFO;
-
-	memcpy(&para.obj_wifi_name, wifi_name, strlen(wifi_name));
-	memcpy(&para.obj_wifi_pass, wifi_pwd, strlen(wifi_pwd));
+	
+	memcpy(&para.obj_wifi_name, "GalaxySZ", strlen("GalaxySZ"));
+	memcpy(&para.obj_wifi_pass, "galaxy123", strlen("galaxy123"));
 
 	hmi_add_obj(hmi_page_get_default(0),para);
 

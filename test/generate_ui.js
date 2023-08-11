@@ -2,23 +2,23 @@
  * @Author: 姚恒锋 1921934563@qq.com
  * @Date: 2023-07-25 16:58:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-11 12:06:24
+ * @LastEditTime: 2023-08-11 12:14:44
  * @FilePath: \hid-handle\test\generate_ui.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 const hid = require("../main.js");
 
-let data = [
+let data =[
     {
-        "obj_id": 1,
+        "obj_id": 2,
         "obj_type": 2,
-        "obj_name": "untitled1",
+        "obj_name": "untitled2",
         "obj_wifi_name": "jieshen",
         "obj_wifi_pass": "Jieshen168",
-        "obj_x": 80,
-        "obj_y": 20,
-        "obj_w": 460,
-        "obj_h": 200,
+        "obj_x": 100,
+        "obj_y": 0,
+        "obj_w": 660,
+        "obj_h": 300,
         "obj_opa": 255,
         "obj_r": 0,
         "obj_g": 0,
@@ -47,7 +47,7 @@ let data = [
         "obj_range_max": 0,
         "obj_angle_range": 0,
         "obj_rotation": 0,
-        "obj_width": 460,
+        "obj_width": 660,
         "obj_point_x_num": 5,
         "obj_point_y_num": 5,
         "obj_time": 0,
@@ -56,19 +56,19 @@ let data = [
         ],
         "obj_event": 0,
         "obj_action": 0,
-        "obj_data": "bilibili.png",
+        "obj_data": "gg.png",
         "obj_reserve": "",
         "obj_url": "",
         "obj_field": "",
         "obj_align_reserve": ""
     },
     {
-        "obj_id": 2,
+        "obj_id": 1,
         "obj_type": 1,
         "obj_name": "untitled1",
         "obj_wifi_name": "jieshen",
         "obj_wifi_pass": "Jieshen168",
-        "obj_x": 200,
+        "obj_x": 140,
         "obj_y": 120,
         "obj_w": 60,
         "obj_h": 40,
@@ -116,13 +116,13 @@ let data = [
         "obj_align_reserve": ""
     },
     {
-        "obj_id": 3,
+        "obj_id": 2,
         "obj_type": 1,
         "obj_name": "untitled2",
         "obj_wifi_name": "jieshen",
         "obj_wifi_pass": "Jieshen168",
-        "obj_x": 360,
-        "obj_y": 120,
+        "obj_x": 660,
+        "obj_y": 160,
         "obj_w": 60,
         "obj_h": 40,
         "obj_opa": 255,

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-11 12:03:37
+ * @LastEditTime: 2023-08-11 13:56:16
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -120,12 +120,14 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // 对象名字,唯一
         std::string obj_name = objAttrT.Get("obj_name").As<String>();
         strcpy_s(para.obj_name, obj_name.c_str());
-        // Wifi 名称 
+
+         // // Wifi 名称 
         // std::string obj_wifi_name = objAttrT.Get("obj_wifi_name").As<String>();
         // strcpy_s(para.obj_wifi_name, obj_wifi_name.c_str());
         //  // Wifi 密码
         // std::string obj_wifi_pass = objAttrT.Get("obj_wifi_pass").As<String>();
         // strcpy_s(para.obj_wifi_pass, obj_wifi_pass.c_str());
+        
         // 横向起点坐标
         para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
         // 纵向起点坐标

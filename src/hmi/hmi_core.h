@@ -40,7 +40,7 @@
 #define MAX_OBJ_URL_LEN (256)
 #define MAX_OBJ_FIELD_LEN (50)
 
-#define MAX_OBJ_FONT_LEN (10)
+#define  MAX_OBJ_FONT_LEN      	(30)
 
 #define MAX_OBJ_WIFI_LEN (10)
 

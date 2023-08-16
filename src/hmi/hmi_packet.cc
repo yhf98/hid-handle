@@ -24,6 +24,7 @@
 int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 {
 	int i = 0;
+	int total = 0;
 	slist_t* node;
 	hmi_element_t* elem = NULL;
 
@@ -53,6 +54,8 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 	unsigned int  video_elem_num  	= 0;
 	unsigned int  music_elem_num    = 0;	
 	unsigned int  font_elem_num	    = 0;
+	
+	unsigned int  progress_file_elem_num = 0;
 
 	memset(obj_reserve,0,sizeof(obj_reserve));
 	
@@ -180,6 +183,23 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 	
 	printf("font_elem_num=%d\n",font_elem_num);
 	fwrite(&font_elem_num,sizeof(unsigned int),1,fp_packet);
+	//**********************************************************
+	//write progress png num
+
+	progress_file_elem_num = 0;
+	slist_for_each(node, (page->page_elem_head))
+	{
+		elem = slist_entry(node, hmi_element_t, elem_l_tail);
+		if(elem){
+			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_PROGRESS_PNG)
+			{
+				progress_file_elem_num = progress_file_elem_num + elem->elem_attr.obj_range_max/elem->elem_attr.obj_progress_interval;
+			}
+		}
+	}	
+	
+	printf("progress_num=%d\n",progress_file_elem_num);
+	fwrite(&progress_file_elem_num,sizeof(unsigned int),1,fp_packet);
 	//**********************************************************
 	//write reserve data
 
@@ -502,6 +522,80 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 		}
 	}
 	//****************************************************************
+	//write progress png file 
+	slist_for_each(node, (page->page_elem_head))
+	{
+		elem = slist_entry(node, hmi_element_t, elem_l_tail);
+		if(elem){		
+			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_PROGRESS_PNG)
+			{
+				total  = elem->elem_attr.obj_range_max/elem->elem_attr.obj_progress_interval;
+				printf("total=%d\n",total);
+
+				//******************************************************************************
+				for(i=0;i<total;i++)
+				{
+					if(strlen(elem->elem_attr.obj_progress_name[i]) > 0)
+					{
+						memset(filename,0,sizeof(filename));
+						sprintf(filename, "%s/img/%s", rootpath, elem->elem_attr.obj_progress_name[i]);
+						// sprintf(filename, "./res/%s", elem->elem_attr.obj_progress_name[i]);
+					
+						fp_font = fopen(filename,"rb");
+						if(!fp_font){
+							printf("file open error %s.\n",filename);
+							break;;
+						}
+					
+						fseek(fp_font,0L,SEEK_END);
+						file_size = ftell(fp_font);
+						fseek(fp_font,0L,SEEK_SET);
+					
+						p_buff = (char*)malloc(file_size);
+						if(!p_buff){
+							printf("malloc buff error %s\n");
+							if(fp_font){
+								fclose(fp_font);
+								fp_font = NULL;
+							}
+							break;
+						}
+					
+						fread(p_buff,file_size,1,fp_font);
+						if(fp_font){
+							fclose(fp_font);
+							fp_font = NULL;
+						}	
+						
+						//****************************************************************
+					
+						file_name_len = strlen(elem->elem_attr.obj_progress_name[i]);
+					
+						//****************************************************************
+						//7.file start code
+						fwrite(&file_start_code,	   sizeof(unsigned int),1,fp_packet);
+						fwrite(&elem->elem_attr.obj_id,sizeof(unsigned int),1,fp_packet);
+					
+						fwrite(&file_name_len,			  sizeof(unsigned int),1,fp_packet);
+						fwrite(&elem->elem_attr.obj_progress_name[i], file_name_len,		1,fp_packet);
+						
+						fwrite(&file_size,			   sizeof(unsigned int),1,fp_packet);
+						fwrite(p_buff,				   file_size,			1,fp_packet);
+					
+						fwrite(&file_end_code,		   sizeof(unsigned int),1,fp_packet);
+						//****************************************************************
+						free(p_buff);
+						p_buff = NULL;
+						//****************************************************************
+					}
+
+				}
+				//******************************************************************************
+			}
+		}
+	}
+
+	//****************************************************************
 	//7.write all obj data info
 	slist_for_each(node, (page->page_elem_head))
 	{
@@ -571,6 +665,7 @@ int hmi_unpacket_file(const char *filepath, const char *out_path)
 	unsigned int  video_elem_num  	= 0;
 	unsigned int  music_elem_num    = 0;	
 	unsigned int  font_elem_num     = 0;	
+	unsigned int  progress_file_elem_num = 0;
 
 	
 	unsigned int file_start_code 	= FILE_START_CODE;
@@ -661,6 +756,10 @@ int hmi_unpacket_file(const char *filepath, const char *out_path)
 	fread(&font_elem_num,sizeof(unsigned int),1,fp_unpacket);
 	
 	printf("font_elem_num=%d\n",font_elem_num);
+	//**********************************************************
+	fread(&progress_file_elem_num,sizeof(unsigned int),1,fp_unpacket);
+	
+	printf("progress_file=%d\n",progress_file_elem_num);
 	//**********************************************************
 	//4.read reserve data
 
@@ -940,6 +1039,62 @@ int hmi_unpacket_file(const char *filepath, const char *out_path)
 		free(file_buff);
 		file_buff = NULL;
 	}
+	//**********************************************************
+	//.read progress file data.
+	for(i=0;i<progress_file_elem_num;i++)
+	{
+		fread(&file_start_code,sizeof(unsigned int),1,fp_unpacket);
+		printf("file_start_code=0x%x\n",file_start_code);
+		if(file_start_code != FILE_START_CODE)
+		{
+			printf("file statr code error.\n");
+			break;
+		}
+		fread(&file_obj_id,sizeof(unsigned int),1,fp_unpacket);
+		printf("file_obj_id=0x%x\n",file_obj_id);
+
+		fread(&file_name_len,sizeof(unsigned int),1,fp_unpacket);
+		printf("file_name_len=%d\n",file_name_len);
+
+		memset(file_temp,0,sizeof(file_temp));
+		fread(file_temp,file_name_len,1,fp_unpacket);
+		printf("file_temp=%s\n",file_temp);
+
+		fread(&file_size,sizeof(unsigned int),1,fp_unpacket);
+		printf("file_size=%d\n",file_size);	
+
+		file_buff = (char*)malloc(file_size);
+		if(!file_buff){
+			printf("file buff malloc error.\n");	
+			break;
+		}
+		
+		fread(file_buff,file_size,1,fp_unpacket);
+		fread(&file_end_code,sizeof(unsigned int),1,fp_unpacket);
+		printf("file_end_code=0x%x\n",file_end_code);
+		if(file_end_code != FILE_END_CODE)
+		{
+			printf("file end code error.\n");
+			break;
+		}
+
+		memset(file_name,0,sizeof(file_name));
+		// sprintf(file_name,"./output/%s",file_temp);
+		sprintf(file_name, "%s/%s", out_path, file_temp);
+		printf("file_name=%s\n",file_name);
+		fp_file  = fopen(file_name,"wb");
+		if(!fp_file){
+			printf("write file error %s.\n",file_name);
+			break;	
+		}
+		fwrite(file_buff,file_size,1,fp_file);
+		fclose(fp_file);
+		fp_file = NULL;
+		free(file_buff);
+		file_buff = NULL;
+	}
+
+	
 	//**********************************************************
 	for(i=0;i<page_elem_num;i++)
 	{

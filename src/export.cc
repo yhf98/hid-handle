@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-11 13:56:16
+ * @LastEditTime: 2023-08-16 13:36:51
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -88,7 +88,7 @@ Value generateUIHandleJs(const CallbackInfo &info)
         TypeError::New(env, "Array expected").ThrowAsJavaScriptException();
         return env.Null();
     }
-    
+
     Array objAttrTs = info[0].As<Array>();
 
     string pkgPath = info[1].As<String>();
@@ -121,13 +121,13 @@ Value generateUIHandleJs(const CallbackInfo &info)
         std::string obj_name = objAttrT.Get("obj_name").As<String>();
         strcpy_s(para.obj_name, obj_name.c_str());
 
-         // // Wifi 名称 
+        // // Wifi 名称
         // std::string obj_wifi_name = objAttrT.Get("obj_wifi_name").As<String>();
         // strcpy_s(para.obj_wifi_name, obj_wifi_name.c_str());
         //  // Wifi 密码
         // std::string obj_wifi_pass = objAttrT.Get("obj_wifi_pass").As<String>();
         // strcpy_s(para.obj_wifi_pass, obj_wifi_pass.c_str());
-        
+
         // 横向起点坐标
         para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
         // 纵向起点坐标
@@ -180,6 +180,24 @@ Value generateUIHandleJs(const CallbackInfo &info)
         para.obj_rotation = objAttrT.Get("obj_rotation").As<Number>().Int32Value();
         // 宽度
         para.obj_width = objAttrT.Get("obj_width").As<Number>().Int32Value();
+        // 进度间隔
+        para.obj_progress_interval = objAttrT.Get("obj_progress_interval").As<Number>().Int32Value();
+
+        // 进度刷图数组obj_progress_name[MAX_OBJ_PROGRESS_LEN][MAX_OBJ_PROGRESS_NAME_LEN]
+        // -------------------------------------------------------------------------
+        Array progressNameArray = objAttrT.Get("obj_progress_name").As<Array>();
+        
+        for (int i = 0; i < MAX_OBJ_PROGRESS_LEN && i < progressNameArray.Length(); i++)
+        {
+            String progressName = progressNameArray.Get(i).As<String>();
+            string progressNameStr = progressName.Utf8Value();
+
+            strncpy(para.obj_progress_name[i], progressNameStr.c_str(), MAX_OBJ_PROGRESS_NAME_LEN - 1);
+            para.obj_progress_name[i][MAX_OBJ_PROGRESS_NAME_LEN - 1] = '\0';
+
+            printf("%s \t", para.obj_progress_name[i]);
+        }
+        // ===============================================
         // 折线图横向点数
         para.obj_point_x_num = objAttrT.Get("obj_point_x_num").As<Number>().Int32Value();
         // 折线图纵向点数
@@ -218,7 +236,7 @@ Value generateUIHandleJs(const CallbackInfo &info)
 
         vec_obj_attr_t.push_back(para);
     }
-    
+
     const auto res = generate_ui_handle(vec_obj_attr_t, pkgPath.c_str(), wifiName.c_str(), wifiPwd.c_str());
     Number result = Number::New(env, res);
 
@@ -441,7 +459,7 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info)
         strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
 
         // unsigned int* obj_font;
-        
+
         vec_obj_attr_t.push_back(para);
     }
 
@@ -595,18 +613,20 @@ Value hidHandleInitJs(const CallbackInfo &info)
     return result;
 }
 
-Object CreateDeviceInfoObject(const Env& env, const device_info_t* info) {
+Object CreateDeviceInfoObject(const Env &env, const device_info_t *info)
+{
     Object obj = Object::New(env);
-    
-    obj.Set("manufact", String::New(env, reinterpret_cast<const char16_t*>(info->manufact)));
-    obj.Set("product", String::New(env, reinterpret_cast<const char16_t*>(info->product)));
-    obj.Set("serial_num", String::New(env, reinterpret_cast<const char16_t*>(info->serial_num)));
-    obj.Set("indexed", String::New(env, reinterpret_cast<const char16_t*>(info->indexed)));
+
+    obj.Set("manufact", String::New(env, reinterpret_cast<const char16_t *>(info->manufact)));
+    obj.Set("product", String::New(env, reinterpret_cast<const char16_t *>(info->product)));
+    obj.Set("serial_num", String::New(env, reinterpret_cast<const char16_t *>(info->serial_num)));
+    obj.Set("indexed", String::New(env, reinterpret_cast<const char16_t *>(info->indexed)));
 
     return obj;
 }
 
-Value getDeviceInfoJs(const CallbackInfo& info) {
+Value getDeviceInfoJs(const CallbackInfo &info)
+{
     Env env = info.Env();
 
     // 创建要返回的结构体对象

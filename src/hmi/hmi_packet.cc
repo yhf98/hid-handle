@@ -220,9 +220,7 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 
 				sprintf(filename, "%s/img/%s", rootpath, elem->elem_attr.obj_data);
 				printf("\nimg2:filename: %s\n", filename);
-
-				fp_png = fopen(filename, "rb");
-
+				
 				printf("filename=%s\n",filename);
 
 				fp_png = fopen(filename,"rb");

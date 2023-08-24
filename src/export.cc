@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-17 17:38:48
+ * @LastEditTime: 2023-08-24 14:33:23
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -637,6 +637,17 @@ Value getDeviceInfoJs(const CallbackInfo &info)
     return result;
 }
 
+Value fotmatHandleInitJs(const CallbackInfo &info)
+{
+    auto env = info.Env();
+
+    const auto res = format_device_handle();
+
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
@@ -656,6 +667,7 @@ Object Init(Env env, Object exports)
     exports.Set("hid_write_file_async_handle", Function::New(env, HidWriteFileHandleAsync));
     exports.Set("hid_init_handle", Function::New(env, hidHandleInitJs));
     exports.Set("get_device_info", Function::New(env, getDeviceInfoJs));
+    exports.Set("format_device_handle", Function::New(env, fotmatHandleInitJs));
 
     return exports;
 }

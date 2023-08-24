@@ -457,6 +457,7 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 		}
 	}
 	//****************************************************************
+#if 0
 	//write font 
 	slist_for_each(node, (page->page_elem_head))
 	{
@@ -519,6 +520,7 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 			}
 		}
 	}
+#endif
 	//****************************************************************
 	//write progress png file 
 	slist_for_each(node, (page->page_elem_head))

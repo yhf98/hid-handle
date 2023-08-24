@@ -20,6 +20,7 @@
 #define    CMD_ELEM_UPDATE			     (0xAE)
 
 #define    CMD_WIFI_INFO			     (0xAF)
+#define    CMD_DELETE_FILE			     (0xB0)
 
 
 
@@ -121,6 +122,7 @@ int hid_write_file(hid_device* hid_handle ,const char *full_path,const char *fil
 int hmi_send_wifi_info(hid_device* hid_handle, const char* wifiname, const char* wifipasswd);
 int hmi_update_obj_data(hid_device* hid_handle);
 
+int hmi_del_all_file(hid_device* hid_handle);
 
 
 

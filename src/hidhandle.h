@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:46:10
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-10 11:06:33
+ * @LastEditTime: 2023-08-24 14:31:59
  * @FilePath: \hid-handle\src\hidhandle.h
  * @Description: hidhandle.h
  */
@@ -46,5 +46,6 @@ int hid_handle_init(void);
 
 int hid_state_handle(void);
 
+int format_device_handle(void);
 
 #endif

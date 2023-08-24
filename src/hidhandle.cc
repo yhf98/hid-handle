@@ -60,7 +60,7 @@ int hid_state_handle()
 
 	if (ret != 0)
 		return -1;
-	
+
 	hid_close(hid_handle);
 	hid_handle = NULL;
 	printf("\n---close Devices---\n");
@@ -670,4 +670,18 @@ int async_test_handle(void)
 		printf("\n==[%d]==\n", i);
 	}
 	return 0;
+}
+
+int format_device_handle(void)
+{
+	unsigned int ret = hid_handle_init();
+	if (ret != 0)
+		return ret;
+
+	ret = hmi_del_all_file(hid_handle);
+
+	hid_close(hid_handle);
+	hid_handle = NULL;
+	
+	return ret;
 }

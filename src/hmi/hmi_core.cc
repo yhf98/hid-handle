@@ -806,8 +806,8 @@ int hmi_config_wifi_info(const char *wifi_name, const char *wifi_pwd)
 	para.obj_id   = 0;
 	para.obj_type = HMI_OBJ_TYPE_WIFI_INFO;
 	
-	memcpy(&para.obj_wifi_name, "jieshen", strlen("jieshen"));
-	memcpy(&para.obj_wifi_pass, "Jieshen168", strlen("Jieshen168"));
+	memcpy(&para.obj_wifi_name, wifi_name, strlen(wifi_name));
+	memcpy(&para.obj_wifi_pass, wifi_pwd, strlen(wifi_pwd));
 
 	hmi_add_obj(hmi_page_get_default(0),para);
 
@@ -1273,6 +1273,62 @@ int hmi_bgvideo_create_test(unsigned int id)
 	return 0;
 }
 
+
+int hmi_progress_png_create_test(unsigned int id)
+{
+	obj_attr_t para ;
+
+	memset(&para,0,sizeof(obj_attr_t));
+
+	para.obj_id   = id;
+	para.obj_type = HMI_OBJ_TYPE_PROGRESS_PNG;
+
+	para.obj_x	  = 640;
+	para.obj_y	  = 0;
+	para.obj_w	  = 200;
+	para.obj_h	  = 40;
+
+	para.obj_opa  = 255;
+	para.obj_r    = 0;
+	para.obj_g    = 0;
+	para.obj_b    = 0;
+
+	para.obj_range_max 		   = 100;
+	para.obj_progress_interval = 5;
+
+	para.obj_time = 500;	
+
+	para.obj_var[0] = 3;
+
+	memcpy(&para.obj_progress_name[0][0], "0.png", strlen("0.png"));
+	memcpy(&para.obj_progress_name[1][0], "1.png", strlen("1.png"));
+	memcpy(&para.obj_progress_name[2][0], "2.png", strlen("2.png"));
+	memcpy(&para.obj_progress_name[3][0], "3.png", strlen("3.png"));
+	memcpy(&para.obj_progress_name[4][0], "4.png", strlen("4.png"));
+
+	memcpy(&para.obj_progress_name[5][0], "5.png", strlen("5.png"));
+	memcpy(&para.obj_progress_name[6][0], "6.png", strlen("6.png"));
+	memcpy(&para.obj_progress_name[7][0], "7.png", strlen("7.png"));
+	memcpy(&para.obj_progress_name[8][0], "8.png", strlen("8.png"));
+	memcpy(&para.obj_progress_name[9][0], "9.png", strlen("9.png"));
+
+	memcpy(&para.obj_progress_name[10][0], "10.png", strlen("10.png"));
+	memcpy(&para.obj_progress_name[11][0], "11.png", strlen("11.png"));
+	memcpy(&para.obj_progress_name[12][0], "12.png", strlen("12.png"));
+	memcpy(&para.obj_progress_name[13][0], "13.png", strlen("13.png"));
+	memcpy(&para.obj_progress_name[14][0], "14.png", strlen("14.png"));
+
+	memcpy(&para.obj_progress_name[15][0], "15.png", strlen("15.png"));
+	memcpy(&para.obj_progress_name[16][0], "16.png", strlen("16.png"));
+	memcpy(&para.obj_progress_name[17][0], "17.png", strlen("17.png"));
+	memcpy(&para.obj_progress_name[18][0], "18.png", strlen("18.png"));
+	memcpy(&para.obj_progress_name[19][0], "19.png", strlen("19.png"));
+
+
+	hmi_add_obj(hmi_page_get_default(0),para);
+
+	return 0;
+}
 
 
 int hmi_create_obj_test(void)

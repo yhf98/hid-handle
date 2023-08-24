@@ -569,6 +569,28 @@ int hmi_send_wifi_info(hid_device* hid_handle, const char* wifiname, const char*
 }
 
 
+int hmi_del_all_file(hid_device* hid_handle)
+{
+	int wifiname_len = 0;
+	int wifipwd_len = 0;
+
+	char control_buff[256] = { 0 };
+
+
+	memset(control_buff, 0, sizeof(control_buff));
+
+	control_buff[0] = ((0xaa >> 0) & 0xff);
+	control_buff[1] = ((0xbb >> 8) & 0xff);
+
+	control_buff[2] = ((0xcc >> 0) & 0xff);
+	control_buff[3] = ((0xdd >> 8) & 0xff);
+
+	hid_io_control(hid_handle, CMD_DELETE_FILE, " ", control_buff, sizeof(control_buff));
+
+	return 0;
+}
+
+
 
 int hmi_update_obj_var(hid_device* hid_handle)
 {

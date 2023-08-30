@@ -3,11 +3,11 @@
         {
             "name": "Win32",
             "includePath": [
+                "K:/mingw/include/**",
+                "K:/mingw/lib/gcc/mingw32/9.2.0/include/c++",
                 "${default}",
                 "${workspaceFolder}/hidapi/hidapi",
-                "${vcpkgRoot}/x64-windows/include",
-                "K:/mingw/include/**",
-                "K:/mingw/lib/gcc/mingw32/9.2.0/include/c++"
+                "${vcpkgRoot}/x64-windows/include"
             ],
             "defines": [
                 "_DEBUG",

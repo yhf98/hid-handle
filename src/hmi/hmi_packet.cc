@@ -529,7 +529,17 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 		if(elem){		
 			if(elem->elem_attr.obj_type == HMI_OBJ_TYPE_PROGRESS_PNG)
 			{
-				total  = elem->elem_attr.obj_range_max/elem->elem_attr.obj_progress_interval;
+
+				if(elem->elem_attr.obj_progress_interval)
+				{
+					total  = elem->elem_attr.obj_progress_interval;
+				}
+				else
+				{
+					total = 0;
+					printf("interval error\n");
+				}
+
 				printf("total=%d\n",total);
 
 				//******************************************************************************

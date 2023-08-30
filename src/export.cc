@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-24 14:33:23
+ * @LastEditTime: 2023-08-30 11:35:03
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -198,6 +198,23 @@ Value generateUIHandleJs(const CallbackInfo &info)
             printf("%s \t", para.obj_progress_name[i]);
         }
         // ===============================================
+
+        // 进度刷图规则obj_rule_name[MAX_OBJ_RULES_LEN][MAX_OBJ_RULES_NAME_LEN]
+        // -------------------------------------------------------------------------
+        Array ruleNameArray = objAttrT.Get("obj_rule_name").As<Array>();
+        
+        for (int i = 0; i < MAX_OBJ_RULES_LEN && i < ruleNameArray.Length(); i++)
+        {
+            String ruleName = ruleNameArray.Get(i).As<String>();
+            string ruleNameStr = ruleName.Utf8Value();
+
+            strncpy(para.obj_rule_name[i], ruleNameStr.c_str(), MAX_OBJ_RULES_NAME_LEN - 1);
+            para.obj_rule_name[i][MAX_OBJ_RULES_NAME_LEN - 1] = '\0';
+
+            printf("%s \t", para.obj_rule_name[i]);
+        }
+        // ===============================================
+
         // 折线图横向点数
         para.obj_point_x_num = objAttrT.Get("obj_point_x_num").As<Number>().Int32Value();
         // 折线图纵向点数

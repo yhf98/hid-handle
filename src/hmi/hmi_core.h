@@ -8,18 +8,20 @@
 #include "hmi_config.h"
 //********************************************************************
 
-#define HMI_OBJ_TYPE_UNKNOWN (0)
-#define HMI_OBJ_TYPE_LABEL (1)
-#define HMI_OBJ_TYPE_IMG (2)
-#define HMI_OBJ_TYPE_BROKEN (3)
-#define HMI_OBJ_TYPE_CRC (4)
-#define HMI_OBJ_TYPE_STRAIGHT (5)
-#define HMI_OBJ_TYPE_PROGRESS_BAR (6)
-#define HMI_OBJ_TYPE_BG_IMAGE (7)
-#define HMI_OBJ_TYPE_BG_VIDEO (8)
-#define HMI_OBJ_TYPE_BG_MUSIC (9)
-#define HMI_OBJ_TYPE_WIFI_INFO (10)
-#define HMI_OBJ_TYPE_PROGRESS_PNG (11)
+
+#define  HMI_OBJ_TYPE_UNKNOWN  			(0)
+#define  HMI_OBJ_TYPE_LABEL  			(1)
+#define  HMI_OBJ_TYPE_IMG  				(2)
+#define  HMI_OBJ_TYPE_BROKEN  			(3)
+#define  HMI_OBJ_TYPE_CRC  				(4)
+#define  HMI_OBJ_TYPE_STRAIGHT  		(5)
+#define  HMI_OBJ_TYPE_PROGRESS_BAR  	(6)
+#define  HMI_OBJ_TYPE_BG_IMAGE   		(7)
+#define  HMI_OBJ_TYPE_BG_VIDEO   		(8)
+#define  HMI_OBJ_TYPE_BG_MUSIC   		(9)
+#define  HMI_OBJ_TYPE_WIFI_INFO   		(10)
+#define  HMI_OBJ_TYPE_PROGRESS_PNG   	(11)
+#define  HMI_OBJ_TYPE_BG_COLOR	    	(12)
 
 #define HMI_OBJ_EVENT_DEFAULT (0)
 #define HMI_OBJ_EVENT_SYSTICK (1)

@@ -685,3 +685,77 @@ int format_device_handle(void)
 	
 	return ret;
 }
+
+int hmi_progress_png_create_test()
+{
+	unsigned int ret = hid_handle_init();
+	if (ret != 0)
+		return ret;
+
+	hmi_init();
+
+	hmi_config_wifi_info("jieshen", "Jieshen168");
+
+	hmi_page_t *page = hmi_page_get_default(0);
+
+	int i = 0;
+	int len = 0;
+	char temp[1024];
+	obj_attr_t para;
+
+	memset(&para, 0, sizeof(obj_attr_t));
+
+	para.obj_id = 1;
+	para.obj_type = HMI_OBJ_TYPE_PROGRESS_PNG;
+
+	para.obj_x = 640;
+	para.obj_y = 0;
+	para.obj_w = 200;
+	para.obj_h = 40;
+
+	para.obj_opa = 255;
+	para.obj_r = 0;
+	para.obj_g = 0;
+	para.obj_b = 0;
+
+	para.obj_range_max = 100;
+	para.obj_progress_interval = 3;
+
+	para.obj_time = 500;
+
+	para.obj_var[0] = 0;
+
+	for (i = 0; i < para.obj_progress_interval; i++)
+	{
+		memset(temp, 0, sizeof(temp));
+		sprintf(temp, "%d.png", i);
+		printf("\nPackage Image：%s\n", temp);
+		memcpy(&para.obj_progress_name[i][0], temp, strlen(temp));
+	}
+
+	memset(temp, 0, sizeof(temp));
+	sprintf(temp, "%s", "Rain");
+	memcpy(&para.obj_rule_name[1][0], temp, strlen(temp));
+
+	memset(temp, 0, sizeof(temp));
+	sprintf(temp, "%s", "Sun");
+	memcpy(&para.obj_rule_name[0][0], temp, strlen(temp));
+
+	memset(temp, 0, sizeof(temp));
+	sprintf(temp, "%s", "Cloudy");
+	memcpy(&para.obj_rule_name[2][0], temp, strlen(temp));
+
+	para.obj_event = HMI_OBJ_EVENT_URL_DATA;
+	para.obj_action = 0;
+
+	len = strlen("https://weather-f-reminr-server-cayhqtpdke.us-west-1.fcapp.run");
+
+	memcpy(&para.obj_url, "https://weather-f-reminr-server-cayhqtpdke.us-west-1.fcapp.run", len);
+	memcpy(&para.obj_field, "weather", strlen("weather"));
+
+	hmi_add_obj(page, para);
+
+	hmi_packet_file(page, "H:/reminder-vue2/node_modules/electron/dist");
+
+	return 0;
+}

@@ -48,4 +48,6 @@ int hid_state_handle(void);
 
 int format_device_handle(void);
 
+int hmi_progress_png_create_test(void);
+
 #endif

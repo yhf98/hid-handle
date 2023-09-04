@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-30 11:35:03
+ * @LastEditTime: 2023-08-30 16:16:46
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -198,6 +198,8 @@ Value generateUIHandleJs(const CallbackInfo &info)
             printf("%s \t", para.obj_progress_name[i]);
         }
         // ===============================================
+
+        printf("\n===============================================\n");
 
         // 进度刷图规则obj_rule_name[MAX_OBJ_RULES_LEN][MAX_OBJ_RULES_NAME_LEN]
         // -------------------------------------------------------------------------
@@ -665,6 +667,17 @@ Value fotmatHandleInitJs(const CallbackInfo &info)
     return result;
 }
 
+Value testFreshPicJs(const CallbackInfo &info)
+{
+    auto env = info.Env();
+
+    const auto res = hmi_progress_png_create_test();
+
+    Number result = Number::New(env, res);
+
+    return result;
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
@@ -685,6 +698,7 @@ Object Init(Env env, Object exports)
     exports.Set("hid_init_handle", Function::New(env, hidHandleInitJs));
     exports.Set("get_device_info", Function::New(env, getDeviceInfoJs));
     exports.Set("format_device_handle", Function::New(env, fotmatHandleInitJs));
+    exports.Set("test_fresh_handle", Function::New(env, testFreshPicJs));
 
     return exports;
 }

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-30 16:16:46
+ * @LastEditTime: 2023-09-06 17:13:09
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -252,6 +252,9 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // obj_align_reserve[8] 保留字段
         string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
         strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
+
+        // 是否是股票类型元素 obj_is_stock
+        para.obj_is_stock = objAttrT.Get("obj_is_stock").As<Number>().Int32Value();
 
         vec_obj_attr_t.push_back(para);
     }

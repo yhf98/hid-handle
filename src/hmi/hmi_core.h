@@ -129,6 +129,8 @@ typedef struct obj_attr
 
 	unsigned int *obj_font;
 
+	unsigned int obj_is_stock;
+
 	char obj_align_reserve[8]; // for obj align
 
 } obj_attr_t;

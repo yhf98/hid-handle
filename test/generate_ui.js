@@ -2,23 +2,23 @@
  * @Author: 姚恒锋 1921934563@qq.com
  * @Date: 2023-07-25 16:58:03
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-08-30 17:01:26
+ * @LastEditTime: 2023-09-04 16:32:51
  * @FilePath: \hid-handle\test\generate_ui.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 const hid = require("../main.js");
 
-let data =[
+let data = [
     {
         "obj_id": 2,
-        "obj_type": 11,
-        "obj_name": "untitled1",
+        "obj_type": 1,
+        "obj_name": "untitled2",
         "obj_wifi_name": "jieshen",
         "obj_wifi_pass": "Jieshen168",
-        "obj_x": 200,
-        "obj_y": 120,
-        "obj_w": 280,
-        "obj_h": 20,
+        "obj_x": 120,
+        "obj_y": 100,
+        "obj_w": 100,
+        "obj_h": 40,
         "obj_opa": 0,
         "obj_r": 0,
         "obj_g": 0,
@@ -44,46 +44,26 @@ let data =[
         "obj_fall_g": 0,
         "obj_fall_b": 0,
         "obj_range_min": 0,
-        "obj_range_max": 30,
+        "obj_range_max": 5,
         "obj_angle_range": 0,
         "obj_rotation": 0,
-        "obj_width": 280,
-        "obj_progress_interval": 9,
+        "obj_width": 100,
+        "obj_progress_interval": 0,
         "obj_point_x_num": 5,
         "obj_point_y_num": 5,
         "obj_time": 3000,
         "obj_var": [
-            5
+            0
         ],
-        "obj_event": 4,
+        "obj_event": 0,
         "obj_action": 0,
-        "obj_data": "5",
+        "obj_data": "TTT",
         "obj_reserve": "",
         "obj_url": "",
         "obj_field": "",
         "obj_align_reserve": "",
-        "obj_rule_name": [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "7",
-            "8",
-            "9",
-            "10"
-        ],
-        "obj_progress_name": [
-            "disk1.png",
-            "disk2.png",
-            "disk3.png",
-            "disk4.png",
-            "disk5.png",
-            "disk7.png",
-            "disk8.png",
-            "disk9.png",
-            "disk10.png"
-        ]
+        "obj_rule_name": [],
+        "obj_progress_name": []
     }
 ]
 hid.HidHandle().then(fn => {

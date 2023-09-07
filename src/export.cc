@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-07 10:10:24
+ * @LastEditTime: 2023-09-07 15:05:03
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -124,7 +124,7 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // Wifi 名称
         std::string obj_wifi_name = objAttrT.Get("obj_wifi_name").As<String>();
         strcpy_s(para.obj_wifi_name, obj_wifi_name.c_str());
-         // Wifi 密码
+        // Wifi 密码
         std::string obj_wifi_pass = objAttrT.Get("obj_wifi_pass").As<String>();
         strcpy_s(para.obj_wifi_pass, obj_wifi_pass.c_str());
 
@@ -186,7 +186,7 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // 进度刷图数组obj_progress_name[MAX_OBJ_PROGRESS_LEN][MAX_OBJ_PROGRESS_NAME_LEN]
         // -------------------------------------------------------------------------
         Array progressNameArray = objAttrT.Get("obj_progress_name").As<Array>();
-        
+
         for (int i = 0; i < MAX_OBJ_PROGRESS_LEN && i < progressNameArray.Length(); i++)
         {
             String progressName = progressNameArray.Get(i).As<String>();
@@ -204,7 +204,7 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // 进度刷图规则obj_rule_name[MAX_OBJ_RULES_LEN][MAX_OBJ_RULES_NAME_LEN]
         // -------------------------------------------------------------------------
         Array ruleNameArray = objAttrT.Get("obj_rule_name").As<Array>();
-        
+
         for (int i = 0; i < MAX_OBJ_RULES_LEN && i < ruleNameArray.Length(); i++)
         {
             String ruleName = ruleNameArray.Get(i).As<String>();
@@ -238,8 +238,8 @@ Value generateUIHandleJs(const CallbackInfo &info)
         string obj_data = objAttrT.Get("obj_data").As<String>();
         strcpy_s(para.obj_data, obj_data.c_str());
 
-         printf("$$$$==para.obj_data=%s ==$$$$$\n", para.obj_data);
-        
+        printf("$$$$==para.obj_data=%s ==$$$$$\n", para.obj_data);
+
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
         strcpy_s(para.obj_reserve, obj_reserve.c_str());
@@ -495,6 +495,154 @@ Value hmiBatchUpdateScreenDataJs(const CallbackInfo &info)
     return result;
 }
 
+Value hmiBatchUpdateScreenDataAsync(const CallbackInfo &info)
+{
+    Env env = info.Env();
+
+    // 创建 Promise 的执行器函数
+    auto executor = [&](Promise::Deferred deferred)
+    {
+        if (info.Length() < 1 || !info[0].IsArray())
+        {
+            TypeError::New(env, "Array expected").ThrowAsJavaScriptException();
+            return env.Null();
+        }
+
+        Array objAttrTs = info[0].As<Array>();
+        vector<obj_attr_t> vec_obj_attr_t;
+
+        for (uint32_t i = 0; i < objAttrTs.Length(); i++)
+        {
+            Value value = objAttrTs.Get(i);
+            Object objAttrT = value.As<Object>();
+
+            if (!objAttrT.IsObject())
+            {
+                TypeError::New(env, "Object expected").ThrowAsJavaScriptException();
+                return env.Null();
+            }
+
+            obj_attr_t para;
+            memset(&para, 0, sizeof(obj_attr_t));
+
+            // 对象id,要唯一
+            para.obj_id = objAttrT.Get("obj_id").As<Number>().Int32Value();
+            // UI类型
+            para.obj_type = objAttrT.Get("obj_type").As<Number>().Int32Value();
+            // 对象名字,唯一
+            std::string obj_name = objAttrT.Get("obj_name").As<String>();
+            strcpy_s(para.obj_name, obj_name.c_str());
+
+            // 横向起点坐标
+            para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
+            // 纵向起点坐标
+            para.obj_y = objAttrT.Get("obj_y").As<Number>().Int32Value();
+            // 宽度
+            para.obj_w = objAttrT.Get("obj_w").As<Number>().Int32Value();
+            // 高度
+            para.obj_h = objAttrT.Get("obj_h").As<Number>().Int32Value();
+            // 主透明度
+            // std::string obj_opa = objAttrT.Get("obj_opa").As<String>();
+            para.obj_opa = objAttrT.Get("obj_opa").As<Number>().Int32Value();
+            // 颜色
+            para.obj_r = objAttrT.Get("obj_r").As<Number>().Int32Value();
+            para.obj_g = objAttrT.Get("obj_g").As<Number>().Int32Value();
+            para.obj_b = objAttrT.Get("obj_b").As<Number>().Int32Value();
+            // 次透明度
+            para.obj_opa_2 = objAttrT.Get("obj_opa_2").As<Number>().Int32Value();
+            para.obj_g_2 = objAttrT.Get("obj_g_2").As<Number>().Int32Value();
+            para.obj_b_2 = objAttrT.Get("obj_b_2").As<Number>().Int32Value();
+            // 字体大小
+            para.obj_font_size = objAttrT.Get("obj_font_size").As<Number>().Int32Value();
+            // 字体名字
+            string obj_font_name = objAttrT.Get("obj_font_name").As<String>();
+            strcpy_s(para.obj_font_name, obj_font_name.c_str());
+            // 字体颜色
+            para.obj_font_r = objAttrT.Get("obj_font_r").As<Number>().Int32Value();
+            para.obj_font_g = objAttrT.Get("obj_font_g").As<Number>().Int32Value();
+            para.obj_font_b = objAttrT.Get("obj_font_b").As<Number>().Int32Value();
+            // 范围最小值
+            para.obj_range_min = objAttrT.Get("obj_range_min").As<Number>().Int32Value();
+            // 范围最大值
+            para.obj_range_max = objAttrT.Get("obj_range_max").As<Number>().Int32Value();
+            // 角度
+            para.obj_angle_range = objAttrT.Get("obj_angle_range").As<Number>().Int32Value();
+            // 方向
+            para.obj_rotation = objAttrT.Get("obj_rotation").As<Number>().Int32Value();
+            // 宽度
+            para.obj_width = objAttrT.Get("obj_width").As<Number>().Int32Value();
+            // 折线图横向点数
+            para.obj_point_x_num = objAttrT.Get("obj_point_x_num").As<Number>().Int32Value();
+            // 折线图纵向点数
+            para.obj_point_y_num = objAttrT.Get("obj_point_y_num").As<Number>().Int32Value();
+            // 定时时间,0则不定时
+            para.obj_time = objAttrT.Get("obj_time").As<Number>().Int32Value();
+            // 对象内置的一些数据更新接口 obj_var[MAX_OBJ_VAR_LEN];
+            // para.obj_var = objAttrT.Get("obj_var").As<Number>().Int32Value();
+
+            Array value_obj_arr = objAttrT.Get("obj_var").As<Array>();
+            // unsigned int obj_var[MAX_OBJ_VAR_LEN];
+            for (int i = 0; i < MAX_OBJ_VAR_LEN && i < value_obj_arr.Length(); i++)
+            {
+                Value val = value_obj_arr[i];
+                // obj_var[i] = val.As<Number>().Int32Value();
+                para.obj_var[i] = val.As<Number>().Int32Value();
+            }
+            // para.obj_var = obj_var;
+
+            // 对象事件
+            para.obj_event = objAttrT.Get("obj_event").As<Number>().Int32Value();
+            // 事件对应的操作
+            para.obj_action = objAttrT.Get("obj_action").As<Number>().Int32Value();
+            // obj_data[MAX_OBJ_DATA_LEN]; 对象的buff区,可通过此更新txt内容
+            string obj_data = objAttrT.Get("obj_data").As<String>();
+            strcpy_s(para.obj_data, obj_data.c_str());
+
+            // obj_reserve[MAX_RESERVE_LEN]; 保留字
+            string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
+            strcpy_s(para.obj_reserve, obj_reserve.c_str());
+
+            // obj_url[MAX_OBJ_URL_LEN] 获取数据API地址
+            string obj_url = objAttrT.Get("obj_url").As<String>();
+            strcpy_s(para.obj_url, obj_url.c_str());
+
+            // obj_field[MAX_OBJ_FIELD_LEN] 数据字段
+            string obj_field = objAttrT.Get("obj_field").As<String>();
+            strcpy_s(para.obj_field, obj_field.c_str());
+
+            // obj_align_reserve[8] 保留字段
+            string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
+            strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
+
+            // unsigned int* obj_font;
+
+            vec_obj_attr_t.push_back(para);
+        }
+
+        int success = hmi_batch_update_screen_data(vec_obj_attr_t);
+
+        if (success == 0)
+        {
+            deferred.Resolve(Number::New(env, success));
+        }
+        else
+        {
+            Error::New(env, "Device file error!").ThrowAsJavaScriptException();
+            deferred.Reject(env.Null()); // 使用 Null 作为拒绝的原因
+        }
+    };
+
+    // 创建 Promise 对象并返回
+    Promise::Deferred deferred = Promise::Deferred::New(env);
+    Promise promise = deferred.Promise();
+
+    // 调用执行器函数，开始异步操作
+    executor(deferred);
+
+    // 返回 Promise 对象给 JavaScript
+    return promise;
+}
+
 Value hmiCreateObjTestJs(const CallbackInfo &info)
 {
     auto env = info.Env();
@@ -705,6 +853,7 @@ Object Init(Env env, Object exports)
     exports.Set("get_device_info", Function::New(env, getDeviceInfoJs));
     exports.Set("format_device_handle", Function::New(env, fotmatHandleInitJs));
     exports.Set("test_fresh_handle", Function::New(env, testFreshPicJs));
+    exports.Set("update_screen_data_async", Function::New(env, hmiBatchUpdateScreenDataAsync));
 
     return exports;
 }

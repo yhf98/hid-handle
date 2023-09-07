@@ -1,7 +1,7 @@
 {
   "name": "hid-handle",
   "main": "./main.js",
-  "version": "1.23.2",
+  "version": "1.23.4",
   "description": "hid-handle - Write data to USB HID devices from Node.js",
   "scripts": {
     "build": "node-gyp clean configure build",

@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-06 17:13:09
+ * @LastEditTime: 2023-09-07 10:10:24
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -237,6 +237,9 @@ Value generateUIHandleJs(const CallbackInfo &info)
         // obj_data[MAX_OBJ_DATA_LEN]; 对象的buff区,可通过此更新txt内容
         string obj_data = objAttrT.Get("obj_data").As<String>();
         strcpy_s(para.obj_data, obj_data.c_str());
+
+         printf("$$$$==para.obj_data=%s ==$$$$$\n", para.obj_data);
+        
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
         strcpy_s(para.obj_reserve, obj_reserve.c_str());

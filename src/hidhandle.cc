@@ -200,7 +200,7 @@ int generate_ui_handle(vector<obj_attr_t> &paras, const char *pkg_path, const ch
 	for (const auto &obj : paras)
 	{
 		hmi_add_obj(page, obj);
-		printf("\n#######Generate: #########: %d\n", obj.obj_id);
+		printf("\n#obj.obj_id=%d\t obj.obj_data=%s###: %d\n", obj.obj_id, obj.obj_data);
 	}
 	ret = hmi_packet_file(page, pkg_path);
 

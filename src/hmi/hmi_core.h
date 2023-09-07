@@ -93,9 +93,11 @@ typedef struct obj_attr
 
 	unsigned int obj_val_flag;
 
-	unsigned int obj_rise_r;
-	unsigned int obj_rise_g;
-	unsigned int obj_rise_b;
+	unsigned int obj_is_stock;
+
+	unsigned int  obj_rise_r;
+	unsigned int  obj_rise_g;
+	unsigned int  obj_rise_b;
 
 	unsigned int obj_fall_r;
 	unsigned int obj_fall_g;
@@ -128,8 +130,6 @@ typedef struct obj_attr
 	char obj_reserve[MAX_RESERVE_LEN]; // 10
 
 	unsigned int *obj_font;
-
-	unsigned int obj_is_stock;
 
 	char obj_align_reserve[8]; // for obj align
 

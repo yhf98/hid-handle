@@ -345,7 +345,7 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 				memset(filename,0,sizeof(filename));
 
 				sprintf(filename, "%s/img/%s", rootpath, elem->elem_attr.obj_data);
-				printf("filename: %s\n", filename);
+				printf("===videoPath==: %s \tvideoName=%s \n", filename, elem->elem_attr.obj_data);
 
 				fp_video = fopen(filename,"rb"); 
 				if(!fp_video){
@@ -627,9 +627,8 @@ int hmi_packet_file(hmi_page_t *page, const char *rootpath)
 			printf("==================================\n");
 			printf("obj_attr_t size	   = %d\n", sizeof(obj_attr_t));
 	#endif
-	
+			printf("\nfwrite:===: obj_data=%s \n",elem->elem_attr.obj_data);
 			fwrite(&elem->elem_attr,sizeof(obj_attr_t),1,fp_packet);
-			
 		}
 	}
 

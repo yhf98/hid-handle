@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-08 14:31:12
+ * @LastEditTime: 2023-09-08 16:21:17
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -627,7 +627,7 @@ Value hmiBatchUpdateScreenDataAsync(const CallbackInfo &info)
         }
         else
         {
-            Error::New(env, "Device file error!").ThrowAsJavaScriptException();
+            Error::New(env, "Data update error!").ThrowAsJavaScriptException();
             deferred.Reject(env.Null()); // 使用 Null 作为拒绝的原因
         }
     };

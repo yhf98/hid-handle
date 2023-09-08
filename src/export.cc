@@ -2,7 +2,7 @@
  * @Author: yaohengfeng 1921934563@qq.com
  * @Date: 2023-01-13 10:58:19
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-07 15:05:03
+ * @LastEditTime: 2023-09-08 14:31:12
  * @FilePath: \hid-handle\src\export.cc
  * @Description: 对外导出接口
  */
@@ -832,6 +832,42 @@ Value testFreshPicJs(const CallbackInfo &info)
     return result;
 }
 
+std::atomic<bool> running{true};
+Napi::ThreadSafeFunction tsfn;
+
+void DeviceStatusListenerThread()
+{
+
+    while (running)
+    {
+        // 设备连接状态变化
+        bool connected = hid_state_handle() == 0;
+        bool *connectedPtr = new bool(connected);
+        tsfn.NonBlockingCall(connectedPtr, [](Napi::Env env, Napi::Function jsCallback, bool *connected)
+                             {
+        jsCallback.Call({ Napi::Boolean::New(env, *connected) });
+        delete connected; });
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+}
+
+void StartDeviceStatusListener(const Napi::CallbackInfo &info)
+{
+    Napi::Env env = info.Env();
+    Napi::Function callback = info[0].As<Napi::Function>();
+
+    tsfn = Napi::ThreadSafeFunction::New(
+        env,
+        callback,
+        "DeviceStatusListener",
+        0,
+        1);
+
+    std::thread listenerThread(DeviceStatusListenerThread);
+    listenerThread.detach();
+}
+
 Object Init(Env env, Object exports)
 {
     exports.Set("hid_write_file_handle", Function::New(env, HidWriteFileHandleJs));
@@ -854,6 +890,7 @@ Object Init(Env env, Object exports)
     exports.Set("format_device_handle", Function::New(env, fotmatHandleInitJs));
     exports.Set("test_fresh_handle", Function::New(env, testFreshPicJs));
     exports.Set("update_screen_data_async", Function::New(env, hmiBatchUpdateScreenDataAsync));
+    exports.Set("startDeviceStatusListener", Function::New(env, StartDeviceStatusListener));
 
     return exports;
 }

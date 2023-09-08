@@ -6,7 +6,7 @@
     'targets': [
         {
             'target_name': 'hidhandle',
-            'sources': [ "src/export.cc", "src/hidhandle.cc","src/hmi/hmi_core.cc", "src/hmi/hmi_hid.cc", "src/hmi/hmi_packet.cc", "src/hmi/list.c" ],
+            'sources': [ "src/export.cc", "src/hidhandle.cc","src/hmi/hmi_core.cc", "src/hmi/hmi_hid.cc", "src/hmi/hmi_packet.cc", "src/hmi/list.c", "src/hmi/cJSON.c" ],
             'dependencies': ['hidapi'],
             'defines': [
                 '_LARGEFILE_SOURCE',
@@ -44,7 +44,7 @@
                   'libraries': ['-lusb']
                 }], # OS==freebsd
                 [ 'OS=="win"', {
-                    "sources": [ "src/hidhandle.cc","src/hmi/hmi_core.cc", "src/hmi/hmi_hid.cc", "src/hmi/hmi_packet.cc", "src/hmi/list.c" ],
+                    "sources": [ "src/hidhandle.cc","src/hmi/hmi_core.cc", "src/hmi/hmi_hid.cc", "src/hmi/hmi_packet.cc", "src/hmi/list.c", "src/hmi/cJSON.c" ],
                     'msvs_settings': {
                         'VCCLCompilerTool': {
                             'ExceptionHandling': '2', # /EHsc

@@ -47,10 +47,10 @@ int hid_handle_init()
 		// hid_get_indexed_string(hid_handle, string_index, indexed, sizeof(indexed));
 		// printf("indexed      = %ls\n", indexed);
 	}
-	else
-	{
-		printf("HID Driver was opened!\n");
-	}
+	// else
+	// {
+	// 	// printf("HID Driver was opened!\n");
+	// }
 	return 0;
 }
 
@@ -63,8 +63,6 @@ int hid_state_handle()
 
 	hid_close(hid_handle);
 	hid_handle = NULL;
-	printf("\n---close Devices---\n");
-
 	return 0;
 }
 

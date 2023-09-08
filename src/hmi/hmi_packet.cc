@@ -1399,33 +1399,33 @@ int hmi_unpacket_file(const char *filepath, const char *out_path)
 
 	//**********************************************************
 	// end.write end code
-	fread(&end_code, sizeof(unsigned int), 1, fp_unpacket);
-	printf("end_code=0x%x\n", end_code);
-	if (end_code != RES_END_CODE)
-	{
-		printf("end code error.\n");
+	// fread(&end_code, sizeof(unsigned int), 1, fp_unpacket);
+	// printf("end_code=0x%x\n", end_code);
+	// if (end_code != RES_END_CODE)
+	// {
+	// 	printf("end code error.\n");
 
-		if (fp_unpacket)
-		{
-			fclose(fp_unpacket);
-			fp_unpacket = NULL;
-		}
+	// 	if (fp_unpacket)
+	// 	{
+	// 		fclose(fp_unpacket);
+	// 		fp_unpacket = NULL;
+	// 	}
 
-		return -1;
-	}
-	//**********************************************************
+	// 	return -1;
+	// }
+	// //**********************************************************
 
-	char *jsonString = cJSON_Print(jsonArray);
+	// char *jsonString = cJSON_Print(jsonArray);
 
-	FILE *file = fopen("H:/hid-handle/ddd123.json", "w");
-	if (file)
-	{
-		fputs(jsonString, file);
-		fclose(file);
-	}
+	// FILE *file = fopen("H:/hid-handle/ddd123.json", "w");
+	// if (file)
+	// {
+	// 	fputs(jsonString, file);
+	// 	fclose(file);
+	// }
 
-	cJSON_Delete(jsonArray); // 释放 cJSON 对象的内存
-	free(jsonString);
+	// cJSON_Delete(jsonArray); // 释放 cJSON 对象的内存
+	// free(jsonString);
 
 	printf("unpacket succeed.\n");
 

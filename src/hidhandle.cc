@@ -597,6 +597,8 @@ int hmi_batch_update_screen_data(vector<obj_attr_t> &paras)
 
 		ret = hid_io_control(hid_handle, CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 	}
+
+	
 	hid_close(hid_handle);
 	hid_handle = NULL;
 	printf("\n---close Devices---\n");

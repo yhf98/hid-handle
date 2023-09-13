@@ -1,12 +1,15 @@
-/*
- * @Author: 姚恒锋 1921934563@qq.com
- * @Date: 2023-07-25 16:58:03
- * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-11 16:52:22
- * @FilePath: \hid-handle\test\generate_ui.js
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-const hid = require("../main.js");
+const HANDLE = require("../handle.js");
+
+var device = new HANDLE.HANDLE(0x264a, 0x232a);
+// var device = new HANDLE.HANDLE(0x483, 0x5750);
+console.info("device: ", device)
+console.info("getDeviceInfo: ", device.getDeviceInfo())
+device.write([0x1, 0x2, 0x3, 0x4, 0x5])
+
+console.info(device.write([0x1, 0x2, 0x3, 0x4, 0x5]))
+// console.info(device.writeFile('H:/reminder-vue2/node_modules/electron/dist/hbin/hmi_res.hbin', 'hmi_res.hbin', 9));
+// console.info(device.writeFile('H:/reminder-vue2/node_modules/electron/dist/hbin/hmi_res.hbin', 'hmi_res.hbin', 9));
+// console.info(device.sendWifiInfo('jieshen', 'Jieshen168'));
 
 let data = [
     {
@@ -238,9 +241,12 @@ let data = [
         "obj_is_stock": 1
     }
 ]
-hid.HidHandle().then(fn => {
-    // 生成UI文件
-    console.info("开--始：====", fn);
-    console.info("生-成：", fn.generate_ui_handle(data, "H:/reminder-vue2/node_modules/electron/dist", 'GalaxySZ', 'galaxy168'));
-    console.info("更新-UI：", fn.hid_write_file_handle('H:/reminder-vue2/node_modules/electron/dist/hbin/hmi_res.hbin', 'hmi_res.hbin', 9));
-})
+
+// console.info(device.unpacketFile("H:/reminder-vue2/node_modules/electron/dist/hbin/hmi_res.hbin", "./output"));
+// console.info(device.writeFile('H:/reminder-vue2/node_modules/electron/dist/hbin/hmi_res.hbin', 'hmi_res.hbin', 9));
+// device.writeFileAsync('H:/reminder-vue2/node_modules/electron/dist/hbin/hmi_res.hbin', 'hmi_res.hbin', 9).then(res => {
+//     console.info("res: ", res)
+// })
+
+// console.info(device.writeFile('H:/reminder-vue2/node_modules/electron/dist/hbin/hmi_res.hbin', 'hmi_res.hbin', 9));
+// console.info(device.writeFile('H:/reminder-vue2/node_modules/electron/dist/hbin/hmi_res.hbin', 'hmi_res.hbin', 9));

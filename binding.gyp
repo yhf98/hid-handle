@@ -6,7 +6,7 @@
     'targets': [
         {
             'target_name': 'hidhandle',
-            'sources': [ "src/HANDLE.cc", "src/hidhandle.cc","src/hmi/hmi_core.cc", "src/hmi/hmi_hid.cc", "src/hmi/hmi_packet.cc", "src/hmi/list.c"],
+            'sources': [ "src/HANDLE.cc", "src/hmi/hmi_core.cc", "src/hmi/hmi_hid.cc", "src/hmi/hmi_packet.cc", "src/hmi/list.c"],
             'dependencies': ['hidapi'],
             'defines': [
                 '_LARGEFILE_SOURCE',
@@ -126,7 +126,7 @@
             'targets': [
                 {
                     'target_name': 'hidhandle_raw',
-                    'sources': [ 'src/export.cc' ],
+                    'sources': [ 'src/HANDLE.cc' ],
                     'dependencies': ['hidapi-linux-hidraw'],
                     'defines': [
                         '_LARGEFILE_SOURCE',

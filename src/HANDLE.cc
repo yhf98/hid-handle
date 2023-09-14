@@ -2,7 +2,7 @@
  * @Author: 姚恒锋 1921934563@qq.com
  * @Date: 2023-09-13 13:51:25
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-13 17:08:30
+ * @LastEditTime: 2023-09-14 15:15:52
  * @FilePath: \hid-handle\src\HANDLE.cc
  * @Description: HANDLE
  */
@@ -49,6 +49,8 @@ private:
     Napi::Value readTimeout(const Napi::CallbackInfo &info);
     Napi::Value getDeviceInfo(const Napi::CallbackInfo &info);
     // 自定义HANDLE
+    Napi::Value writeStr(const Napi::CallbackInfo &info);
+    Napi::Value writeHex(const Napi::CallbackInfo &info);
     Napi::Value writeFile(const Napi::CallbackInfo &info);
     Napi::Value writeFileAsync(const Napi::CallbackInfo &info);
     Napi::Value sendWifiInfo(const Napi::CallbackInfo &info);
@@ -511,12 +513,92 @@ Napi::Value HANDLE::writeFile(const Napi::CallbackInfo &info)
     string arg1 = info[1].As<String>();
     int arg2 = info[2].As<Napi::Number>().Int32Value();
 
-    // const auto res = hid_write_file_handle(arg0.c_str(), arg1.c_str(), arg2);
     const auto res = hid_write_file(_hidHandle, arg0.c_str(), arg1.c_str(), arg2);
 
     Napi::Number result = Number::New(env, res);
 
     return result;
+}
+
+Napi::Value HANDLE::writeStr(const Napi::CallbackInfo &info)
+{
+    auto env = info.Env();
+
+    string str = info[0].As<String>();
+    if (str.empty())
+    {
+        TypeError::New(env, "String cannot be empty!").ThrowAsJavaScriptException();
+        return env.Null();
+    }
+    
+    unsigned char writebuff[65];
+    sprintf((char *const)writebuff, " %s", str.c_str());
+
+    printf("Revices: %s\n", writebuff);
+    const auto res = hid_write(_hidHandle, writebuff, sizeof(writebuff));
+
+    Napi::Number result = Number::New(env, res);
+
+    return result;
+}
+
+Napi::Value HANDLE::writeHex(const Napi::CallbackInfo &info)
+{
+    Napi::Env env = info.Env();
+
+    if (info.Length() != 1)
+    {
+        Napi::TypeError::New(env, "HANDLE write requires one argument").ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    std::vector<unsigned char> message;
+    if (info[0].IsBuffer())
+    {
+        printf("==========Buffer======");
+        Napi::Buffer<unsigned short> buffer = info[0].As<Napi::Buffer<unsigned short>>();
+        uint32_t len = buffer.Length();
+        unsigned short *data = buffer.Data();
+        message.assign(data, data + len);
+    }
+    else if (info[0].IsArray())
+    {
+        printf("==========Array======");
+        Napi::Array messageArray = info[0].As<Napi::Array>();
+        message.reserve(messageArray.Length());
+
+        for (unsigned i = 0; i < messageArray.Length(); i++)
+        {
+            Napi::Value v = messageArray.Get(i);
+            if (!v.IsNumber())
+            {
+                Napi::TypeError::New(env, "unexpected array element in array to send, expecting only integers").ThrowAsJavaScriptException();
+                return env.Null();
+            }
+            uint32_t b = v.As<Napi::Number>().Uint32Value();
+            message.push_back((unsigned short)b);
+        }
+    }
+    else
+    {
+        Napi::TypeError::New(env, "unexpected data to send, expecting an array or buffer").ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    if (!_hidHandle)
+    {
+        Napi::TypeError::New(env, "Cannot write to closed device").ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    int returnedLength = hid_write(_hidHandle, message.data(), message.size());
+    if (returnedLength < 0)
+    {
+        Napi::TypeError::New(env, "Cannot write to hid device").ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    return Napi::Number::New(env, returnedLength);
 }
 
 // FIXME: 打包出错：Napi::Promise::Deferred”: 没有合适的默认构造函数可用
@@ -975,7 +1057,8 @@ Napi::Value HANDLE::updateScreenData(const Napi::CallbackInfo &info)
     return result;
 }
 
-Napi::Value HANDLE::updateScreenDataAsync(const Napi::CallbackInfo &info){
+Napi::Value HANDLE::updateScreenDataAsync(const Napi::CallbackInfo &info)
+{
     Napi::Env env = info.Env();
 
     // 创建 Promise 的执行器函数
@@ -1188,7 +1271,6 @@ Napi::Value HANDLE::updateScreenDataAsync(const Napi::CallbackInfo &info){
     return promise;
 }
 
-
 static void
 deinitialize(void *)
 {
@@ -1199,7 +1281,7 @@ deinitialize(void *)
         return;
     }
 }
-void HANDLE::Initialize(Napi::Env & env, Napi::Object & exports)
+void HANDLE::Initialize(Napi::Env &env, Napi::Object &exports)
 {
     if (hid_init())
     {
@@ -1210,25 +1292,26 @@ void HANDLE::Initialize(Napi::Env & env, Napi::Object & exports)
     napi_add_env_cleanup_hook(env, deinitialize, nullptr);
 
     Napi::Function ctor = DefineClass(env, "HANDLE",
-                                        {
-                                            InstanceMethod("close", &HANDLE::close),
-                                            InstanceMethod("read", &HANDLE::read),
-                                            InstanceMethod("write", &HANDLE::write, napi_enumerable),
-                                            InstanceMethod("getFeatureReport", &HANDLE::getFeatureReport, napi_enumerable),
-                                            InstanceMethod("sendFeatureReport", &HANDLE::sendFeatureReport, napi_enumerable),
-                                            InstanceMethod("setNonBlocking", &HANDLE::setNonBlocking, napi_enumerable),
-                                            InstanceMethod("readSync", &HANDLE::readSync, napi_enumerable),
-                                            InstanceMethod("readTimeout", &HANDLE::readTimeout, napi_enumerable),
-                                            InstanceMethod("getDeviceInfo", &HANDLE::getDeviceInfo, napi_enumerable),
-                                            InstanceMethod("writeFile", &HANDLE::writeFile, napi_enumerable),
-                                            InstanceMethod("writeFileAsync", &HANDLE::writeFileAsync, napi_enumerable),
-                                            InstanceMethod("sendWifiInfo", &HANDLE::sendWifiInfo, napi_enumerable),
-                                            InstanceMethod("generateUI", &HANDLE::generateUI, napi_enumerable),
-                                            InstanceMethod("unpacketFile", &HANDLE::unpacketFile, napi_enumerable),
-                                            InstanceMethod("updateScreenData", &HANDLE::updateScreenData, napi_enumerable),
-                                            InstanceMethod("updateScreenDataAsync", &HANDLE::updateScreenDataAsync, napi_enumerable),
-
-                                        });
+                                      {
+                                          InstanceMethod("close", &HANDLE::close),
+                                          InstanceMethod("read", &HANDLE::read),
+                                          InstanceMethod("write", &HANDLE::write, napi_enumerable),
+                                          InstanceMethod("getFeatureReport", &HANDLE::getFeatureReport, napi_enumerable),
+                                          InstanceMethod("sendFeatureReport", &HANDLE::sendFeatureReport, napi_enumerable),
+                                          InstanceMethod("setNonBlocking", &HANDLE::setNonBlocking, napi_enumerable),
+                                          InstanceMethod("readSync", &HANDLE::readSync, napi_enumerable),
+                                          InstanceMethod("readTimeout", &HANDLE::readTimeout, napi_enumerable),
+                                          InstanceMethod("getDeviceInfo", &HANDLE::getDeviceInfo, napi_enumerable),
+                                          InstanceMethod("writeStr", &HANDLE::writeStr, napi_enumerable),
+                                          InstanceMethod("writeHex", &HANDLE::writeHex, napi_enumerable),
+                                          InstanceMethod("writeFile", &HANDLE::writeFile, napi_enumerable),
+                                          InstanceMethod("writeFileAsync", &HANDLE::writeFileAsync, napi_enumerable),
+                                          InstanceMethod("sendWifiInfo", &HANDLE::sendWifiInfo, napi_enumerable),
+                                          InstanceMethod("generateUI", &HANDLE::generateUI, napi_enumerable),
+                                          InstanceMethod("unpacketFile", &HANDLE::unpacketFile, napi_enumerable),
+                                          InstanceMethod("updateScreenData", &HANDLE::updateScreenData, napi_enumerable),
+                                          InstanceMethod("updateScreenDataAsync", &HANDLE::updateScreenDataAsync, napi_enumerable),
+                                      });
 
     exports.Set("HANDLE", ctor);
     exports.Set("devices", Napi::Function::New(env, &HANDLE::devices));

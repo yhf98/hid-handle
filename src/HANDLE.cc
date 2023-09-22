@@ -2,7 +2,7 @@
  * @Author: 姚恒锋 1921934563@qq.com
  * @Date: 2023-09-13 13:51:25
  * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-14 15:15:52
+ * @LastEditTime: 2023-09-21 11:57:59
  * @FilePath: \hid-handle\src\HANDLE.cc
  * @Description: HANDLE
  */
@@ -406,8 +406,9 @@ Napi::Value HANDLE::write(const Napi::CallbackInfo &info)
     int returnedLength = hid_write(_hidHandle, message.data(), message.size());
     if (returnedLength < 0)
     {
-        Napi::TypeError::New(env, "Cannot write to hid device").ThrowAsJavaScriptException();
-        return env.Null();
+        // Napi::TypeError::New(env, "Cannot write to hid device").ThrowAsJavaScriptException();
+        // return env.Null();
+        return Napi::Number::New(env, returnedLength);
     }
 
     return Napi::Number::New(env, returnedLength);
@@ -534,7 +535,6 @@ Napi::Value HANDLE::writeStr(const Napi::CallbackInfo &info)
     unsigned char writebuff[65];
     sprintf((char *const)writebuff, " %s", str.c_str());
 
-    printf("Revices: %s\n", writebuff);
     const auto res = hid_write(_hidHandle, writebuff, sizeof(writebuff));
 
     Napi::Number result = Number::New(env, res);
@@ -555,7 +555,6 @@ Napi::Value HANDLE::writeHex(const Napi::CallbackInfo &info)
     std::vector<unsigned char> message;
     if (info[0].IsBuffer())
     {
-        printf("==========Buffer======");
         Napi::Buffer<unsigned short> buffer = info[0].As<Napi::Buffer<unsigned short>>();
         uint32_t len = buffer.Length();
         unsigned short *data = buffer.Data();
@@ -563,7 +562,6 @@ Napi::Value HANDLE::writeHex(const Napi::CallbackInfo &info)
     }
     else if (info[0].IsArray())
     {
-        printf("==========Array======");
         Napi::Array messageArray = info[0].As<Napi::Array>();
         message.reserve(messageArray.Length());
 
@@ -594,8 +592,9 @@ Napi::Value HANDLE::writeHex(const Napi::CallbackInfo &info)
     int returnedLength = hid_write(_hidHandle, message.data(), message.size());
     if (returnedLength < 0)
     {
-        Napi::TypeError::New(env, "Cannot write to hid device").ThrowAsJavaScriptException();
-        return env.Null();
+        // Napi::TypeError::New(env, "Cannot write to hid device").ThrowAsJavaScriptException();
+        // return env.Null();
+        return Napi::Number::New(env, returnedLength);
     }
 
     return Napi::Number::New(env, returnedLength);
@@ -664,8 +663,6 @@ Napi::Value HANDLE::generateUI(const Napi::CallbackInfo &info)
     string pkgPath = info[1].As<String>();
     string wifiName = info[2].As<String>();
     string wifiPwd = info[3].As<String>();
-
-    printf("\n\n--11--\n\n");
 
     vector<obj_attr_t> vec_obj_attr_t;
 

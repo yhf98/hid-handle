@@ -10,10 +10,10 @@
 
 # 编译
 ```
-npm run build
+npm  run build
 ```
 
 # 生成UI文件
 ```
-node .\test\generate_ui.js
+node  .\test\generate_ui.js
 ```

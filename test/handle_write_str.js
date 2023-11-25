@@ -1,8 +1,8 @@
 /*
  * @Author: 姚恒锋 1921934563@qq.com
  * @Date: 2023-09-13 17:20:04
- * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-22 11:54:13
+ * @LastEditors: yaohengfeng 1921934563@qq.com
+ * @LastEditTime: 2023-11-25 14:18:48
  * @FilePath: \hid-handle\test\handle_write_file.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,8 +13,10 @@ const HANDLE = require("../handle.js");
 
 // let devices = HANDLE.devices();
 
-console.info("devices:", devices)
+// console.info("devices:", devices)
 let devices = HANDLE.devices();
+console.info("devices:", devices)
+
 var device = null;
 for(const d of devices){
     if(new HANDLE.HANDLE(d.path) !== null){

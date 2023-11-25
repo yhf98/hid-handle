@@ -1,8 +1,8 @@
 /*
  * @Author: 姚恒锋 1921934563@qq.com
  * @Date: 2023-09-13 13:51:25
- * @LastEditors: 姚恒锋 1921934563@qq.com
- * @LastEditTime: 2023-09-21 11:57:59
+ * @LastEditors: yaohengfeng 1921934563@qq.com
+ * @LastEditTime: 2023-11-25 14:09:33
  * @FilePath: \hid-handle\src\HANDLE.cc
  * @Description: HANDLE
  */
@@ -686,14 +686,14 @@ Napi::Value HANDLE::generateUI(const Napi::CallbackInfo &info)
         para.obj_type = objAttrT.Get("obj_type").As<Number>().Int32Value();
         // 对象名字,唯一
         std::string obj_name = objAttrT.Get("obj_name").As<String>();
-        strcpy_s(para.obj_name, obj_name.c_str());
+        strcpy(para.obj_name, obj_name.c_str());
 
         // Wifi 名称
         std::string obj_wifi_name = objAttrT.Get("obj_wifi_name").As<String>();
-        strcpy_s(para.obj_wifi_name, obj_wifi_name.c_str());
+        strcpy(para.obj_wifi_name, obj_wifi_name.c_str());
         // Wifi 密码
         std::string obj_wifi_pass = objAttrT.Get("obj_wifi_pass").As<String>();
-        strcpy_s(para.obj_wifi_pass, obj_wifi_pass.c_str());
+        strcpy(para.obj_wifi_pass, obj_wifi_pass.c_str());
 
         // 横向起点坐标
         para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
@@ -720,7 +720,7 @@ Napi::Value HANDLE::generateUI(const Napi::CallbackInfo &info)
         para.obj_b_3 = objAttrT.Get("obj_b_3").As<Number>().Int32Value();
         // 字体名字
         string obj_font_name = objAttrT.Get("obj_font_name").As<String>();
-        strcpy_s(para.obj_font_name, obj_font_name.c_str());
+        strcpy(para.obj_font_name, obj_font_name.c_str());
         // 字体大小
         para.obj_font_size = objAttrT.Get("obj_font_size").As<Number>().Int32Value();
         // 字体颜色
@@ -803,25 +803,25 @@ Napi::Value HANDLE::generateUI(const Napi::CallbackInfo &info)
         para.obj_action = objAttrT.Get("obj_action").As<Number>().Int32Value();
         // obj_data[MAX_OBJ_DATA_LEN]; 对象的buff区,可通过此更新txt内容
         string obj_data = objAttrT.Get("obj_data").As<String>();
-        strcpy_s(para.obj_data, obj_data.c_str());
+        strcpy(para.obj_data, obj_data.c_str());
 
         printf("$$$$==para.obj_data=%s ==$$$$$\n", para.obj_data);
 
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
-        strcpy_s(para.obj_reserve, obj_reserve.c_str());
+        strcpy(para.obj_reserve, obj_reserve.c_str());
 
         // obj_url[MAX_OBJ_URL_LEN] 获取数据API地址
         string obj_url = objAttrT.Get("obj_url").As<String>();
-        strcpy_s(para.obj_url, obj_url.c_str());
+        strcpy(para.obj_url, obj_url.c_str());
 
         // obj_field[MAX_OBJ_FIELD_LEN] 数据字段
         string obj_field = objAttrT.Get("obj_field").As<String>();
-        strcpy_s(para.obj_field, obj_field.c_str());
+        strcpy(para.obj_field, obj_field.c_str());
 
         // obj_align_reserve[8] 保留字段
         string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
-        strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
+        strcpy(para.obj_align_reserve, obj_align_reserve.c_str());
 
         // 是否是股票类型元素 obj_is_stock
         para.obj_is_stock = objAttrT.Get("obj_is_stock").As<Number>().Int32Value();
@@ -894,7 +894,7 @@ Napi::Value HANDLE::updateScreenData(const Napi::CallbackInfo &info)
         para.obj_type = objAttrT.Get("obj_type").As<Number>().Int32Value();
         // 对象名字,唯一
         std::string obj_name = objAttrT.Get("obj_name").As<String>();
-        strcpy_s(para.obj_name, obj_name.c_str());
+        strcpy(para.obj_name, obj_name.c_str());
 
         // 横向起点坐标
         para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
@@ -919,7 +919,7 @@ Napi::Value HANDLE::updateScreenData(const Napi::CallbackInfo &info)
         para.obj_font_size = objAttrT.Get("obj_font_size").As<Number>().Int32Value();
         // 字体名字
         string obj_font_name = objAttrT.Get("obj_font_name").As<String>();
-        strcpy_s(para.obj_font_name, obj_font_name.c_str());
+        strcpy(para.obj_font_name, obj_font_name.c_str());
         // 字体颜色
         para.obj_font_r = objAttrT.Get("obj_font_r").As<Number>().Int32Value();
         para.obj_font_g = objAttrT.Get("obj_font_g").As<Number>().Int32Value();
@@ -959,23 +959,23 @@ Napi::Value HANDLE::updateScreenData(const Napi::CallbackInfo &info)
         para.obj_action = objAttrT.Get("obj_action").As<Number>().Int32Value();
         // obj_data[MAX_OBJ_DATA_LEN]; 对象的buff区,可通过此更新txt内容
         string obj_data = objAttrT.Get("obj_data").As<String>();
-        strcpy_s(para.obj_data, obj_data.c_str());
+        strcpy(para.obj_data, obj_data.c_str());
 
         // obj_reserve[MAX_RESERVE_LEN]; 保留字
         string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
-        strcpy_s(para.obj_reserve, obj_reserve.c_str());
+        strcpy(para.obj_reserve, obj_reserve.c_str());
 
         // obj_url[MAX_OBJ_URL_LEN] 获取数据API地址
         string obj_url = objAttrT.Get("obj_url").As<String>();
-        strcpy_s(para.obj_url, obj_url.c_str());
+        strcpy(para.obj_url, obj_url.c_str());
 
         // obj_field[MAX_OBJ_FIELD_LEN] 数据字段
         string obj_field = objAttrT.Get("obj_field").As<String>();
-        strcpy_s(para.obj_field, obj_field.c_str());
+        strcpy(para.obj_field, obj_field.c_str());
 
         // obj_align_reserve[8] 保留字段
         string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
-        strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
+        strcpy(para.obj_align_reserve, obj_align_reserve.c_str());
 
         // unsigned int* obj_font;
 
@@ -1090,7 +1090,7 @@ Napi::Value HANDLE::updateScreenDataAsync(const Napi::CallbackInfo &info)
             para.obj_type = objAttrT.Get("obj_type").As<Number>().Int32Value();
             // 对象名字,唯一
             std::string obj_name = objAttrT.Get("obj_name").As<String>();
-            strcpy_s(para.obj_name, obj_name.c_str());
+            strcpy(para.obj_name, obj_name.c_str());
 
             // 横向起点坐标
             para.obj_x = objAttrT.Get("obj_x").As<Number>().Int32Value();
@@ -1115,7 +1115,7 @@ Napi::Value HANDLE::updateScreenDataAsync(const Napi::CallbackInfo &info)
             para.obj_font_size = objAttrT.Get("obj_font_size").As<Number>().Int32Value();
             // 字体名字
             string obj_font_name = objAttrT.Get("obj_font_name").As<String>();
-            strcpy_s(para.obj_font_name, obj_font_name.c_str());
+            strcpy(para.obj_font_name, obj_font_name.c_str());
             // 字体颜色
             para.obj_font_r = objAttrT.Get("obj_font_r").As<Number>().Int32Value();
             para.obj_font_g = objAttrT.Get("obj_font_g").As<Number>().Int32Value();
@@ -1155,23 +1155,23 @@ Napi::Value HANDLE::updateScreenDataAsync(const Napi::CallbackInfo &info)
             para.obj_action = objAttrT.Get("obj_action").As<Number>().Int32Value();
             // obj_data[MAX_OBJ_DATA_LEN]; 对象的buff区,可通过此更新txt内容
             string obj_data = objAttrT.Get("obj_data").As<String>();
-            strcpy_s(para.obj_data, obj_data.c_str());
+            strcpy(para.obj_data, obj_data.c_str());
 
             // obj_reserve[MAX_RESERVE_LEN]; 保留字
             string obj_reserve = objAttrT.Get("obj_reserve").As<String>();
-            strcpy_s(para.obj_reserve, obj_reserve.c_str());
+            strcpy(para.obj_reserve, obj_reserve.c_str());
 
             // obj_url[MAX_OBJ_URL_LEN] 获取数据API地址
             string obj_url = objAttrT.Get("obj_url").As<String>();
-            strcpy_s(para.obj_url, obj_url.c_str());
+            strcpy(para.obj_url, obj_url.c_str());
 
             // obj_field[MAX_OBJ_FIELD_LEN] 数据字段
             string obj_field = objAttrT.Get("obj_field").As<String>();
-            strcpy_s(para.obj_field, obj_field.c_str());
+            strcpy(para.obj_field, obj_field.c_str());
 
             // obj_align_reserve[8] 保留字段
             string obj_align_reserve = objAttrT.Get("obj_align_reserve").As<String>();
-            strcpy_s(para.obj_align_reserve, obj_align_reserve.c_str());
+            strcpy(para.obj_align_reserve, obj_align_reserve.c_str());
 
             // unsigned int* obj_font;
 

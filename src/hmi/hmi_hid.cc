@@ -1,11 +1,5 @@
-#include <windows.h>
-#include <winioctl.h>
-#include <setupapi.h>
-#include <initguid.h>
 #include <stdio.h>
-#include <hidsdi.h>
-#include <tchar.h>
-#include <stdlib.h> 
+#include <string.h>
 #include <time.h>
 #include <hidapi.h>
 
@@ -64,9 +58,7 @@ int hid_io_control(hid_device* hid_handle ,unsigned int cmd,const char *file_nam
 	tran_packet_t m_packet;
 	ack_packet_t  a_packet;
 
-	unsigned long long time_s;
-	unsigned long long time_e;
-
+	
 	printf("rese_len=%d.\n",control_buff_len);
 
 	if(control_buff_len < 16){
@@ -92,7 +84,7 @@ int hid_io_control(hid_device* hid_handle ,unsigned int cmd,const char *file_nam
 	printf("file_name=%s\n",file_name);
 
 
-	time_s = GetTickCount64();				
+			
 
 	m_packet.hid_ep_id    = HID_END_POINT;         //hid-endpoint
 	m_packet.start_byte   = TRAN_END_FRAME_HEDA; //start frame head byte
@@ -162,10 +154,7 @@ int hid_io_control(hid_device* hid_handle ,unsigned int cmd,const char *file_nam
 		printf("tran_index=%d,data_len=%d,\n", m_packet.tran_index,m_packet.tran_data_len);
 	}
 	
-    time_e = GetTickCount64();	
-	
-	printf("file trans succeed,time=%lld ms.\n",time_e - time_s);
-
+   
 	return SYS_SUCCEED;
 
 }
@@ -182,9 +171,7 @@ int hid_write_buff(  hid_device* hid_handle ,unsigned char *buff,const unsigned 
 	tran_packet_t m_packet;
 	ack_packet_t  a_packet;
 
-	unsigned long long time_s;
-	unsigned long long time_e;
-
+	
 	if(!hid_handle){
 		printf("hid device error.\n");
 		return SYS_DEVICE_ERROR;
@@ -196,8 +183,6 @@ int hid_write_buff(  hid_device* hid_handle ,unsigned char *buff,const unsigned 
 	memset((unsigned char*)(&m_packet), 0, sizeof(tran_packet_t));
 	memset((unsigned char*)(&a_packet), 0, sizeof(ack_packet_t));
 
-
-	time_s = GetTickCount64();				
 
 	m_packet.hid_ep_id    = HID_END_POINT;         //hid-endpoint
 	m_packet.start_byte   = TRAN_START_FRAME_HEDA; //start frame head byte
@@ -310,10 +295,7 @@ int hid_write_buff(  hid_device* hid_handle ,unsigned char *buff,const unsigned 
 		}
 	}
 
-    time_e = GetTickCount64();	
-	
-	printf("file trans succeed,time=%lld ms.\n",time_e - time_s);
-
+   
 	return SYS_SUCCEED;
 
 }
@@ -330,9 +312,7 @@ int hid_write_file(hid_device* hid_handle ,const char *full_path,const char *fil
 	tran_packet_t m_packet;
 	ack_packet_t  a_packet;
 
-	unsigned long long time_s;
-	unsigned long long time_e;
-
+	
 	unsigned long long cnt = 0;
 
 	if(!hid_handle){
@@ -354,7 +334,7 @@ int hid_write_file(hid_device* hid_handle ,const char *full_path,const char *fil
 	fseek(fp_png,0,SEEK_SET);
 
 
-	time_s = GetTickCount64();				
+				
 
 	name_len = strlen(file_name);
 	
@@ -518,10 +498,6 @@ int hid_write_file(hid_device* hid_handle ,const char *full_path,const char *fil
 	fclose(fp_png);
 	fp_png = NULL;
 
-    time_e = GetTickCount64();	
-	
-	printf("file trans succeed,time=%lld ms.\n",time_e - time_s);
-
 	return SYS_SUCCEED;
 
 }
@@ -595,63 +571,63 @@ int hmi_del_all_file(hid_device* hid_handle)
 int hmi_update_obj_var(hid_device* hid_handle)
 {
 
-	int i = 0;
-	unsigned int  page_id	 = 0;
-	unsigned int  elem_id	 = 0;
-	unsigned int  data_type  = 0;
-	unsigned int  elem_data_len   = 0;
+	// int i = 0;
+	// unsigned int  page_id	 = 0;
+	// unsigned int  elem_id	 = 0;
+	// unsigned int  data_type  = 0;
+	// unsigned int  elem_data_len   = 0;
 	
-	unsigned int  var0	 = 0;
-	unsigned int  var1	 = 0;
-	unsigned int  var2	 = 0;
-	unsigned int  var3	 = 0;
+	// unsigned int  var0	 = 0;
+	// unsigned int  var1	 = 0;
+	// unsigned int  var2	 = 0;
+	// unsigned int  var3	 = 0;
 	
-	char control_buff[24];
+	// char control_buff[24];
 	
-	memset(control_buff,0,sizeof(control_buff));
+	// memset(control_buff,0,sizeof(control_buff));
 	
-	srand(time(0));
-	var0 = rand()%100;
-	var1 = rand()%100;
-	var2 = rand()%100;
-	var3 = rand()%100;
+	// srand(time(0));
+	// // var0 = rand()%100;
+	// // var1 = rand()%100;
+	// // var2 = rand()%100;
+	// // var3 = rand()%100;
 
-	printf("var0=%d\n",var0);
-	printf("var1=%d\n",var1);
-	printf("var2=%d\n",var2);
-	printf("var3=%d\n",var3);
-
-	
-	page_id = 0;
-	elem_id = 6 ;
-	
-	data_type = HMI_OBJ_DATA_DEFAULT;
-	
-	elem_data_len = 3;
-
-	control_buff[0] = ((page_id>>0)&0xff);
-	control_buff[1] = ((page_id>>8)&0xff);
-
-	control_buff[2] = ((elem_id>>0)&0xff);
-	control_buff[3] = ((elem_id>>8)&0xff);
-
-	control_buff[4] = ((data_type>>0)&0xff);
-	control_buff[5] = ((data_type>>8)&0xff);
-
-	control_buff[6] = ((elem_data_len>>0)&0xff);
-	control_buff[7] = ((elem_data_len>>8)&0xff);
+	// // printf("var0=%d\n",var0);
+	// // printf("var1=%d\n",var1);
+	// // printf("var2=%d\n",var2);
+	// // printf("var3=%d\n",var3);
 
 	
-	control_buff[8] = ((var0>>0)&0xff);
-	control_buff[9] = ((var0>>8)&0xff);
+	// page_id = 0;
+	// elem_id = 6 ;
 	
-	control_buff[10] = ((var1>>0)&0xff);
-	control_buff[11] = ((var1>>8)&0xff);
+	// data_type = HMI_OBJ_DATA_DEFAULT;
 	
-	control_buff[12] = ((var2>>0)&0xff);
-	control_buff[13] = ((var2>>8)&0xff);
+	// elem_data_len = 3;
 
-	hid_io_control(hid_handle,CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	// control_buff[0] = ((page_id>>0)&0xff);
+	// control_buff[1] = ((page_id>>8)&0xff);
+
+	// control_buff[2] = ((elem_id>>0)&0xff);
+	// control_buff[3] = ((elem_id>>8)&0xff);
+
+	// control_buff[4] = ((data_type>>0)&0xff);
+	// control_buff[5] = ((data_type>>8)&0xff);
+
+	// control_buff[6] = ((elem_data_len>>0)&0xff);
+	// control_buff[7] = ((elem_data_len>>8)&0xff);
+
+	
+	// control_buff[8] = ((var0>>0)&0xff);
+	// control_buff[9] = ((var0>>8)&0xff);
+	
+	// control_buff[10] = ((var1>>0)&0xff);
+	// control_buff[11] = ((var1>>8)&0xff);
+	
+	// control_buff[12] = ((var2>>0)&0xff);
+	// control_buff[13] = ((var2>>8)&0xff);
+
+	// hid_io_control(hid_handle,CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 	
 
 	return 0;
@@ -662,75 +638,75 @@ int hmi_update_obj_var(hid_device* hid_handle)
 int hmi_update_obj_data(hid_device* hid_handle)
 {
 
-	int i = 0;
-	unsigned int  page_id	 = 0;
-	unsigned int  elem_id	 = 0;
-	unsigned int  data_type  = 0;
-	unsigned int  elem_data_len   = 0;
+	// int i = 0;
+	// unsigned int  page_id	 = 0;
+	// unsigned int  elem_id	 = 0;
+	// unsigned int  data_type  = 0;
+	// unsigned int  elem_data_len   = 0;
 	
-	unsigned int  var0	 = 0;
-	unsigned int  var1	 = 0;
-	unsigned int  var2	 = 0;
-	unsigned int  var3	 = 0;
+	// unsigned int  var0	 = 0;
+	// unsigned int  var1	 = 0;
+	// unsigned int  var2	 = 0;
+	// unsigned int  var3	 = 0;
 	
-	char control_buff[24];
+	// char control_buff[24];
 	
-	memset(control_buff,0,sizeof(control_buff));
+	// memset(control_buff,0,sizeof(control_buff));
 	
-	srand(time(0));
-	var0 = rand()%100;
-	var1 = rand()%100;
-	var2 = rand()%100;
-	var3 = rand()%100;
+	// srand(time(0));
+	// var0 = rand()%100;
+	// var1 = rand()%100;
+	// var2 = rand()%100;
+	// var3 = rand()%100;
 
-	printf("var0=%d\n",var0);
-	printf("var1=%d\n",var1);
-	printf("var2=%d\n",var2);
-	printf("var3=%d\n",var3);
-
-	
+	// printf("var0=%d\n",var0);
+	// printf("var1=%d\n",var1);
+	// printf("var2=%d\n",var2);
+	// printf("var3=%d\n",var3);
 
 	
-	page_id = 0;
-	elem_id = 6 ;
+
 	
-	data_type = HMI_OBJ_DATA_BUFF;
+	// page_id = 0;
+	// elem_id = 6 ;
 	
-	elem_data_len = 3;
+	// data_type = HMI_OBJ_DATA_BUFF;
+	
+	// elem_data_len = 3;
 
-	control_buff[0] = ((page_id>>0)&0xff);
-	control_buff[1] = ((page_id>>8)&0xff);
+	// control_buff[0] = ((page_id>>0)&0xff);
+	// control_buff[1] = ((page_id>>8)&0xff);
 
-	control_buff[2] = ((elem_id>>0)&0xff);
-	control_buff[3] = ((elem_id>>8)&0xff);
+	// control_buff[2] = ((elem_id>>0)&0xff);
+	// control_buff[3] = ((elem_id>>8)&0xff);
 
-	control_buff[4] = ((data_type>>0)&0xff);
-	control_buff[5] = ((data_type>>8)&0xff);
+	// control_buff[4] = ((data_type>>0)&0xff);
+	// control_buff[5] = ((data_type>>8)&0xff);
 
-	control_buff[6] = ((elem_data_len>>0)&0xff);
-	control_buff[7] = ((elem_data_len>>8)&0xff);
+	// control_buff[6] = ((elem_data_len>>0)&0xff);
+	// control_buff[7] = ((elem_data_len>>8)&0xff);
 
-	switch(i){
-	case 0:{
-		sprintf(control_buff+8,"内存:%d%",var0);
-		break;
-	}
-	case 1:{
-		sprintf(control_buff+8,"CPU:%d%",var1);
-		break;
-	}
-	case 2:{
-		sprintf(control_buff+8,"NET:%d%",var2);
-		break;
-	}
-	case 3:{
-		sprintf(control_buff+8,"磁盘:%d%",var3);	
-		break;
-	}
-	default:break;
-	}
+	// switch(i){
+	// case 0:{
+	// 	sprintf(control_buff+8,"内存:%d%",var0);
+	// 	break;
+	// }
+	// case 1:{
+	// 	sprintf(control_buff+8,"CPU:%d%",var1);
+	// 	break;
+	// }
+	// case 2:{
+	// 	sprintf(control_buff+8,"NET:%d%",var2);
+	// 	break;
+	// }
+	// case 3:{
+	// 	sprintf(control_buff+8,"磁盘:%d%",var3);	
+	// 	break;
+	// }
+	// default:break;
+	// }
 
-	hid_io_control(hid_handle,CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
+	// hid_io_control(hid_handle,CMD_ELEM_UPDATE, " ", control_buff, sizeof(control_buff));
 	
 
 	return 0;
